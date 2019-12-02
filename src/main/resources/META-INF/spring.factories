@@ -1,0 +1,4 @@
+# Auto Configure
+org.springframework.boot.autoconfigure.EnableAutoConfiguration=\
+com.baidu.ai.aip.spring.boot.FaceRecognitionV2AutoConfiguration,\
+com.baidu.ai.aip.spring.boot.FaceRecognitionV3AutoConfiguration

@@ -1,0 +1,6 @@
+baidu:
+  face:
+    v3:
+      enabled: true
+      client-id: xxxx
+      client-secret: xxxx
