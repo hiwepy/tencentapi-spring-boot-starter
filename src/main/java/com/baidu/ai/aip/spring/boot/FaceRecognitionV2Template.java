@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2018, vindell (https://github.com/vindell).
+ * Copyright (c) 2018, hiwepy (https://github.com/hiwepy).
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not
  * use this file except in compliance with the License. You may obtain a copy of
@@ -34,7 +34,7 @@ import com.google.common.cache.RemovalNotification;
 
 /**
  * 
- * @author ： <a href="https://github.com/vindell">wandl</a>
+ * @author ： <a href="https://github.com/hiwepy">wandl</a>
  */
 
 public class FaceRecognitionV2Template {
@@ -135,7 +135,7 @@ public class FaceRecognitionV2Template {
 	 * 人脸检测与属性分析：https://ai.baidu.com/docs#/Face-Detect/top
 	 * 
 	 * @param imageBytes       图片字节码：现支持PNG、JPG、JPEG、BMP，不支持GIF图片
-	 * @author ： <a href="https://github.com/vindell">wandl</a>
+	 * @author ： <a href="https://github.com/hiwepy">wandl</a>
 	 * @return
 	 */
 	public JSONObject detect(byte[] imageBytes) {
@@ -154,7 +154,7 @@ public class FaceRecognitionV2Template {
 	 * @param imageBase64 Base64编码：请求的图片需经过Base64编码，图片的base64编码指将图片数据编码成一串字符串，使用该字符串代替图像地址。
 	 *                    您可以首先得到图片的二进制，然后用Base64格式编码即可。需要注意的是，图片的base64编码是不包含图片头的，如data:image/jpg;base64,
 	 *                    图片格式：现支持PNG、JPG、JPEG、BMP，不支持GIF图片
-	 * @author ： <a href="https://github.com/vindell">wandl</a>
+	 * @author ： <a href="https://github.com/hiwepy">wandl</a>
 	 * @return
 	 */
 	public JSONObject detect(String imageBase64) {
@@ -188,7 +188,7 @@ public class FaceRecognitionV2Template {
 	/**
 	 * 人脸对比：https://ai.baidu.com/docs#/Face-Match/top
 	 * 
-	 * @author ： <a href="https://github.com/vindell">wandl</a>
+	 * @author ： <a href="https://github.com/hiwepy">wandl</a>
 	 * @param imageBytes_1   图片字节码：现支持PNG、JPG、JPEG、BMP，不支持GIF图片
 	 * @param imageBytes_2   图片字节码：现支持PNG、JPG、JPEG、BMP，不支持GIF图片
 	 * @param image_liveness 返回的活体信息， “faceliveness,faceliveness”:表示对比对的两张图片都做活体检测；
@@ -217,7 +217,7 @@ public class FaceRecognitionV2Template {
 	
 	/**
 	 * 人脸对比：https://ai.baidu.com/docs#/Face-Match/top
-	 * @author 		： <a href="https://github.com/vindell">wandl</a>
+	 * @author 		： <a href="https://github.com/hiwepy">wandl</a>
 	 * @param imageBase64_1 Base64编码：请求的图片需经过Base64编码，图片的base64编码指将图片数据编码成一串字符串，使用该字符串代替图像地址。
 	 *                    您可以首先得到图片的二进制，然后用Base64格式编码即可。需要注意的是，图片的base64编码是不包含图片头的，如data:image/jpg;base64,
 	 *                    图片格式：现支持PNG、JPG、JPEG、BMP，不支持GIF图片
@@ -258,7 +258,7 @@ public class FaceRecognitionV2Template {
 	/**
 	 * 人脸搜索 : https://ai.baidu.com/docs#/Face-Search/top
 	 * 
-	 * @author ： <a href="https://github.com/vindell">wandl</a>
+	 * @author ： <a href="https://github.com/hiwepy">wandl</a>
 	 * @param imageBytes  图片字节码：现支持PNG、JPG、JPEG、BMP，不支持GIF图片
 	 * @param group_id_list 用户组id（由数字、字母、下划线组成），长度限制128B，如果需要查询多个用户组id，用逗号分隔
 	 * @return
@@ -271,7 +271,7 @@ public class FaceRecognitionV2Template {
 	/**
 	 * 人脸搜索 : https://ai.baidu.com/docs#/Face-Search/top
 	 * 
-	 * @author ： <a href="https://github.com/vindell">wandl</a>
+	 * @author ： <a href="https://github.com/hiwepy">wandl</a>
 	 * @param imageBase64   Base64编码：请求的图片需经过Base64编码，图片的base64编码指将图片数据编码成一串字符串，使用该字符串代替图像地址。
 	 *                      您可以首先得到图片的二进制，然后用Base64格式编码即可。需要注意的是，图片的base64编码是不包含图片头的，如data:image/jpg;base64,
 	 *                      图片格式：现支持PNG、JPG、JPEG、BMP，不支持GIF图片
@@ -302,7 +302,7 @@ public class FaceRecognitionV2Template {
 	/**
 	 * 人脸注册： https://ai.baidu.com/docs#/Face-Set/36357792；
 	 * 用于从人脸库中新增用户，可以设定多个用户所在组，及组内用户的人脸图片，典型应用场景：构建您的人脸库，如会员人脸注册，已有用户补全人脸信息等。
-	 * @author ： <a href="https://github.com/vindell">wandl</a>
+	 * @author ： <a href="https://github.com/hiwepy">wandl</a>
 	 * @param imageBase64      Base64编码：请求的图片需经过Base64编码，图片的base64编码指将图片数据编码成一串字符串，使用该字符串代替图像地址。
 	 *                         您可以首先得到图片的二进制，然后用Base64格式编码即可。需要注意的是，图片的base64编码是不包含图片头的，如data:image/jpg;base64,
 	 *                         图片格式：现支持PNG、JPG、JPEG、BMP，不支持GIF图片
@@ -332,7 +332,7 @@ public class FaceRecognitionV2Template {
 	/**
 	 * 人脸更新：https://ai.baidu.com/docs#/Face-Set/115feb43；
 	 * 用于对人脸库中指定用户，更新其下的人脸图像。
-	 * @author ： <a href="https://github.com/vindell">wandl</a>
+	 * @author ： <a href="https://github.com/hiwepy">wandl</a>
 	 * @param imageBase64      Base64编码：请求的图片需经过Base64编码，图片的base64编码指将图片数据编码成一串字符串，使用该字符串代替图像地址。
 	 *                         您可以首先得到图片的二进制，然后用Base64格式编码即可。需要注意的是，图片的base64编码是不包含图片头的，如data:image/jpg;base64,
 	 *                         图片格式：现支持PNG、JPG、JPEG、BMP，不支持GIF图片
@@ -363,7 +363,7 @@ public class FaceRecognitionV2Template {
 	/**
 	 * 人脸删除：https://ai.baidu.com/docs#/Face-Set/13cf451f；
 	 * 用于从人脸库中删除一个用户。
-	 * @author ： <a href="https://github.com/vindell">wandl</a>
+	 * @author ： <a href="https://github.com/hiwepy">wandl</a>
 	 * @param group_id         用户组id，标识一组用户（由数字、字母、下划线组成），长度限制48B。产品建议：根据您的业务需求，可以将需要注册的用户，按照业务划分，分配到不同的group下，例如按照会员手机尾号作为groupid，用于刷脸支付、会员计费消费等，这样可以尽可能控制每个group下的用户数与人脸数，提升检索的准确率
 	 * @param user_id          用户id（由数字、字母、下划线组成），长度限制128B
 	 * @return
@@ -388,7 +388,7 @@ public class FaceRecognitionV2Template {
 	/**
 	 * 用户信息查询：https://ai.baidu.com/docs#/Face-Set/49342029；
 	 * 用于查询人脸库中某用户的详细信息。
-	 * @author ： <a href="https://github.com/vindell">wandl</a>
+	 * @author ： <a href="https://github.com/hiwepy">wandl</a>
 	 * @param group_id         用户组id，标识一组用户（由数字、字母、下划线组成），长度限制48B。产品建议：根据您的业务需求，可以将需要注册的用户，按照业务划分，分配到不同的group下，例如按照会员手机尾号作为groupid，用于刷脸支付、会员计费消费等，这样可以尽可能控制每个group下的用户数与人脸数，提升检索的准确率
 	 * @param user_id          用户id（由数字、字母、下划线组成），长度限制128B
 	 * @return
@@ -414,7 +414,7 @@ public class FaceRecognitionV2Template {
 	/**
 	 * 组内用户列表查询： https://ai.baidu.com/docs#/Face-Set/edbb230c；
 	 * 用于查询指定用户组中的用户列表。
-	 * @author ： <a href="https://github.com/vindell">wandl</a>
+	 * @author ： <a href="https://github.com/hiwepy">wandl</a>
 	 * @param group_id         用户组id(由数字、字母、下划线组成，长度限制48B)，如传入“@ALL”则从所有组中查询用户信息。注：处于不同组，但uid相同的用户，我们认为是同一个用户。
 	 * @param start          	默认值0，起始序号
 	 * @param num          	返回数量，默认值100，最大值1000
@@ -440,7 +440,7 @@ public class FaceRecognitionV2Template {
 	/**
 	 * 组列表查询：https://ai.baidu.com/docs#/Face-Set/57adbd34；
 	 * 用于查询用户组的列表。
-	 * @author ： <a href="https://github.com/vindell">wandl</a>
+	 * @author ： <a href="https://github.com/hiwepy">wandl</a>
 	 * @param start        默认值0，起始序号
 	 * @param num          回数量，默认值100，最大值1000
 	 * @return
@@ -466,7 +466,7 @@ public class FaceRecognitionV2Template {
 	/**
 	 * 组间复制用户：https://ai.baidu.com/docs#/Face-Set/9004fef3；
 	 * 用于将已经存在于人脸库中的用户复制到一个新的组。
-	 * @author ： <a href="https://github.com/vindell">wandl</a>
+	 * @author ： <a href="https://github.com/hiwepy">wandl</a>
 	 * @param group_id         用户组id(由数字、字母、下划线组成，长度限制48B)，如传入“@ALL”则从所有组中查询用户信息。注：处于不同组，但uid相同的用户，我们认为是同一个用户。
 	 * @param user_id          用户id（由数字、字母、下划线组成），长度限制128B
 	 * @param target_group_id  需要添加信息的组id，多个的话用逗号分隔
@@ -492,7 +492,7 @@ public class FaceRecognitionV2Template {
 	/**
 	 * 组内删除用户：https://ai.baidu.com/docs#/Face-Set/9b46e037；
 	 * 用于将用户从某个组中删除，但不会删除用户在其它组的信息。
-	 * @author ： <a href="https://github.com/vindell">wandl</a>
+	 * @author ： <a href="https://github.com/hiwepy">wandl</a>
 	 * @param group_id         用户组id(由数字、字母、下划线组成，长度限制48B)，如传入“@ALL”则从所有组中查询用户信息。注：处于不同组，但uid相同的用户，我们认为是同一个用户。
 	 * @param user_id          用户id（由数字、字母、下划线组成），长度限制128B
 	 * @return

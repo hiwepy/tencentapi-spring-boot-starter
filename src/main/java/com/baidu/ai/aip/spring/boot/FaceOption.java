@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2018, vindell (https://github.com/vindell).
+ * Copyright (c) 2018, hiwepy (https://github.com/hiwepy).
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not
  * use this file except in compliance with the License. You may obtain a copy of
@@ -17,7 +17,7 @@ package com.baidu.ai.aip.spring.boot;
 
 /**
  * 场景信息，程序会视不同的场景选用相对应的模型。当前支持的场景有COMMON(通用场景)，GATE(闸机场景)，默认使用COMMON
- * @author ： <a href="https://github.com/vindell">wandl</a>
+ * @author ： <a href="https://github.com/hiwepy">wandl</a>
  */
 public enum FaceOption {
 	 

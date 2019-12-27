@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2018, vindell (https://github.com/vindell).
+ * Copyright (c) 2018, hiwepy (https://github.com/hiwepy).
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not
  * use this file except in compliance with the License. You may obtain a copy of
@@ -39,7 +39,7 @@ import com.google.common.cache.RemovalNotification;
 /**
  * TODO
  * 
- * @author ： <a href="https://github.com/vindell">wandl</a>
+ * @author ： <a href="https://github.com/hiwepy">wandl</a>
  */
 
 public class FaceRecognitionV3Template {
@@ -163,7 +163,7 @@ public class FaceRecognitionV3Template {
 	 * @param liveness		        活体控制 检测结果中不符合要求的人脸会被过滤 NONE: 不进行控制 LOW:较低的活体要求(高通过率
 	 *                         低攻击拒绝率) NORMAL: 一般的活体要求(平衡的攻击拒绝率, 通过率) HIGH:
 	 *                         较高的活体要求(高攻击拒绝率 低通过率) 默认NONE
-	 * @author ： <a href="https://github.com/vindell">wandl</a>
+	 * @author ： <a href="https://github.com/hiwepy">wandl</a>
 	 * @return
 	 */
 	public JSONObject detect(byte[] imageBytes, FaceType face_type, FaceLiveness liveness) {
@@ -197,7 +197,7 @@ public class FaceRecognitionV3Template {
 	 * @param liveness 活体控制 检测结果中不符合要求的人脸会被过滤 NONE: 不进行控制 LOW:较低的活体要求(高通过率
 	 *                         低攻击拒绝率) NORMAL: 一般的活体要求(平衡的攻击拒绝率, 通过率) HIGH:
 	 *                         较高的活体要求(高攻击拒绝率 低通过率) 默认NONE
-	 * @author ： <a href="https://github.com/vindell">wandl</a>
+	 * @author ： <a href="https://github.com/hiwepy">wandl</a>
 	 * @return
 	 */
 	public JSONObject detect(String imageBase64, FaceType face_type, FaceLiveness liveness) {
@@ -259,7 +259,7 @@ public class FaceRecognitionV3Template {
 	/**
 	 * 人脸对比: https://ai.baidu.com/docs#/Face-Match-V3/top
 	 * 
-	 * @author ： <a href="https://github.com/vindell">wandl</a>
+	 * @author ： <a href="https://github.com/hiwepy">wandl</a>
 	 * @param imageBytes_1     图片字节码：现支持PNG、JPG、JPEG、BMP，不支持GIF图片
 	 * @param imageBytes_2     图片字节码：现支持PNG、JPG、JPEG、BMP，不支持GIF图片
 	 * @param face_type        人脸的类型：LIVE表示生活照：通常为手机、相机拍摄的人像图片、或从网络获取的人像图片等
@@ -309,7 +309,7 @@ public class FaceRecognitionV3Template {
 	 * @param liveness 活体控制 检测结果中不符合要求的人脸会被过滤； NONE: 不进行控制 ；LOW:较低的活体要求(高通过率
 	 *                         低攻击拒绝率)； NORMAL: 一般的活体要求(平衡的攻击拒绝率, 通过率)； HIGH:
 	 *                         较高的活体要求(高攻击拒绝率 低通过率)； 默认NONE
-	 * @author ： <a href="https://github.com/vindell">wandl</a>
+	 * @author ： <a href="https://github.com/hiwepy">wandl</a>
 	 * @return
 	 */
 	public JSONObject match(String imageBase64_1, String imageBase64_2, FaceType face_type, FaceQuality quality, FaceLiveness liveness) {
@@ -399,7 +399,7 @@ public class FaceRecognitionV3Template {
 	/**
 	 * 人脸注册： https://ai.baidu.com/docs#/Face-Set-V3/8bea9967；
 	 * 用于向人脸库中新增用户，及组内用户的人脸图片，典型应用场景：构建您的人脸库，如会员人脸注册，已有用户补全人脸信息等。
-	 * @author ： <a href="https://github.com/vindell">wandl</a>
+	 * @author ： <a href="https://github.com/hiwepy">wandl</a>
 	 * @param imageBase64      Base64编码：请求的图片需经过Base64编码，图片的base64编码指将图片数据编码成一串字符串，使用该字符串代替图像地址。
 	 *                         您可以首先得到图片的二进制，然后用Base64格式编码即可。需要注意的是，图片的base64编码是不包含图片头的，如data:image/jpg;base64,
 	 *                         图片格式：现支持PNG、JPG、JPEG、BMP，不支持GIF图片
@@ -450,7 +450,7 @@ public class FaceRecognitionV3Template {
 	/**
 	 * 人脸更新： https://ai.baidu.com/docs#/Face-Set-V3/bc7f58d1；
 	 * 用于对人脸库中指定用户，更新其下的人脸图像。
-	 * @author ： <a href="https://github.com/vindell">wandl</a>
+	 * @author ： <a href="https://github.com/hiwepy">wandl</a>
 	 * @param imageBase64      Base64编码：请求的图片需经过Base64编码，图片的base64编码指将图片数据编码成一串字符串，使用该字符串代替图像地址。
 	 *                         您可以首先得到图片的二进制，然后用Base64格式编码即可。需要注意的是，图片的base64编码是不包含图片头的，如data:image/jpg;base64,
 	 *                         图片格式：现支持PNG、JPG、JPEG、BMP，不支持GIF图片
@@ -501,7 +501,7 @@ public class FaceRecognitionV3Template {
 	/**
 	 * 人脸删除： https://ai.baidu.com/docs#/Face-Set-V3/912191e1；
 	 * 删除用户的某一张人脸，如果该用户只有一张人脸图片，则同时删除用户
-	 * @author ： <a href="https://github.com/vindell">wandl</a>
+	 * @author ： <a href="https://github.com/hiwepy">wandl</a>
 	 * @param group_id         用户组id，标识一组用户（由数字、字母、下划线组成），长度限制48B。产品建议：根据您的业务需求，可以将需要注册的用户，按照业务划分，分配到不同的group下，例如按照会员手机尾号作为groupid，用于刷脸支付、会员计费消费等，这样可以尽可能控制每个group下的用户数与人脸数，提升检索的准确率
 	 * @param user_id          用户id（由数字、字母、下划线组成），长度限制128B
 	 * @param face_token       需要删除的人脸图片token，（由数字、字母、下划线组成）长度限制64B
@@ -532,7 +532,7 @@ public class FaceRecognitionV3Template {
 	/**
 	 * 用户信息查询： https://ai.baidu.com/docs#/Face-Set-V3/a8205a0b;
 	 * 获取人脸库中某个用户的信息(user_info信息和用户所属的组)。
-	 * @author ： <a href="https://github.com/vindell">wandl</a>
+	 * @author ： <a href="https://github.com/hiwepy">wandl</a>
 	 * @param group_id         用户组id(由数字、字母、下划线组成，长度限制48B)，如传入“@ALL”则从所有组中查询用户信息。注：处于不同组，但uid相同的用户，我们认为是同一个用户。
 	 * @param user_id          用户id（由数字、字母、下划线组成），长度限制128B
 	 * @return
@@ -561,7 +561,7 @@ public class FaceRecognitionV3Template {
 	/**
 	 * 获取用户人脸列表： https://ai.baidu.com/docs#/Face-Set-V3/871dcfcb;
 	 * 获取人脸库中某个用户的信息(user_info信息和用户所属的组)。
-	 * @author ： <a href="https://github.com/vindell">wandl</a>
+	 * @author ： <a href="https://github.com/hiwepy">wandl</a>
 	 * @param group_id         用户组id(由数字、字母、下划线组成，长度限制48B)，如传入“@ALL”则从所有组中查询用户信息。注：处于不同组，但uid相同的用户，我们认为是同一个用户。
 	 * @param user_id          用户id（由数字、字母、下划线组成），长度限制128B
 	 * @return
@@ -590,7 +590,7 @@ public class FaceRecognitionV3Template {
 	/**
 	 * 获取用户列表： https://ai.baidu.com/docs#/Face-Set-V3/67d10e05;
 	 * 用于查询指定用户组中的用户列表。
-	 * @author ： <a href="https://github.com/vindell">wandl</a>
+	 * @author ： <a href="https://github.com/hiwepy">wandl</a>
 	 * @param group_id         用户组id(由数字、字母、下划线组成，长度限制48B)，如传入“@ALL”则从所有组中查询用户信息。注：处于不同组，但uid相同的用户，我们认为是同一个用户。
 	 * @param start          	默认值0，起始序号
 	 * @param length          	返回数量，默认值100，最大值1000
@@ -621,7 +621,7 @@ public class FaceRecognitionV3Template {
 	/**
 	 * 复制用户： https://ai.baidu.com/docs#/Face-Set-V3/4c8cc30a;
 	 * 用于将已经存在于人脸库中的用户复制到一个新的组。
-	 * @author ： <a href="https://github.com/vindell">wandl</a>
+	 * @author ： <a href="https://github.com/hiwepy">wandl</a>
 	 * @param group_id         用户组id(由数字、字母、下划线组成，长度限制48B)，如传入“@ALL”则从所有组中查询用户信息。注：处于不同组，但uid相同的用户，我们认为是同一个用户。
 	 * @param user_id          用户id（由数字、字母、下划线组成），长度限制128B
 	 * @param target_group_id  需要添加信息的组id，多个的话用逗号分隔
@@ -652,7 +652,7 @@ public class FaceRecognitionV3Template {
 	/**
 	 * 删除用户： https://ai.baidu.com/docs#/Face-Set-V3/95b207bf;
 	 * 用于将用户从某个组中删除。
-	 * @author ： <a href="https://github.com/vindell">wandl</a>
+	 * @author ： <a href="https://github.com/hiwepy">wandl</a>
 	 * @param group_id         用户组id(由数字、字母、下划线组成，长度限制48B) ，如传入“@ALL”则从所有组中删除用户
 	 * @param user_id          用户id（由数字、字母、下划线组成），长度限制128B
 	 * @return
@@ -681,7 +681,7 @@ public class FaceRecognitionV3Template {
 	/**
 	 * 创建用户组： https://ai.baidu.com/docs#/Face-Set-V3/5867daad;
 	 * 用于创建一个空的用户组，如果用户组已存在 则返回错误。
-	 * @author ： <a href="https://github.com/vindell">wandl</a>
+	 * @author ： <a href="https://github.com/hiwepy">wandl</a>
 	 * @param group_id         用户组id，标识一组用户（由数字、字母、下划线组成），长度限制48B。
 	 * @return
 	 */
@@ -708,7 +708,7 @@ public class FaceRecognitionV3Template {
 	/**
 	 * 删除用户组： https://ai.baidu.com/docs#/Face-Set-V3/5867daad;
 	 * 删除用户组下所有的用户及人脸，如果组不存在 则返回错误。 注：组内的人脸数量如果大于500条，会在后台异步进行删除。在删除期间，无法向该组中添加人脸。1秒钟可以删除20条记录，相当于一小时可以将7万人的人脸组删除干净。
-	 * @author ： <a href="https://github.com/vindell">wandl</a>
+	 * @author ： <a href="https://github.com/hiwepy">wandl</a>
 	 * @param group_id         用户组id，标识一组用户（由数字、字母、下划线组成），长度限制48B。
 	 * @return
 	 */
@@ -735,7 +735,7 @@ public class FaceRecognitionV3Template {
 	/**
 	 * 删除用户组： https://ai.baidu.com/docs#/Face-Set-V3/5867daad;
 	 * 删除用户组下所有的用户及人脸，如果组不存在 则返回错误。 注：组内的人脸数量如果大于500条，会在后台异步进行删除。在删除期间，无法向该组中添加人脸。1秒钟可以删除20条记录，相当于一小时可以将7万人的人脸组删除干净。
-	 * @author ： <a href="https://github.com/vindell">wandl</a>
+	 * @author ： <a href="https://github.com/hiwepy">wandl</a>
 	 * @param start        默认值0，起始序号
 	 * @param length          回数量，默认值100，最大值1000
 	 * @return
@@ -782,7 +782,7 @@ public class FaceRecognitionV3Template {
 	
 	/**
 	 * 身份验证：https://ai.baidu.com/docs#/Face-PersonVerify-V3/top
-	 * @author ： <a href="https://github.com/vindell">wandl</a>
+	 * @author ： <a href="https://github.com/hiwepy">wandl</a>
 	 * @param imageBase64      图片信息(总数据大小应小于10M)，图片上传方式根据image_type来判断
 	 * @param id_card_number   身份证号码
 	 * @param name             姓名（真实姓名，和身份证号匹配）
@@ -826,7 +826,7 @@ public class FaceRecognitionV3Template {
 	
 	/**
 	 * 在线活体检测：https://ai.baidu.com/docs#/Face-Liveness-V3/top
-	 * @author ： <a href="https://github.com/vindell">wandl</a>
+	 * @author ： <a href="https://github.com/hiwepy">wandl</a>
 	 * @param imageBase64 图片信息(总数据大小应小于10M)，图片上传方式根据image_type来判断
 	 * @param option      场景信息，程序会视不同的场景选用相对应的模型。当前支持的场景有COMMON(通用场景)，GATE(闸机场景)，默认使用COMMON
 	 * @return
