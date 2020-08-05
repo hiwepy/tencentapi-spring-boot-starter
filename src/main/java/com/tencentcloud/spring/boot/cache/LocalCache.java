@@ -13,29 +13,27 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  */
-package com.baidu.ai.aip.spring.boot;
+package com.tencentcloud.spring.boot.cache;
 
-/**
- * 人脸的类型
- * @author ： <a href="https://github.com/hiwepy">wandl</a>
- */
-public enum FaceType {
+public interface LocalCache<K, V> {
+	
+	/**
+	 * Returns the value associated with {@code key} in this cache, or {@code null}
+	 * if there is no cached value for {@code key}.
+	 **/
+	V get(K key) throws Exception;
 
 	/**
-	 * 表示生活照：通常为手机、相机拍摄的人像图片、或从网络获取的人像图片等
-	 */
-	LIVE,
-	/**
-	 * 表示身份证芯片照：二代身份证内置芯片中的人像照片
-	 */
-	IDCARD,
-	/**
-	 * 表示带水印证件照：一般为带水印的小图，如公安网小图
-	 */
-	WATERMARK,
-	/**
-	 * 表示证件照片：如拍摄的身份证、工卡、护照、学生证等证件图片
-	 */
-	CERT;
+	 * Associates {@code value} with {@code key} in this cache. If the cache
+	 * previously contained a value associated with {@code key}, the old value is
+	 * replaced by {@code value}.
+	 *
+	 **/
+	void put(K key, V value);
 
+	/**
+	 * Discards any cached value for key {@code key}.
+	 */
+	void remove(Object key);
+	
 }

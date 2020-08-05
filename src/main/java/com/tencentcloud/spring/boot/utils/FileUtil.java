@@ -1,4 +1,4 @@
-package com.baidu.ai.aip.utils;
+package com.tencentcloud.spring.boot.utils;
 
 import java.io.*;
 
