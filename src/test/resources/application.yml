@@ -1,6 +1,6 @@
-baidu:
-  face:
-    v3:
-      enabled: true
-      client-id: xxxx
-      client-secret: xxxx
+tencent:
+  tim:
+    sdkappid: 222 
+    identifier: 
+    expire: 1111
+    private-key: sss

@@ -9,7 +9,7 @@ import com.tencentyun.TLSSigAPIv2;
 
 @Configuration
 @ConditionalOnProperty(prefix = TencentCloudProperties.PREFIX, value = "enabled", havingValue = "true")
-@EnableConfigurationProperties({ TencentCloudProperties.class })
+@EnableConfigurationProperties({ TencentCloudProperties.class, TencentWebimProperties.class })
 public class TencentCloudAutoConfiguration {
 
 	@Bean
