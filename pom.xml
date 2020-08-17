@@ -376,6 +376,10 @@
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
 		
+		<libphonenumber.version>8.12.7</libphonenumber.version>
+		<libphonenumber-carrier.version>1.133</libphonenumber-carrier.version>
+		<libphonenumber-prefixmapper.version>2.143</libphonenumber-prefixmapper.version>
+		<libphonenumber-geocoder.version>2.143</libphonenumber-geocoder.version>
 		<tencentcloud-sdk-java.version>3.1.103</tencentcloud-sdk-java.version>
 		<tencentcloud-tls-sig-api-v2.version>1.1</tencentcloud-tls-sig-api-v2.version>
 		<guava.version>29.0-jre</guava.version>
@@ -390,6 +394,55 @@
 		<maven-nexus-staging-plugin.version>1.6.8</maven-nexus-staging-plugin.version>
 
 	</properties>
+
+	<dependencyManagement>
+		<dependencies>
+			<!-- https://mvnrepository.com/artifact/com.googlecode.libphonenumber/libphonenumber -->
+			<dependency>
+			    <groupId>com.googlecode.libphonenumber</groupId>
+			    <artifactId>libphonenumber</artifactId>
+			    <version>${libphonenumber.version}</version>
+			</dependency>
+			<!-- https://mvnrepository.com/artifact/com.googlecode.libphonenumber/carrier -->
+			<dependency>
+			    <groupId>com.googlecode.libphonenumber</groupId>
+			    <artifactId>carrier</artifactId>
+			    <version>${libphonenumber-carrier.version}</version>
+			</dependency>
+			<!-- https://mvnrepository.com/artifact/com.googlecode.libphonenumber/libphonenumber-prefixmapper -->
+			<dependency>
+			    <groupId>com.googlecode.libphonenumber</groupId>
+			    <artifactId>libphonenumber-prefixmapper</artifactId>
+			    <version>${libphonenumber-libphonenumber-prefixmapper.version}</version>
+			</dependency>
+			<!-- https://mvnrepository.com/artifact/com.googlecode.libphonenumber/geocoder -->
+			<dependency>
+			    <groupId>com.googlecode.libphonenumber</groupId>
+			    <artifactId>geocoder</artifactId>
+			    <version>${libphonenumber-geocoder.version}</version>
+			</dependency>
+			
+			<!-- https://mvnrepository.com/artifact/com.alibaba/fastjson -->
+			<dependency>
+				<groupId>com.alibaba</groupId>
+				<artifactId>fastjson</artifactId>
+				<version>${fastjson.version}</version>
+			</dependency>
+			
+			<!-- https://mvnrepository.com/artifact/com.tencentcloudapi/tencentcloud-sdk-java -->
+			<dependency>
+			    <groupId>com.tencentcloudapi</groupId>
+			    <artifactId>tencentcloud-sdk-java</artifactId>
+			    <version>${tencentcloud-sdk-java.version}</version>
+			</dependency>
+			<dependency>
+	            <groupId>com.github.tencentyun</groupId>
+	            <artifactId>tls-sig-api-v2</artifactId>
+	            <version>${tencentcloud-tls-sig-api-v2.version}</version>
+	        </dependency>
+			
+		</dependencies>
+	</dependencyManagement>
 
 	<dependencies>
 		
@@ -451,7 +504,6 @@
 		<dependency>
 			<groupId>com.alibaba</groupId>
 			<artifactId>fastjson</artifactId>
-			<version>${fastjson.version}</version>
 		</dependency>
 		<!-- https://mvnrepository.com/artifact/com.fasterxml.jackson.core/jackson-core -->
 		<dependency>
@@ -473,13 +525,12 @@
 		<dependency>
 		    <groupId>com.tencentcloudapi</groupId>
 		    <artifactId>tencentcloud-sdk-java</artifactId>
-		    <version>${tencentcloud-sdk-java.version}</version>
 		</dependency>
 		<dependency>
             <groupId>com.github.tencentyun</groupId>
             <artifactId>tls-sig-api-v2</artifactId>
-            <version>${tencentcloud-tls-sig-api-v2.version}</version>
         </dependency>
+        
 
 	</dependencies>
 
