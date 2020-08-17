@@ -46,7 +46,7 @@ public class TencentCloudAutoConfiguration {
 	
 	@Bean
 	public TencentSmsTemplate tencentSmsTemplate(SmsClient smsClient, TencentSmsProperties properties) {
-		return new TencentSmsTemplate(smsClient);
+		return new TencentSmsTemplate(smsClient, properties);
 	}
 
 }
