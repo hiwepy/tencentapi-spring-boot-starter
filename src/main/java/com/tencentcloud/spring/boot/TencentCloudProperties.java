@@ -20,31 +20,25 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 @ConfigurationProperties(TencentCloudProperties.PREFIX)
 public class TencentCloudProperties {
 
-	public static final String PREFIX = "baidu.face.v2";
+	public static final String PREFIX = "tencent.cloud";
 
 	/**
-	 * Enable Baidu Face Recognition.
+	 * Enable Tencent .
 	 */
 	private boolean enabled = false;
-	
-
+	/**
+	 * 官网获取的 API ID（腾讯云应用的AK）
+	 */
 	private String secretId;
-
+	/**
+	 * 官网获取的 Secret Key（腾讯应用的SK）
+	 */
   	private String secretKey;
 
   	private String token;
   
-  
-	/**
-	 * 官网获取的 API Key（百度云应用的AK）
-	 */
-	private String clientId;
-	/**
-	 * 官网获取的 Secret Key（百度云应用的SK）
-	 */
-	private String clientSecret;
-
 	private long sdkappid;
+	
 	private String key;
 
 	public boolean isEnabled() {
@@ -53,22 +47,6 @@ public class TencentCloudProperties {
 
 	public void setEnabled(boolean enabled) {
 		this.enabled = enabled;
-	}
-
-	public String getClientId() {
-		return clientId;
-	}
-
-	public void setClientId(String clientId) {
-		this.clientId = clientId;
-	}
-
-	public String getClientSecret() {
-		return clientSecret;
-	}
-
-	public void setClientSecret(String clientSecret) {
-		this.clientSecret = clientSecret;
 	}
 
 	public long getSdkappid() {
