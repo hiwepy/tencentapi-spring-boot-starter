@@ -32,7 +32,7 @@ import okhttp3.RequestBody;
 @Slf4j
 public class TencentTimTemplate {
 
-	private static final String PREFIX = "https://console.tim.qq.com";
+	public static final String PREFIX = "https://console.tim.qq.com";
 	private static final String DELIMITER = "&";
 	private static final String SEPARATOR = "=";
 	private static final String USER_SIG = "usersig";
@@ -61,10 +61,10 @@ public class TencentTimTemplate {
 			OkHttpClient okhttp3Client) {
 		this.sdkappid = webimProperties.getSdkappid();
 		this.identifier = webimProperties.getIdentifier();
-		this.sign = this.genSig(webimProperties.getIdentifier(), webimProperties.getExpire());
 		this.expire = webimProperties.getExpire();
 		this.tlsSigAPIv2 = tlsSigAPIv2;
 		this.okhttp3Client = okhttp3Client;
+		this.sign = this.genSig(webimProperties.getIdentifier(), webimProperties.getExpire());
 	}
 
 	public String genSig(String identifier) {
