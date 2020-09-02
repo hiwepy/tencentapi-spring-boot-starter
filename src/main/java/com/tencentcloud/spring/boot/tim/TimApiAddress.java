@@ -4,7 +4,7 @@ package com.tencentcloud.spring.boot.tim;
  * https://cloud.tencent.com/document/product/269/1520
  * @author 		： <a href="https://github.com/vindell">vindell</a>
  */
-public enum IMRequestAddress {
+public enum TimApiAddress {
 	
 	// ---------------- 帐号管理 ------------------
 	
@@ -170,7 +170,7 @@ public enum IMRequestAddress {
 
 	private String value;
 
-	IMRequestAddress(String value) {
+	TimApiAddress(String value) {
 		this.value = value;
 	}
 
@@ -178,4 +178,8 @@ public enum IMRequestAddress {
 		return value;
 	}
 
+	public String fullpath(String prefix){
+        return prefix.concat(value);
+    }
+ 
 }

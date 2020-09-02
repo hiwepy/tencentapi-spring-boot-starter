@@ -19,15 +19,17 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 
 import lombok.Data;
 
-@ConfigurationProperties(TencentWebimProperties.PREFIX)
+@ConfigurationProperties(TencentTimProperties.PREFIX)
 @Data
-public class TencentWebimProperties {
+public class TencentTimProperties {
 
+	public static final String ADMINISTRATOR = "administrator";
 	public static final String PREFIX = "tencent.tim";
-
-	public String identifier = "admin";
-	public long sdkappid;
-	public long expire = 86400 * 30;
-	public String privateKey;
+	private static final long EXPIRE = 86400 * 30;
+	 
+	private String identifier = ADMINISTRATOR;
+	private Long sdkappid;
+	private String privateKey;
+	private long expire = EXPIRE;
 
 }

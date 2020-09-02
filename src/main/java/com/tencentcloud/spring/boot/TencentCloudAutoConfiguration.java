@@ -1,29 +1,34 @@
 package com.tencentcloud.spring.boot;
 
+import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 import com.tencentcloud.spring.boot.sms.TencentSmsTemplate;
+import com.tencentcloud.spring.boot.tim.TencentTimTemplate;
 import com.tencentcloudapi.common.Credential;
 import com.tencentcloudapi.sms.v20190711.SmsClient;
-import com.tencentyun.TLSSigAPIv2;
+
+import okhttp3.OkHttpClient;
 
 @Configuration
 @ConditionalOnProperty(prefix = TencentCloudProperties.PREFIX, value = "enabled", havingValue = "true")
-@EnableConfigurationProperties({ TencentCloudProperties.class, TencentWebimProperties.class,
+@EnableConfigurationProperties({ TencentCloudProperties.class, TencentTimProperties.class,
 		TencentSmsProperties.class })
 public class TencentCloudAutoConfiguration {
 
 	@Bean
-	public TLSSigAPIv2 tlsSigAPIv2(TencentCloudProperties properties) {
-		return new TLSSigAPIv2(properties.getSdkappid(), properties.getKey());
+	@ConditionalOnMissingBean
+	public OkHttpClient okhttp3Client() {
+		return new OkHttpClient.Builder().build();
 	}
 	
 	@Bean
-	public TencentWebimTemplate tencentWebimTemplate(TLSSigAPIv2 tlsSigAPIv2) {
-		return new TencentWebimTemplate(tlsSigAPIv2);
+	public TencentTimTemplate tencentTimTemplate(TencentTimProperties webimProperties,  OkHttpClient okhttp3Client) {
+		// tencent-tim-java-sdk
+		return new TencentTimTemplate(webimProperties, okhttp3Client);
 	}
 	
 	/*
