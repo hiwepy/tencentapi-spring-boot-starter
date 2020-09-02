@@ -110,6 +110,24 @@ public enum IMRequestAddress {
 	 */
 	PORTRAIT_SET("/v4/profile/portrait_set?"),
 	
+	
+	  /**
+     * 添加黑名单
+     */
+    BLACK_LIST_ADD("/v4/sns/black_list_add?"),
+    /**
+     * 删除黑名单
+     */
+    BLACK_LIST_DELETE("/v4/sns/black_list_delete?"),
+    /**
+     * 拉取黑名单
+     */
+    BLACK_LIST_GET("/v4/sns/black_list_get?"),
+    /**
+     * 校验黑名单
+     */
+    BLACK_LIST_CHECK("/v4/sns/black_list_check?"),
+    
 	/**
 	 * 获取APP中的所有群组
 	 */

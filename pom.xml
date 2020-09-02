@@ -421,6 +421,12 @@
 			    <artifactId>geocoder</artifactId>
 			    <version>${libphonenumber-geocoder.version}</version>
 			</dependency>
+			<!-- https://mvnrepository.com/artifact/com.google.guava/guava -->
+			<dependency>
+			    <groupId>com.google.guava</groupId>
+			    <artifactId>guava</artifactId>
+			    <version>${guava.version}</version>
+			</dependency>
 			
 			<!-- https://mvnrepository.com/artifact/com.alibaba/fastjson -->
 			<dependency>
@@ -515,7 +521,15 @@
 		    <groupId>com.fasterxml.jackson.core</groupId>
 		    <artifactId>jackson-annotations</artifactId>
 		</dependency>
-
+		<dependency>
+			<groupId>com.fasterxml.jackson.core</groupId>
+  			<artifactId>jackson-databind</artifactId>
+		</dependency>
+		<dependency>
+		    <groupId>com.google.guava</groupId>
+		    <artifactId>guava</artifactId>
+		</dependency>
+		
 		<dependency>
 			<groupId>org.apache.commons</groupId>
 			<artifactId>commons-lang3</artifactId>
