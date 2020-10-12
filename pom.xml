@@ -380,7 +380,7 @@
 		<libphonenumber-carrier.version>1.133</libphonenumber-carrier.version>
 		<libphonenumber-prefixmapper.version>2.143</libphonenumber-prefixmapper.version>
 		<libphonenumber-geocoder.version>2.143</libphonenumber-geocoder.version>
-		<tencentcloud-sdk-java.version>3.1.103</tencentcloud-sdk-java.version>
+		<tencentcloud-sdk-java.version>3.1.143</tencentcloud-sdk-java.version>
 		<tencentcloud-tls-sig-api-v2.version>1.1</tencentcloud-tls-sig-api-v2.version>
 		<guava.version>29.0-jre</guava.version>
 		<fastjson.version>1.2.72</fastjson.version>

@@ -6,6 +6,8 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import org.apache.commons.lang3.StringUtils;
 
@@ -15,6 +17,7 @@ import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Maps;
 import com.tencentcloud.spring.boot.TencentTimProperties;
 import com.tencentcloud.spring.boot.tim.req.message.BlacklistMessage;
+import com.tencentcloud.spring.boot.tim.resp.AccountCheckActionResponse;
 import com.tencentcloud.spring.boot.tim.resp.BlacklistResponse;
 import com.tencentcloud.spring.boot.tim.resp.IMActionResponse;
 import com.tencentcloud.spring.boot.tim.resp.UserProfileItemResponse;
@@ -130,7 +133,7 @@ public class TencentTimTemplate {
 
 	/**
 	 * 1、导入单个帐号 v4/im_open_login_svc/account_import
-	 *
+	 * API：https://cloud.tencent.com/document/product/269/1608
 	 * @param userId
 	 * @param nickname
 	 * @param avatar
@@ -138,9 +141,76 @@ public class TencentTimTemplate {
 	 */
 	public IMActionResponse accountImport(String userId, String nickname, String avatar) {
 		Map<String, Object> requestBody = new ImmutableMap.Builder<String, Object>()
-				.put("Identifier", getImUserByUserId(userId)).put("Nick", nickname).put("FaceUrl", avatar).build();
+				.put("Identifier", getImUserByUserId(userId))
+				.put("Nick", nickname)
+				.put("FaceUrl", avatar).build();
 		IMActionResponse res = request(TimApiAddress.ACCOUNT_IMPORT.getValue() + joiner.join(getDefaultParams()),
 				requestBody, IMActionResponse.class);
+		System.out.println(res);
+		if (!res.isSuccess()) {
+			log.error("导入信息失败, response message is: {}", res);
+		}
+		return res;
+	}
+	
+	/**
+	 * 2、导入多个帐号
+	 * API：https://cloud.tencent.com/document/product/269/4919
+	 * @author 		： <a href="https://github.com/vindell">vindell</a>
+	 * @param userIds
+	 * @return
+	 */
+	public IMActionResponse accountImport(String[] userIds) {
+		Map<String, Object> requestBody = new ImmutableMap.Builder<String, Object>()
+				.put("Accounts", userIds).build();
+		IMActionResponse res = request(TimApiAddress.MULTI_ACCOUNT_IMPORT.getValue() + joiner.join(getDefaultParams()),
+				requestBody, IMActionResponse.class);
+		System.out.println(res);
+		if (!res.isSuccess()) {
+			log.error("导入信息失败, response message is: {}", res);
+		}
+		return res;
+	}
+	
+	/**
+	 * 3、删除帐号
+	 * API：https://cloud.tencent.com/document/product/269/36443
+	 * @author 		： <a href="https://github.com/vindell">vindell</a>
+	 * @param userIds
+	 * @return
+	 */
+	public IMActionResponse accountDelete(String[] userIds) {
+		Map<String, Object> requestBody = new ImmutableMap.Builder<String, Object>()
+				.put("DeleteItem", Stream.of(userIds).map(uid -> {
+					Map<String, Object> userMap = new HashMap<>();
+					userMap.put("UserID", uid);
+					return userMap;
+				}).collect(Collectors.toList())).build();
+		IMActionResponse res = request(TimApiAddress.ACCOUNT_DELETE.getValue() + joiner.join(getDefaultParams()),
+				requestBody, IMActionResponse.class);
+		System.out.println(res);
+		if (!res.isSuccess()) {
+			log.error("导入信息失败, response message is: {}", res);
+		}
+		return res;
+	}
+	
+	/**
+	 * 4、查询帐号
+	 * API：https://cloud.tencent.com/document/product/269/38417
+	 * @author 		： <a href="https://github.com/vindell">vindell</a>
+	 * @param userIds
+	 * @return
+	 */
+	public AccountCheckActionResponse accountCheck(String[] userIds) {
+		Map<String, Object> requestBody = new ImmutableMap.Builder<String, Object>()
+				.put("CheckItem", Stream.of(userIds).map(uid -> {
+					Map<String, Object> userMap = new HashMap<>();
+					userMap.put("UserID", uid);
+					return userMap;
+				}).collect(Collectors.toList())).build();
+		AccountCheckActionResponse res = request(TimApiAddress.ACCOUNT_DELETE.getValue() + joiner.join(getDefaultParams()),
+				requestBody, AccountCheckActionResponse.class);
 		System.out.println(res);
 		if (!res.isSuccess()) {
 			log.error("导入信息失败, response message is: {}", res);
