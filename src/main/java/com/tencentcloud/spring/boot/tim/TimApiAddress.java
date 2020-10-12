@@ -19,19 +19,19 @@ public enum TimApiAddress {
 	/**
 	 * 删除帐号
 	 */
-	ACCOUNT_DELETE(TencentTimTemplate.PREFIX + "v4/im_open_login_svc/account_delete?"),
+	ACCOUNT_DELETE(TencentTimTemplate.PREFIX + "/v4/im_open_login_svc/account_delete?"),
 	/**
 	 * 查询帐号
 	 */
-	ACCOUNT_CHECK(TencentTimTemplate.PREFIX + "v4/im_open_login_svc/account_check?"),
+	ACCOUNT_CHECK(TencentTimTemplate.PREFIX + "/v4/im_open_login_svc/account_check?"),
 	/**
 	 * 失效帐号登录态
 	 */
-	ACCOUNT_KICK(TencentTimTemplate.PREFIX + "v4/im_open_login_svc/kick?"),
+	ACCOUNT_KICK(TencentTimTemplate.PREFIX + "/v4/im_open_login_svc/kick?"),
 	/**
 	 * 查询帐号在线状态
 	 */
-	ACCOUNT_STATE(TencentTimTemplate.PREFIX + "v4/openim/querystate?"),
+	ACCOUNT_STATE(TencentTimTemplate.PREFIX + "/v4/openim/querystate?"),
 	
 	// ---------------- 单聊消息 ------------------
 	
