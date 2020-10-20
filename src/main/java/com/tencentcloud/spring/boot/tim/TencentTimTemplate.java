@@ -31,6 +31,7 @@ import okhttp3.RequestBody;
 
 /**
  * Tim 接口集成 1、帐号管理
+ * https://cloud.tencent.com/document/product/269/42440
  */
 @Slf4j
 public class TencentTimTemplate {
