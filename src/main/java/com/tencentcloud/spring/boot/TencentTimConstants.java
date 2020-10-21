@@ -1,7 +1,16 @@
 package com.tencentcloud.spring.boot;
 
+
 public class TencentTimConstants {
 
+	public static class Action {
+
+		public static final String LOGIN = "Login"; // 表示上线（TCP 建立）
+		public static final String LOGOUT = "Logout"; // 表示下线（TCP 断开）
+		public static final String DISCONNECT = "Disconnect"; // 表示网络断开（TCP 断开）
+		
+	}
+	
 	public static class CallBack {
 		
 		/**
@@ -94,6 +103,13 @@ public class TencentTimConstants {
 		 * https://cloud.tencent.com/document/product/269/2930
 		 */
 		public static final String GROUP_AFTER_GROUP_INFO_CHANGED = "Group.CallbackAfterGroupInfoChanged";
+	}
+	
+	public static class Reason {
+
+		public static final String LINK_CLOSE = "LinkClose";
+		public static final String TIME_OUT = "TimeOut";
+		
 	}
 	
 }

@@ -1,26 +1,14 @@
 package com.tencentcloud.spring.boot.tim;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 import org.apache.commons.lang3.StringUtils;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.google.common.base.Joiner;
-import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Maps;
 import com.tencentcloud.spring.boot.TencentTimProperties;
-import com.tencentcloud.spring.boot.tim.req.message.BlacklistMessage;
-import com.tencentcloud.spring.boot.tim.resp.AccountCheckActionResponse;
-import com.tencentcloud.spring.boot.tim.resp.BlacklistResponse;
-import com.tencentcloud.spring.boot.tim.resp.IMActionResponse;
-import com.tencentcloud.spring.boot.tim.resp.UserProfileItemResponse;
 import com.tencentyun.TLSSigAPIv2;
 
 import lombok.extern.slf4j.Slf4j;
@@ -30,15 +18,14 @@ import okhttp3.Request;
 import okhttp3.RequestBody;
 
 /**
- * Tim 接口集成 1、帐号管理
- * https://cloud.tencent.com/document/product/269/42440
+ * Tim 接口集成 https://cloud.tencent.com/document/product/269/42440
  */
 @Slf4j
 public class TencentTimTemplate {
 
-	public static final String PREFIX = "https://console.tim.qq.com";
-	private static final String DELIMITER = "&";
-	private static final String SEPARATOR = "=";
+	public final static String APPLICATION_JSON_VALUE = "application/json";
+	public final static String APPLICATION_JSON_UTF8_VALUE = "application/json;charset=UTF-8";
+
 	private static final String USER_SIG = "usersig";
 	private static final String IDENTIFIER = "identifier";
 	private static final String SDKAPPID = "sdkappid";
@@ -46,7 +33,6 @@ public class TencentTimTemplate {
 	private static final String CONTENTTYPE = "contenttype";
 	private static final String CONTENTTYPE_JSON = "json";
 
-	private final Joiner.MapJoiner joiner = Joiner.on(DELIMITER).withKeyValueSeparator(SEPARATOR);
 	private final ObjectMapper objectMapper = new ObjectMapper();
 
 	private String identifier;
@@ -55,6 +41,11 @@ public class TencentTimTemplate {
 	private String sign;
 	private TLSSigAPIv2 tlsSigAPIv2;
 	private OkHttpClient okhttp3Client;
+
+	private final TencentTimAccountOperations accountOps = new TencentTimAccountOperations(this);
+	private final TencentTimOpenimOperations imOps = new TencentTimOpenimOperations(this);
+	private final TencentTimProfileOperations profileOps = new TencentTimProfileOperations(this);
+	private final TencentTimSnsOperations snsOps = new TencentTimSnsOperations(this);
 
 	public TencentTimTemplate(TencentTimProperties webimProperties, OkHttpClient okhttp3Client) {
 		this(webimProperties, new TLSSigAPIv2(webimProperties.getSdkappid(), webimProperties.getPrivateKey()),
@@ -69,6 +60,23 @@ public class TencentTimTemplate {
 		this.tlsSigAPIv2 = tlsSigAPIv2;
 		this.okhttp3Client = okhttp3Client;
 		this.sign = this.genSig(webimProperties.getIdentifier(), webimProperties.getExpire());
+
+	}
+
+	public TencentTimAccountOperations opsForAccount() {
+		return accountOps;
+	}
+
+	public TencentTimOpenimOperations opsForOpenim() {
+		return imOps;
+	}
+
+	public TencentTimProfileOperations opsForProfile() {
+		return profileOps;
+	}
+
+	public TencentTimSnsOperations opsForSns() {
+		return snsOps;
 	}
 
 	public String genSig(String identifier) {
@@ -85,9 +93,10 @@ public class TencentTimTemplate {
 
 	/**
 	 * 返回默认的参数
+	 * 
 	 * @return
 	 */
-	private Map<String, String> getDefaultParams() {
+	public Map<String, String> getDefaultParams() {
 		Map<String, String> pathParams = Maps.newHashMap();
 		pathParams.put(USER_SIG, sign);
 		pathParams.put(IDENTIFIER, identifier);
@@ -98,11 +107,11 @@ public class TencentTimTemplate {
 		return pathParams;
 	}
 
-	private <T> T request(String url, Object params, Class<T> cls) {
+	public <T> T request(String url, Object params, Class<T> cls) {
 		return toBean(requestInvoke(url, params), cls);
 	}
 
-	private <T> T toBean(String json, Class<T> cls) {
+	public <T> T toBean(String json, Class<T> cls) {
 		try {
 			return objectMapper.readValue(json, cls);
 		} catch (IOException e) {
@@ -118,10 +127,10 @@ public class TencentTimTemplate {
 	 * @param params
 	 * @return
 	 */
-	private String requestInvoke(String url, Object params) {
+	public String requestInvoke(String url, Object params) {
 		String json = null;
 		try {
-			RequestBody requestBody = RequestBody.create(MediaType.parse("application/json"),
+			RequestBody requestBody = RequestBody.create(MediaType.parse(APPLICATION_JSON_VALUE),
 					objectMapper.writeValueAsString(params));
 			Request request = new Request.Builder().url(url).post(requestBody).build();
 			json = okhttp3Client.newCall(request).execute().body().string();
@@ -130,189 +139,6 @@ public class TencentTimTemplate {
 			log.error("IM 请求异常", e);
 		}
 		return json;
-	}
-
-	/**
-	 * 1、导入单个帐号 v4/im_open_login_svc/account_import
-	 * API：https://cloud.tencent.com/document/product/269/1608
-	 * @param userId
-	 * @param nickname
-	 * @param avatar
-	 * @return
-	 */
-	public IMActionResponse accountImport(String userId, String nickname, String avatar) {
-		Map<String, Object> requestBody = new ImmutableMap.Builder<String, Object>()
-				.put("Identifier", getImUserByUserId(userId))
-				.put("Nick", nickname)
-				.put("FaceUrl", avatar).build();
-		IMActionResponse res = request(TimApiAddress.ACCOUNT_IMPORT.getValue() + joiner.join(getDefaultParams()),
-				requestBody, IMActionResponse.class);
-		System.out.println(res);
-		if (!res.isSuccess()) {
-			log.error("导入信息失败, response message is: {}", res);
-		}
-		return res;
-	}
-	
-	/**
-	 * 2、导入多个帐号
-	 * API：https://cloud.tencent.com/document/product/269/4919
-	 * @author 		： <a href="https://github.com/vindell">vindell</a>
-	 * @param userIds
-	 * @return
-	 */
-	public IMActionResponse accountImport(String[] userIds) {
-		Map<String, Object> requestBody = new ImmutableMap.Builder<String, Object>()
-				.put("Accounts", userIds).build();
-		IMActionResponse res = request(TimApiAddress.MULTI_ACCOUNT_IMPORT.getValue() + joiner.join(getDefaultParams()),
-				requestBody, IMActionResponse.class);
-		System.out.println(res);
-		if (!res.isSuccess()) {
-			log.error("导入信息失败, response message is: {}", res);
-		}
-		return res;
-	}
-	
-	/**
-	 * 3、删除帐号
-	 * API：https://cloud.tencent.com/document/product/269/36443
-	 * @author 		： <a href="https://github.com/vindell">vindell</a>
-	 * @param userIds
-	 * @return
-	 */
-	public IMActionResponse accountDelete(String[] userIds) {
-		Map<String, Object> requestBody = new ImmutableMap.Builder<String, Object>()
-				.put("DeleteItem", Stream.of(userIds).map(uid -> {
-					Map<String, Object> userMap = new HashMap<>();
-					userMap.put("UserID", uid);
-					return userMap;
-				}).collect(Collectors.toList())).build();
-		IMActionResponse res = request(TimApiAddress.ACCOUNT_DELETE.getValue() + joiner.join(getDefaultParams()),
-				requestBody, IMActionResponse.class);
-		System.out.println(res);
-		if (!res.isSuccess()) {
-			log.error("导入信息失败, response message is: {}", res);
-		}
-		return res;
-	}
-	
-	/**
-	 * 4、查询帐号
-	 * API：https://cloud.tencent.com/document/product/269/38417
-	 * @author 		： <a href="https://github.com/vindell">vindell</a>
-	 * @param userIds
-	 * @return
-	 */
-	public AccountCheckActionResponse accountCheck(String[] userIds) {
-		Map<String, Object> requestBody = new ImmutableMap.Builder<String, Object>()
-				.put("CheckItem", Stream.of(userIds).map(uid -> {
-					Map<String, Object> userMap = new HashMap<>();
-					userMap.put("UserID", uid);
-					return userMap;
-				}).collect(Collectors.toList())).build();
-		AccountCheckActionResponse res = request(TimApiAddress.ACCOUNT_DELETE.getValue() + joiner.join(getDefaultParams()),
-				requestBody, AccountCheckActionResponse.class);
-		System.out.println(res);
-		if (!res.isSuccess()) {
-			log.error("导入信息失败, response message is: {}", res);
-		}
-		return res;
-	}
-
-	public UserProfileItemResponse portraitGet(Long userId) {
-		ArrayList<String> tagList = new ArrayList<String>();
-		tagList.add("Tag_Profile_IM_Nick");
-		tagList.add("Tag_Profile_IM_Image");
-		ArrayList<String> toAccount = new ArrayList<String>();
-		toAccount.add(String.valueOf(userId));
-		Map<String, Object> requestBody = new ImmutableMap.Builder<String, Object>().put("To_Account", toAccount)
-				.put("TagList", tagList).build();
-		UserProfileItemResponse res = request(
-				TimApiAddress.PORTRAIT_GET.getValue() + joiner.join(getDefaultParams()), requestBody,
-				UserProfileItemResponse.class);
-		if (!res.isSuccess()) {
-			log.error("获取信息失败, response message is: {}", res);
-		}
-		return res;
-	}
-
-	/**
-	 * 设置资料
-	 *
-	 * @param userId
-	 * @param nickname
-	 * @param avatar
-	 * @return
-	 */
-	public IMActionResponse portraitSet(Long userId, String nickname, String avatar) {
-		IMActionResponse res = new IMActionResponse();
-		if (userId == null || userId <= 0) {
-			return res;
-		}
-		if (StringUtils.isBlank(nickname) && StringUtils.isBlank(avatar)) {
-			return res;
-		}
-		ArrayList<HashMap<String, String>> objects = new ArrayList<>();
-		HashMap<String, String> hashMap = new HashMap<>();
-		hashMap.put("Tag", "Tag_Profile_IM_Nick");
-		hashMap.put("Value", nickname);
-		HashMap<String, String> hashMap1 = new HashMap<>();
-		hashMap1.put("Tag", "Tag_Profile_IM_Image");
-		hashMap1.put("Value", avatar);
-		objects.add(hashMap);
-		objects.add(hashMap1);
-
-		Map<String, Object> requestBody = new ImmutableMap.Builder<String, Object>()
-				.put("From_Account", String.valueOf(userId)).put("ProfileItem", objects).build();
-		res = request(TimApiAddress.PORTRAIT_SET.getValue() + joiner.join(getDefaultParams()), requestBody,
-				IMActionResponse.class);
-		if (!res.isSuccess()) {
-			log.error("设置资料失败, response message is: {}", res);
-		}
-		return res;
-	}
-
-	public Boolean addBlackList(String fromAccount, String toAccount) {
-		BlacklistMessage message = new BlacklistMessage();
-		message.setFromAccount(fromAccount);
-		message.setToAccount(Arrays.asList(toAccount));
-
-		BlacklistResponse request = request(
-				TimApiAddress.BLACK_LIST_ADD.getValue() + joiner.join(getDefaultParams()), message,
-				BlacklistResponse.class);
-		if (!request.isSuccess()) {
-			log.error("拉黑失败, response message is: {}", request);
-			return false;
-		}
-		return true;
-	}
-
-	public Boolean deleteBlackList(String fromAccount, String toAccount) {
-		BlacklistMessage message = new BlacklistMessage();
-		message.setFromAccount(fromAccount);
-		message.setToAccount(Arrays.asList(toAccount));
-
-		BlacklistResponse request = request(
-				TimApiAddress.BLACK_LIST_DELETE.getValue() + joiner.join(getDefaultParams()), message,
-				BlacklistResponse.class);
-		if (!request.isSuccess()) {
-			log.error("取消拉黑失败, response message is: {}", request);
-			return false;
-		}
-		return true;
-	}
-
-	public BlacklistResponse getBlackList(String fromAccount, Integer lastSequence) {
-		BlacklistMessage message = new BlacklistMessage();
-		message.setFromAccount(fromAccount);
-		message.setStartIndex(0);
-		message.setMaxLimited(20);
-		message.setLastSequence(lastSequence);
-
-		BlacklistResponse blacklistResponse = request(
-				TimApiAddress.BLACK_LIST_GET.getValue() + joiner.join(getDefaultParams()), message,
-				BlacklistResponse.class);
-		return blacklistResponse;
 	}
 
 	/**
