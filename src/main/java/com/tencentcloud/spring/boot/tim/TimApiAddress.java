@@ -2,7 +2,7 @@ package com.tencentcloud.spring.boot.tim;
 
 /**
  * https://cloud.tencent.com/document/product/269/1520
- * @author 		： <a href="https://github.com/vindell">vindell</a>
+ * @author 		： <a href="https://github.com/hiwepy">hiwepy</a>
  */
 public enum TimApiAddress {
 	
