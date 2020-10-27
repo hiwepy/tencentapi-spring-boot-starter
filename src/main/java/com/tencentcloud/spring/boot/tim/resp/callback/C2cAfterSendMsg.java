@@ -6,15 +6,15 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Data;
 
 /**
- *发单聊消息之前回调
- * https://cloud.tencent.com/document/product/269/1632
+ *发单聊消息之后回调
+ * https://cloud.tencent.com/document/product/269/2716
  */
 @Data
 @JsonInclude(JsonInclude.Include.NON_NULL)
-public class C2cBeforeSendMsg {
+public class C2cAfterSendMsg {
 	
 	/**
-	 * 回调命令 - C2C.CallbackBeforeSendMsg
+	 * 回调命令 - C2C.CallbackAfterSendMsg
 	 */
 	@JsonProperty(value = "CallbackCommand")
 	private String command;
@@ -54,6 +54,18 @@ public class C2cBeforeSendMsg {
 	 */
 	@JsonProperty(value = "MsgKey")
 	private String msgKey;
+	
+	/**
+	 * 该条消息的下发结果，0表示下发成功，非0表示下发失败
+	 */
+	@JsonProperty(value = "SendMsgResult")
+	private String msgResult;
+	
+	/**
+	 * 该条消息下发失败的错误信息，若消息发送成功，则为"send msg succeed"
+	 */
+	@JsonProperty(value = "ErrorInfo")
+	private String ErrorInfo;
     
 	/**
 	 * 消息体，参见 TIMMessage 消息对象

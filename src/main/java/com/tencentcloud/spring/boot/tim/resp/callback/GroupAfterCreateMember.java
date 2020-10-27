@@ -22,17 +22,12 @@ import lombok.Data;
 
 @Data
 @JsonInclude(JsonInclude.Include.NON_NULL)
-public class C2cBeforeSendMsgBody {
+public class GroupAfterCreateMember {
 
 	/**
-	 * From_Account 的黑名单列表中删除了 To_Account
+	 * 初始成员账号
 	 */
-	@JsonProperty(value = "From_Account")
-	private String from;
-	/**
-	 * To_Account 从 From_Account 的黑名单列表中删除
-	 */
-	@JsonProperty(value = "To_Account")
-	private String to;
+	@JsonProperty(value = "Member_Account")
+	private String member;
 	
 }

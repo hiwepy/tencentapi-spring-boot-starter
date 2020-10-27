@@ -10,8 +10,7 @@ import lombok.Data;
  * 回调应答对象
  */
 @Data
-@ApiModel(value = "C2cCallbackRespone", description = "用户每日行为统计DTO")
-public class C2cCallbackRespone {
+public class C2cBeforeSendMsgCallbackRespone {
 	
 	/**
 	 * 请求处理的结果，OK 表示处理成功，FAIL 表示失败
@@ -32,6 +31,6 @@ public class C2cCallbackRespone {
 	 * App 修改之后的消息，如果没有，则默认使用用户发送的消息
 	 */
 	@JsonProperty(value = "MsgBody")
-	private List<C2cCallbackResponeBody> MsgBody;
+	private List<C2cSendMsgBody> MsgBody;
 	
 }

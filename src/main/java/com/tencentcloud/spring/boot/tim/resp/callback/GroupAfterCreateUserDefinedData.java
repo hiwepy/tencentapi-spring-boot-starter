@@ -20,19 +20,22 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 
 import lombok.Data;
 
+/**
+ * 用户建群时的自定义字段
+ * @author 		： <a href="https://github.com/vindell">vindell</a>
+ */
 @Data
 @JsonInclude(JsonInclude.Include.NON_NULL)
-public class C2cCallbackResponeBody {
+public class GroupAfterCreateUserDefinedData {
 
 	/**
-	 * 消息类型
+	 * 用户建群时的自定义字段Key
 	 */
-	@JsonProperty(value = "MsgType")
-	private String MsgType;
+	@JsonProperty(value = "Key")
+	private String Key;
 	/**
-	 * 消息内容
+	 * 用户建群时的自定义字段Value
 	 */
-	@JsonProperty(value = "MsgContent")
-	private C2cCallbackResponeBodyContent MsgContent;
-	
+	@JsonProperty(value = "Value")
+	private String Value;
 }

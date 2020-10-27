@@ -22,22 +22,17 @@ import lombok.Data;
 
 @Data
 @JsonInclude(JsonInclude.Include.NON_NULL)
-public class C2cCallbackResponeBodyContent {
+public class C2cSendMsgBody {
 
 	/**
-	 * 文本
+	 * 消息类型
 	 */
-	@JsonProperty(value = "Text")
-	private String Text;
+	@JsonProperty(value = "MsgType")
+	private String MsgType;
 	/**
-	 * 描述
+	 * 消息内容
 	 */
-	@JsonProperty(value = "Desc")
-	private String Desc;
-	/**
-	 *  数据
-	 */
-	@JsonProperty(value = "Data")
-	private String Data;
-
+	@JsonProperty(value = "MsgContent")
+	private C2cSendMsgBodyContent MsgContent;
+	
 }
