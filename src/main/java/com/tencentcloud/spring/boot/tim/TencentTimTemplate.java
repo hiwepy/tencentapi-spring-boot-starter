@@ -16,6 +16,7 @@ import okhttp3.MediaType;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.RequestBody;
+import okhttp3.Response;
 
 /**
  * Tim 接口集成 https://cloud.tencent.com/document/product/269/42440
@@ -128,17 +129,21 @@ public class TencentTimTemplate {
 	 * @return
 	 */
 	public String requestInvoke(String url, Object params) {
-		String json = null;
+		String content = null;
 		try {
 			RequestBody requestBody = RequestBody.create(MediaType.parse(APPLICATION_JSON_VALUE),
 					objectMapper.writeValueAsString(params));
 			Request request = new Request.Builder().url(url).post(requestBody).build();
-			json = okhttp3Client.newCall(request).execute().body().string();
-			log.info("IM 响应 {}", json);
+			Response response = okhttp3Client.newCall(request).execute();
+			if (response.isSuccessful()) {
+                content = response.body().string();
+                log.debug("response : {}", content);
+                return content;
+            }
 		} catch (Exception e) {
-			log.error("IM 请求异常", e);
+			log.error("请求异常", e);
 		}
-		return json;
+		return content;
 	}
 
 	/**
