@@ -1,5 +1,7 @@
 package com.tencentcloud.spring.boot;
 
+import java.util.concurrent.TimeUnit;
+
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
@@ -11,6 +13,7 @@ import com.tencentcloud.spring.boot.tim.TencentTimTemplate;
 import com.tencentcloudapi.common.Credential;
 import com.tencentcloudapi.sms.v20190711.SmsClient;
 
+import okhttp3.ConnectionPool;
 import okhttp3.OkHttpClient;
 
 @Configuration
@@ -22,7 +25,13 @@ public class TencentCloudAutoConfiguration {
 	@Bean
 	@ConditionalOnMissingBean
 	public OkHttpClient okhttp3Client() {
-		return new OkHttpClient.Builder().build();
+		OkHttpClient.Builder builder = new OkHttpClient.Builder();
+        builder.connectTimeout(6L, TimeUnit.SECONDS);
+        builder.readTimeout(6L, TimeUnit.SECONDS);
+        builder.writeTimeout(6L, TimeUnit.SECONDS);
+        ConnectionPool connectionPool = new ConnectionPool(50, 60, TimeUnit.SECONDS);
+        builder.connectionPool(connectionPool);
+        return builder.build();
 	}
 	
 	@Bean
