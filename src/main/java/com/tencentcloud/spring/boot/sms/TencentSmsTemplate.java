@@ -33,11 +33,11 @@ public class TencentSmsTemplate {
 		this.smsProperties = smsProperties;
 	}
 
-	public SendSmsResponse send(String phoneNumber, String templateID, String[] templateParams) throws TencentCloudSDKException {
+	public SendSmsResponse send(String phoneNumber, String templateID, String... templateParams) throws TencentCloudSDKException {
 		return this.send(new String[] {phoneNumber}, templateID, templateParams);
 	}
 	
-	public SendSmsResponse send(String[] phoneNumbers, String templateID, String[] templateParams) throws TencentCloudSDKException {
+	public SendSmsResponse send(String[] phoneNumbers, String templateID, String... templateParams) throws TencentCloudSDKException {
 		
 		/*
 		 * 实例化一个请求对象，根据调用的接口和实际情况，可以进一步设置请求参数 您可以直接查询 SDK 源码确定接口有哪些属性可以设置

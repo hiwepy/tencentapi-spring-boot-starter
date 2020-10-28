@@ -10,7 +10,7 @@ import lombok.Data;
 
 @JsonInclude( JsonInclude.Include.NON_NULL)
 @Data
-public class BlacklistResponse extends IMActionResponse{
+public class BlacklistResponse extends TimActionResponse{
     /**
      * 黑名单对象数组，每一个黑名单对象都包括了 To_Account 和 AddBlackTimeStamp
      */

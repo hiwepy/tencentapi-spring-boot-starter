@@ -14,7 +14,7 @@ import java.util.Map;
  */
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @Data
-public class IMActionResponse {
+public class TimActionResponse {
 
 	/**
 	 * 请求处理的结果，OK 表示处理成功，FAIL 表示失败。
@@ -68,7 +68,7 @@ public class IMActionResponse {
 	 * 推送任务报告列表。
 	 */
 	@JsonProperty("Reports")
-	private IMActionReportsResponse reports;
+	private TimActionReportsResponse reports;
 
 	/**
 	 *

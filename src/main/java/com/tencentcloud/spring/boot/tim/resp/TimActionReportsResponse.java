@@ -9,7 +9,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
  *  推送任务报告列表。
  */
 @JsonInclude( JsonInclude.Include.NON_NULL)
-public class IMActionReportsResponse {
+public class TimActionReportsResponse {
 
     /**
      * 0(未处理) / 1（推送中) / 2（推送完成） 。

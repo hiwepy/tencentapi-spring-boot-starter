@@ -23,7 +23,7 @@ import java.util.stream.Stream;
 import com.google.common.collect.ImmutableMap;
 import com.tencentcloud.spring.boot.tim.resp.AccountCheckActionResponse;
 import com.tencentcloud.spring.boot.tim.resp.AccountStateActionResponse;
-import com.tencentcloud.spring.boot.tim.resp.IMActionResponse;
+import com.tencentcloud.spring.boot.tim.resp.TimActionResponse;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -46,13 +46,13 @@ public class TencentTimOpenimOperations extends TencentTimOperations {
 	 * @param avatar
 	 * @return
 	 */
-	public IMActionResponse accountImport(String userId, String nickname, String avatar) {
+	public TimActionResponse accountImport(String userId, String nickname, String avatar) {
 		Map<String, Object> requestBody = new ImmutableMap.Builder<String, Object>()
 				.put("Identifier", getImUserByUserId(userId))
 				.put("Nick", nickname)
 				.put("FaceUrl", avatar).build();
-		IMActionResponse res = request(TimApiAddress.ACCOUNT_IMPORT.getValue() + joiner.join(getDefaultParams()),
-				requestBody, IMActionResponse.class);
+		TimActionResponse res = request(TimApiAddress.ACCOUNT_IMPORT.getValue() + joiner.join(getDefaultParams()),
+				requestBody, TimActionResponse.class);
 		System.out.println(res);
 		if (!res.isSuccess()) {
 			log.error("导入单个帐号失败, response message is: {}", res);
@@ -66,11 +66,11 @@ public class TencentTimOpenimOperations extends TencentTimOperations {
 	 * @param userIds
 	 * @return
 	 */
-	public IMActionResponse accountImport(String[] userIds) {
+	public TimActionResponse accountImport(String[] userIds) {
 		Map<String, Object> requestBody = new ImmutableMap.Builder<String, Object>()
 				.put("Accounts", Stream.of(userIds).map(uid -> this.getImUserByUserId(uid)).collect(Collectors.toList())).build();
-		IMActionResponse res = request(TimApiAddress.MULTI_ACCOUNT_IMPORT.getValue() + joiner.join(getDefaultParams()),
-				requestBody, IMActionResponse.class);
+		TimActionResponse res = request(TimApiAddress.MULTI_ACCOUNT_IMPORT.getValue() + joiner.join(getDefaultParams()),
+				requestBody, TimActionResponse.class);
 		System.out.println(res);
 		if (!res.isSuccess()) {
 			log.error("导入多个帐号失败, response message is: {}", res);
@@ -84,15 +84,15 @@ public class TencentTimOpenimOperations extends TencentTimOperations {
 	 * @param userIds
 	 * @return
 	 */
-	public IMActionResponse accountDelete(String[] userIds) {
+	public TimActionResponse accountDelete(String[] userIds) {
 		Map<String, Object> requestBody = new ImmutableMap.Builder<String, Object>()
 				.put("DeleteItem", Stream.of(userIds).map(uid -> {
 					Map<String, Object> userMap = new HashMap<>();
 					userMap.put("UserID", this.getImUserByUserId(uid));
 					return userMap;
 				}).collect(Collectors.toList())).build();
-		IMActionResponse res = request(TimApiAddress.ACCOUNT_DELETE.getValue() + joiner.join(getDefaultParams()),
-				requestBody, IMActionResponse.class);
+		TimActionResponse res = request(TimApiAddress.ACCOUNT_DELETE.getValue() + joiner.join(getDefaultParams()),
+				requestBody, TimActionResponse.class);
 		System.out.println(res);
 		if (!res.isSuccess()) {
 			log.error("删除帐号失败, response message is: {}", res);
@@ -128,11 +128,11 @@ public class TencentTimOpenimOperations extends TencentTimOperations {
 	 * @param userId
 	 * @return
 	 */
-	public IMActionResponse accountKick(String userId) {
+	public TimActionResponse accountKick(String userId) {
 		Map<String, Object> requestBody = new ImmutableMap.Builder<String, Object>()
 				.put("Identifier", this.getImUserByUserId(userId)).build();
-		IMActionResponse res = request(TimApiAddress.ACCOUNT_KICK.getValue() + joiner.join(getDefaultParams()),
-				requestBody, IMActionResponse.class);
+		TimActionResponse res = request(TimApiAddress.ACCOUNT_KICK.getValue() + joiner.join(getDefaultParams()),
+				requestBody, TimActionResponse.class);
 		System.out.println(res);
 		if (!res.isSuccess()) {
 			log.error("查询失效帐号登录态失败, response message is: {}", res);

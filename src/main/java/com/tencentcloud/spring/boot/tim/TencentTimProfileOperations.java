@@ -22,7 +22,7 @@ import java.util.Map;
 import org.apache.commons.lang3.StringUtils;
 
 import com.google.common.collect.ImmutableMap;
-import com.tencentcloud.spring.boot.tim.resp.IMActionResponse;
+import com.tencentcloud.spring.boot.tim.resp.TimActionResponse;
 import com.tencentcloud.spring.boot.tim.resp.UserProfileItemResponse;
 
 import lombok.extern.slf4j.Slf4j;
@@ -63,8 +63,8 @@ public class TencentTimProfileOperations extends TencentTimOperations {
 	 * @param avatar
 	 * @return
 	 */
-	public IMActionResponse portraitSet(Long userId, String nickname, String avatar) {
-		IMActionResponse res = new IMActionResponse();
+	public TimActionResponse portraitSet(Long userId, String nickname, String avatar) {
+		TimActionResponse res = new TimActionResponse();
 		if (userId == null || userId <= 0) {
 			return res;
 		}
@@ -84,7 +84,7 @@ public class TencentTimProfileOperations extends TencentTimOperations {
 		Map<String, Object> requestBody = new ImmutableMap.Builder<String, Object>()
 				.put("From_Account", String.valueOf(userId)).put("ProfileItem", objects).build();
 		res = request(TimApiAddress.PORTRAIT_SET.getValue() + joiner.join(getDefaultParams()), requestBody,
-				IMActionResponse.class);
+				TimActionResponse.class);
 		if (!res.isSuccess()) {
 			log.error("设置资料失败, response message is: {}", res);
 		}
