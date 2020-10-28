@@ -2,6 +2,7 @@ package com.tencentcloud.spring.boot;
 
 import java.util.concurrent.TimeUnit;
 
+import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
@@ -9,11 +10,13 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 import com.tencentcloud.spring.boot.tim.TencentTimTemplate;
+import com.tencentyun.TLSSigAPIv2;
 
 import okhttp3.ConnectionPool;
 import okhttp3.OkHttpClient;
 
 @Configuration
+@ConditionalOnClass(TLSSigAPIv2.class)
 @ConditionalOnProperty(prefix = TencentTimProperties.PREFIX, value = "enabled", havingValue = "true")
 @EnableConfigurationProperties({ TencentTimProperties.class })
 public class TencentTimAutoConfiguration {

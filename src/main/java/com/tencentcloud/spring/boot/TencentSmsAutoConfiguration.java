@@ -1,5 +1,6 @@
 package com.tencentcloud.spring.boot;
 
+import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
@@ -10,6 +11,7 @@ import com.tencentcloudapi.common.Credential;
 import com.tencentcloudapi.sms.v20190711.SmsClient;
 
 @Configuration
+@ConditionalOnClass(SmsClient.class)
 @ConditionalOnProperty(prefix = TencentSmsProperties.PREFIX, value = "enabled", havingValue = "true")
 @EnableConfigurationProperties({ TencentSmsProperties.class })
 public class TencentSmsAutoConfiguration {
