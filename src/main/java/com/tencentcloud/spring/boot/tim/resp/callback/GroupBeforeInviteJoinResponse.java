@@ -6,6 +6,7 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 
 /**
  * 拉人入群之前回调响应
@@ -13,7 +14,8 @@ import lombok.Data;
  */
 @Data
 @JsonInclude(JsonInclude.Include.NON_NULL)
-public class GroupBeforeInviteJoinResponse {
+@EqualsAndHashCode(callSuper=false)
+public class GroupBeforeInviteJoinResponse extends CallbackRespone{
 	
 	/**
 	 * 请求处理的结果，OK 表示处理成功，FAIL 表示失败
