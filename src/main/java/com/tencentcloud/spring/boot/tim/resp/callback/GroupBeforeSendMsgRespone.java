@@ -10,7 +10,7 @@ import lombok.Data;
  * 回调应答对象
  */
 @Data
-public class C2cBeforeSendMsgCallbackRespone {
+public class GroupBeforeSendMsgRespone {
 	
 	/**
 	 * 请求处理的结果，OK 表示处理成功，FAIL 表示失败
@@ -18,7 +18,7 @@ public class C2cBeforeSendMsgCallbackRespone {
 	@JsonProperty(value = "ActionStatus")
 	private String ActionStatus = "OK";
 	/**
-	 * 错误码，0为允许发言；1为拒绝发言。若业务希望拒绝发言的同时，将错误码 ErrorCode 和 ErrorInfo 传递至客户端，请将错误码 ErrorCode 设置在 [120001, 130000] 区间内
+	 * 错误码，0为允许发言；1为拒绝发言；2为静默丢弃
 	 */
 	@JsonProperty(value = "ErrorCode")
 	private Integer ErrorCode = 0;
@@ -28,9 +28,9 @@ public class C2cBeforeSendMsgCallbackRespone {
 	@JsonProperty(value = "ErrorInfo")
 	private String ErrorInfo = "";
 	/**
-	 * App 修改之后的消息，如果没有，则默认使用用户发送的消息
+	 * 经过App修改之后的消息体，云通讯后台将把修改后的消息发送到群组中
 	 */
 	@JsonProperty(value = "MsgBody")
-	private List<C2cSendMsgBody> MsgBody;
+	private List<GroupSendMsgBody> MsgBody;
 	
 }

@@ -383,7 +383,7 @@
 		<tencentcloud-sdk-java.version>3.1.143</tencentcloud-sdk-java.version>
 		<tencentcloud-tls-sig-api-v2.version>1.1</tencentcloud-tls-sig-api-v2.version>
 		<guava.version>29.0-jre</guava.version>
-		<fastjson.version>1.2.72</fastjson.version>
+		<fastjson.version>1.2.74</fastjson.version>
 		
 		<maven.version>3.0</maven.version>
 		<maven-gpg-plugin.version>1.6</maven-gpg-plugin.version>

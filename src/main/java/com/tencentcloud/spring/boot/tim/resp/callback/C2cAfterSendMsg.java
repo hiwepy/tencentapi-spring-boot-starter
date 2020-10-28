@@ -1,5 +1,7 @@
 package com.tencentcloud.spring.boot.tim.resp.callback;
 
+import java.util.List;
+
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
@@ -71,6 +73,6 @@ public class C2cAfterSendMsg {
 	 * 消息体，参见 TIMMessage 消息对象
 	 */
 	@JsonProperty(value = "MsgBody")
-	private C2cSendMsgBody msgBody;
+	private List<C2cSendMsgBody> msgBody;
 	    
 }

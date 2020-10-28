@@ -1,3 +1,4 @@
 # Auto Configure
 org.springframework.boot.autoconfigure.EnableAutoConfiguration=\
-com.tencentcloud.spring.boot.TencentCloudAutoConfiguration
+com.tencentcloud.spring.boot.TencentSmsAutoConfiguration,\
+com.tencentcloud.spring.boot.TencentTimAutoConfiguration

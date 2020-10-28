@@ -13,28 +13,21 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  */
-package com.tencentcloud.spring.boot;
+package com.tencentcloud.spring.boot.tim.resp.callback;
 
-import org.springframework.boot.context.properties.ConfigurationProperties;
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
 import lombok.Data;
 
-@ConfigurationProperties(TencentTimProperties.PREFIX)
 @Data
-public class TencentTimProperties {
+@JsonInclude(JsonInclude.Include.NON_NULL)
+public class GroupAfterDestroyedMember {
 
-	public static final String ADMINISTRATOR = "administrator";
-	public static final String PREFIX = "tencent.tim";
-	private static final long EXPIRE = 86400 * 30;
-	 
 	/**
-	 * Enable Tencent Tim.
+	 * 被解散群的成员 UserID
 	 */
-	private boolean enabled = false;
+	@JsonProperty(value = "Member_Account")
+	private String member;
 	
-	private String identifier = ADMINISTRATOR;
-	private Long sdkappid;
-	private String privateKey;
-	private long expire = EXPIRE;
-
 }

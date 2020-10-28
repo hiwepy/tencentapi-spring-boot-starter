@@ -17,11 +17,28 @@ package com.tencentcloud.spring.boot;
 
 import org.springframework.boot.context.properties.ConfigurationProperties;
 
+import lombok.Data;
+
 @ConfigurationProperties(TencentSmsProperties.PREFIX)
+@Data
 public class TencentSmsProperties {
 
 	public static final String PREFIX = "tencent.sms";
 
+	/**
+	 * Enable Tencent Sms .
+	 */
+	private boolean enabled = false;
+	
+	/**
+	 * 官网获取的 API ID（腾讯云应用的AK）
+	 */
+	private String secretId;
+	/**
+	 * 官网获取的 Secret Key（腾讯应用的SK）
+	 */
+  	private String secretKey;
+  	
 	/**
 	 * 短信SdkAppid在 [短信控制台](https://console.cloud.tencent.com/smsv2)
 	 * 添加应用后生成的实际SdkAppid，示例如1400006666。
@@ -47,45 +64,5 @@ public class TencentSmsProperties {
 	 * helper](https://cloud.tencent.com/document/product/382/3773)。
 	 */
 	private String encode;
-
-	public String getRegion() {
-		return region;
-	}
-
-	public void setRegion(String region) {
-		this.region = region;
-	}
-
-	public String getSdkappid() {
-		return sdkappid;
-	}
-
-	public void setSdkappid(String sdkappid) {
-		this.sdkappid = sdkappid;
-	}
-
-	public String getSign() {
-		return sign;
-	}
-
-	public void setSign(String sign) {
-		this.sign = sign;
-	}
-
-	public String getSenderId() {
-		return senderId;
-	}
-
-	public void setSenderId(String senderId) {
-		this.senderId = senderId;
-	}
-
-	public String getEncode() {
-		return encode;
-	}
-
-	public void setEncode(String encode) {
-		this.encode = encode;
-	}
 	
 }

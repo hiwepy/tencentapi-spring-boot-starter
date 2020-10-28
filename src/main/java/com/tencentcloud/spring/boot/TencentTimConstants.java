@@ -52,27 +52,27 @@ public class TencentTimConstants {
 		 * 8、创建群组之前回调
 		 * https://cloud.tencent.com/document/product/269/1662
 		 */
-		public static final String GROUP_BEFORE_CREATE_GROUP = "Group.CallbackBeforeCreateGroup";
+		public static final String GROUP_BEFORE_CREATE = "Group.CallbackBeforeCreateGroup";
 		/**
 		 * 9、创建群组之后回调
 		 * https://cloud.tencent.com/document/product/269/1663
 		 */
-		public static final String GROUP_AFTER_CREATE_GROUP = "Group.CallbackAfterCreateGroup";
+		public static final String GROUP_AFTER_CREATE = "Group.CallbackAfterCreateGroup";
 		/**
 		 * 10、申请入群之前回调
 		 * https://cloud.tencent.com/document/product/269/1665
 		 */
-		public static final String GROUP_BEFORE_APPLY_JOIN_GROUP = "Group.CallbackBeforeApplyJoinGroup";
+		public static final String GROUP_BEFORE_APPLY_JOIN = "Group.CallbackBeforeApplyJoinGroup";
 		/**
 		 * 11、拉人入群之前回调
 		 * https://cloud.tencent.com/document/product/269/1666
 		 */
-		public static final String GROUP_BEFORE_INVITE_JOIN_GROUP = "Group.CallbackBeforeInviteJoinGroup";
+		public static final String GROUP_BEFORE_INVITE_JOIN = "Group.CallbackBeforeInviteJoinGroup";
 		/**
 		 * 12、新成员入群之后回调
 		 * https://cloud.tencent.com/document/product/269/1667
 		 */
-		public static final String GROUP_AFTER_MEMBER_JOIN_GROUP = "Group.CallbackAfterNewMemberJoin";
+		public static final String GROUP_AFTER_MEMBER_JOIN = "Group.CallbackAfterNewMemberJoin";
 		/**
 		 * 13、群成员离开之后回调
 		 * https://cloud.tencent.com/document/product/269/1668

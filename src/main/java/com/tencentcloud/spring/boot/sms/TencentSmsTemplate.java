@@ -28,7 +28,6 @@ public class TencentSmsTemplate {
 	private SmsClient client;
 	private TencentSmsProperties smsProperties;
 	
-	
 	public TencentSmsTemplate(SmsClient client, TencentSmsProperties smsProperties) {
 		this.client = client;
 		this.smsProperties = smsProperties;
