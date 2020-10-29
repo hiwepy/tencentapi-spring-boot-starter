@@ -26,7 +26,7 @@ import lombok.EqualsAndHashCode;
 @Data
 @EqualsAndHashCode(callSuper=false)
 @JsonInclude( JsonInclude.Include.NON_NULL)
-public class AccountStateActionResponse extends ApiResponse {
+public class AccountStateResponse extends ApiResponse {
 
 	/**
 	 * 用户在线状态结构化信息

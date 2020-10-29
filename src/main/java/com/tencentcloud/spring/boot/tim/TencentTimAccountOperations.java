@@ -25,7 +25,7 @@ import com.tencentcloud.spring.boot.tim.resp.AccountCheckResponse;
 import com.tencentcloud.spring.boot.tim.resp.AccountDeleteResponse;
 import com.tencentcloud.spring.boot.tim.resp.AccountImportResponse;
 import com.tencentcloud.spring.boot.tim.resp.AccountKickResponse;
-import com.tencentcloud.spring.boot.tim.resp.AccountStateActionResponse;
+import com.tencentcloud.spring.boot.tim.resp.AccountStateResponse;
 import com.tencentcloud.spring.boot.tim.resp.AccountsImportResponse;
 
 import lombok.extern.slf4j.Slf4j;
@@ -144,7 +144,7 @@ public class TencentTimAccountOperations extends TencentTimOperations {
 	 * @param userIds
 	 * @return
 	 */
-	public AccountStateActionResponse state(String... userIds) {
+	public AccountStateResponse state(String... userIds) {
 		return this.state(userIds, false);
 	}
 	
@@ -155,14 +155,14 @@ public class TencentTimAccountOperations extends TencentTimOperations {
 	 * @param needDetail
 	 * @return
 	 */
-	public AccountStateActionResponse state(String[] userIds, boolean needDetail) {
+	public AccountStateResponse state(String[] userIds, boolean needDetail) {
 		ImmutableMap.Builder<String, Object> builder = new ImmutableMap.Builder<String, Object>()
 			.put("To_Account", Stream.of(userIds).map(uid -> this.getImUserByUserId(uid)).collect(Collectors.toList()));
 		if(needDetail) {
 			builder.put("IsNeedDetail", 1);
 		}
-		AccountStateActionResponse res = request(TimApiAddress.ACCOUNT_STATE.getValue() + joiner.join(getDefaultParams()),
-				builder.build(), AccountStateActionResponse.class);
+		AccountStateResponse res = request(TimApiAddress.ACCOUNT_STATE.getValue() + joiner.join(getDefaultParams()),
+				builder.build(), AccountStateResponse.class);
 		System.out.println(res);
 		if (!res.isSuccess()) {
 			log.error("查询帐号在线状态失败，ActionStatus : {}, ErrorCode : {}, ErrorInfo : {}", res.getActionStatus(), res.getErrorCode(), res.getErrorInfo());
