@@ -78,8 +78,11 @@ public class TencentSmsTemplate {
 		
 		/* 3、国际/港澳台短信 senderid: 国内短信填空，默认未开通，如需开通请联系 [sms helper] */
 		map.from(smsProperties.getSenderId()).to(req::setSenderId);
+
+		/* 4、用户的 session 内容: 可以携带用户侧 ID 等上下文信息，server 会原样返回 */
+		map.from(smsProperties.getSession()).to(req::setSessionContext);
 		
-		/* 4、短信码号扩展号: 默认未开通，如需开通请联系 [sms helper] */
+		/* 5、短信码号扩展号: 默认未开通，如需开通请联系 [sms helper] */
 		map.from(smsProperties.getEncode()).to(req::setExtendCode);
 		
 		/*

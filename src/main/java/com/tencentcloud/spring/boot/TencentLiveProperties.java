@@ -19,14 +19,14 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 
 import lombok.Data;
 
-@ConfigurationProperties(TencentSmsProperties.PREFIX)
+@ConfigurationProperties(TencentLiveProperties.PREFIX)
 @Data
-public class TencentSmsProperties {
+public class TencentLiveProperties {
 
-	public static final String PREFIX = "tencent.sms";
+	public static final String PREFIX = "tencent.live";
 
 	/**
-	 * Enable Tencent Sms .
+	 * Enable Tencent Live .
 	 */
 	private boolean enabled = false;
 	
@@ -64,11 +64,5 @@ public class TencentSmsProperties {
 	 * helper](https://cloud.tencent.com/document/product/382/3773)。
 	 */
 	private String encode;
-	
-	/**
-	 * 用户的 session 内容，可以携带用户侧 ID 等上下文信息，server 会原样返回。
-	 * https://cloud.tencent.com/document/product/382/38778
-	 */
-	private String session;
 	
 }
