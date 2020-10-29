@@ -15,21 +15,14 @@
  */
 package com.tencentcloud.spring.boot.tim.resp;
 
-import java.util.List;
+import com.fasterxml.jackson.annotation.JsonInclude;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
 
-/**
- * TODO
- * @author 		： <a href="https://github.com/hiwepy">hiwepy</a>
- */
+@Data
+@EqualsAndHashCode(callSuper=false)
+@JsonInclude( JsonInclude.Include.NON_NULL)
+public class AccountKickResponse extends ApiResponse {
 
-public class AccountDeleteActionResponse extends ActionResponse {
-
-	 /**
-     * 单个帐号的结果对象数组
-     */
-    @JsonProperty("ResultItem")
-    private List<ResultItem> resultItem;
-	
 }

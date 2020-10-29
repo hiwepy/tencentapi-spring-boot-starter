@@ -10,7 +10,7 @@ import lombok.Data;
  */
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @Data
-public class ActionResponse {
+public class ApiResponse {
 
 	/**
 	 * 请求处理的结果，OK 表示处理成功，FAIL 表示失败。
@@ -25,7 +25,7 @@ public class ActionResponse {
 	private String errorInfo;
 
 	/**
-	 * 错误码。
+	 * 错误码，0表示成功，非0表示失败
 	 */
 	@JsonProperty("ErrorCode")
 	private int errorCode;

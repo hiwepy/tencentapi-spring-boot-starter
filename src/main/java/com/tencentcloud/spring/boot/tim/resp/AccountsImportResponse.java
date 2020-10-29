@@ -26,18 +26,12 @@ import lombok.EqualsAndHashCode;
 @Data
 @EqualsAndHashCode(callSuper=false)
 @JsonInclude( JsonInclude.Include.NON_NULL)
-public class AccountStateActionResponse extends ApiResponse {
+public class AccountsImportResponse extends ApiResponse {
 
 	/**
-	 * 用户在线状态结构化信息
+	 * 导入失败的帐号列表
 	 */
-	@JsonProperty("QueryResult")
-	private List<AccountStateQueryResult> queryResult;
-	
-	/**
-	 * 状态查询失败的帐号列表，在此列表中的目标帐号，状态查询失败或目标帐号不存在。若状态全部查询成功，则 ErrorList 为空
-	 */
-	@JsonProperty("ErrorList")
-	private List<AccountStateQueryError> errorList;
-	
+	@JsonProperty("FailAccounts")
+	private List<String> failAccounts;
+
 }

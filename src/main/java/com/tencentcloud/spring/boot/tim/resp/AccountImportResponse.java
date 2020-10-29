@@ -15,10 +15,7 @@
  */
 package com.tencentcloud.spring.boot.tim.resp;
 
-import java.util.List;
-
 import com.fasterxml.jackson.annotation.JsonInclude;
-import com.fasterxml.jackson.annotation.JsonProperty;
 
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -26,12 +23,6 @@ import lombok.EqualsAndHashCode;
 @Data
 @EqualsAndHashCode(callSuper=false)
 @JsonInclude( JsonInclude.Include.NON_NULL)
-public class AccountCheckActionResponse extends ActionResponse {
-
-	/**
-	 * 单个帐号的结果对象数组
-	 */
-	@JsonProperty("ResultItem")
-	private List<AccountItem> resultItem;
+public class AccountImportResponse extends ApiResponse {
 
 }
