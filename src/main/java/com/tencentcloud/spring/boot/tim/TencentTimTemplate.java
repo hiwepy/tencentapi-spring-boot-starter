@@ -1,12 +1,16 @@
 package com.tencentcloud.spring.boot.tim;
 
 import java.io.IOException;
+import java.time.Duration;
 import java.util.Map;
 import java.util.UUID;
 
 import org.apache.commons.lang3.StringUtils;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.google.common.cache.CacheBuilder;
+import com.google.common.cache.CacheLoader;
+import com.google.common.cache.LoadingCache;
 import com.google.common.collect.Maps;
 import com.tencentcloud.spring.boot.TencentTimProperties;
 import com.tencentyun.TLSSigAPIv2;
@@ -39,7 +43,6 @@ public class TencentTimTemplate {
 	private String identifier;
 	private Long sdkappid;
 	private long expire;
-	private String sign;
 	private TLSSigAPIv2 tlsSigAPIv2;
 	private OkHttpClient okhttp3Client;
 
@@ -47,7 +50,8 @@ public class TencentTimTemplate {
 	private final TencentTimOpenimOperations imOps = new TencentTimOpenimOperations(this);
 	private final TencentTimProfileOperations profileOps = new TencentTimProfileOperations(this);
 	private final TencentTimSnsOperations snsOps = new TencentTimSnsOperations(this);
-
+	private LoadingCache<String, String> tlsSigCache;
+	
 	public TencentTimTemplate(TencentTimProperties webimProperties, OkHttpClient okhttp3Client) {
 		this(webimProperties, new TLSSigAPIv2(webimProperties.getSdkappid(), webimProperties.getPrivateKey()),
 				okhttp3Client);
@@ -60,8 +64,17 @@ public class TencentTimTemplate {
 		this.expire = webimProperties.getExpire();
 		this.tlsSigAPIv2 = tlsSigAPIv2;
 		this.okhttp3Client = okhttp3Client;
-		this.sign = this.genSig(webimProperties.getIdentifier(), webimProperties.getExpire());
+		this.tlsSigCache = CacheBuilder.newBuilder()
+						.expireAfterWrite(Duration.ofSeconds(Math.max(webimProperties.getExpire() - 60, 60)))
+						.build(new CacheLoader<String, String>() {
 
+							@Override
+							public String load(String key) throws Exception {
+								return tlsSigAPIv2.genSig(webimProperties.getIdentifier(), webimProperties.getExpire());
+							}
+							
+						});
+		
 	}
 
 	public TencentTimAccountOperations opsForAccount() {
@@ -99,7 +112,7 @@ public class TencentTimTemplate {
 	 */
 	public Map<String, String> getDefaultParams() {
 		Map<String, String> pathParams = Maps.newHashMap();
-		pathParams.put(USER_SIG, sign);
+		pathParams.put(USER_SIG, tlsSigCache.getUnchecked(USER_SIG));
 		pathParams.put(IDENTIFIER, identifier);
 		pathParams.put(SDKAPPID, sdkappid.toString());
 		pathParams.put(RANDOM, UUID.randomUUID().toString().replace("-", "").toLowerCase());

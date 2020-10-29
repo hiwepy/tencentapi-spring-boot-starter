@@ -144,8 +144,8 @@ public class TencentTimAccountOperations extends TencentTimOperations {
 	 * @param userIds
 	 * @return
 	 */
-	public AccountStateResponse state(String... userIds) {
-		return this.state(userIds, false);
+	public AccountStateResponse onlineState(String... userIds) {
+		return this.onlineState(userIds, false);
 	}
 	
 	/**
@@ -155,7 +155,7 @@ public class TencentTimAccountOperations extends TencentTimOperations {
 	 * @param needDetail
 	 * @return
 	 */
-	public AccountStateResponse state(String[] userIds, boolean needDetail) {
+	public AccountStateResponse onlineState(String[] userIds, boolean needDetail) {
 		ImmutableMap.Builder<String, Object> builder = new ImmutableMap.Builder<String, Object>()
 			.put("To_Account", Stream.of(userIds).map(uid -> this.getImUserByUserId(uid)).collect(Collectors.toList()));
 		if(needDetail) {

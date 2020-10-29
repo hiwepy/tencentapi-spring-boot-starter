@@ -13,31 +13,16 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  */
-package com.tencentcloud.spring.boot;
+package com.tencentcloud.spring.boot.tim.resp;
 
-import org.springframework.boot.context.properties.ConfigurationProperties;
+import com.fasterxml.jackson.annotation.JsonInclude;
 
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 
-@ConfigurationProperties(TencentTimProperties.PREFIX)
 @Data
-public class TencentTimProperties {
-
-	public static final String ADMINISTRATOR = "administrator";
-	public static final String PREFIX = "tencent.tim";
-	// 单位秒
-	private static final long EXPIRE = 86400 * 30;
-	/**
-	 * Enable Tencent Tim.
-	 */
-	private boolean enabled = false;
-	
-	private String identifier = ADMINISTRATOR;
-	private Long sdkappid;
-	private String privateKey;
-	/**
-	 * 签名过期时间，单位秒
-	 */
-	private long expire = EXPIRE;
+@EqualsAndHashCode(callSuper=false)
+@JsonInclude( JsonInclude.Include.NON_NULL)
+public class UserProfilePortraitSetResponse extends ApiResponse {
 
 }

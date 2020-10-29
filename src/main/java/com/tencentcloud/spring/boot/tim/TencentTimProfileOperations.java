@@ -18,12 +18,14 @@ package com.tencentcloud.spring.boot.tim;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import org.apache.commons.lang3.StringUtils;
 
 import com.google.common.collect.ImmutableMap;
-import com.tencentcloud.spring.boot.tim.resp.TimActionResponse;
-import com.tencentcloud.spring.boot.tim.resp.UserProfileItemResponse;
+import com.tencentcloud.spring.boot.tim.resp.UserProfilePortraitGetResponse;
+import com.tencentcloud.spring.boot.tim.resp.UserProfilePortraitSetResponse;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -38,19 +40,28 @@ public class TencentTimProfileOperations extends TencentTimOperations {
 		super(timTemplate);
 	}
 
-	public UserProfileItemResponse portraitGet(String userId) {
+	
+	public UserProfilePortraitGetResponse portraitGet(String... userIds) {
 		ArrayList<String> tagList = new ArrayList<String>();
 		tagList.add("Tag_Profile_IM_Nick");
-		tagList.add("Tag_Profile_IM_Image");
-		ArrayList<String> toAccount = new ArrayList<String>();
-		toAccount.add(userId);
-		Map<String, Object> requestBody = new ImmutableMap.Builder<String, Object>().put("To_Account", toAccount)
+		tagList.add("Tag_Profile_IM_Gender");
+		tagList.add("Tag_Profile_IM_BirthDay");
+		tagList.add("Tag_Profile_IM_Location");
+		tagList.add("Tag_Profile_IM_SelfSignature");
+		tagList.add("Tag_Profile_IM_AllowType");
+		tagList.add("Tag_Profile_IM_Language");
+		tagList.add("Tag_Profile_IM_MsgSettings");
+		tagList.add("Tag_Profile_IM_AdminForbidType");
+		tagList.add("Tag_Profile_IM_Level");
+		tagList.add("Tag_Profile_IM_Role");
+		Map<String, Object> requestBody = new ImmutableMap.Builder<String, Object>()
+				.put("To_Account", Stream.of(userIds).map(uid -> this.getImUserByUserId(uid)).collect(Collectors.toList()))
 				.put("TagList", tagList).build();
-		UserProfileItemResponse res = request(
+		UserProfilePortraitGetResponse res = request(
 				TimApiAddress.PORTRAIT_GET.getValue() + joiner.join(getDefaultParams()), requestBody,
-				UserProfileItemResponse.class);
+				UserProfilePortraitGetResponse.class);
 		if (!res.isSuccess()) {
-			log.error("获取信息失败, response message is: {}", res);
+			log.error("获取信息失败， ActionStatus : {}, ErrorCode : {}, ErrorInfo : {}", res.getActionStatus(), res.getErrorCode(), res.getErrorInfo());
 		}
 		return res;
 	}
@@ -63,8 +74,8 @@ public class TencentTimProfileOperations extends TencentTimOperations {
 	 * @param avatar
 	 * @return
 	 */
-	public TimActionResponse portraitSet(Long userId, String nickname, String avatar) {
-		TimActionResponse res = new TimActionResponse();
+	public UserProfilePortraitSetResponse portraitSet(Long userId, String nickname, String avatar) {
+		UserProfilePortraitSetResponse res = new UserProfilePortraitSetResponse();
 		if (userId == null || userId <= 0) {
 			return res;
 		}
@@ -84,9 +95,9 @@ public class TencentTimProfileOperations extends TencentTimOperations {
 		Map<String, Object> requestBody = new ImmutableMap.Builder<String, Object>()
 				.put("From_Account", String.valueOf(userId)).put("ProfileItem", objects).build();
 		res = request(TimApiAddress.PORTRAIT_SET.getValue() + joiner.join(getDefaultParams()), requestBody,
-				TimActionResponse.class);
+				UserProfilePortraitSetResponse.class);
 		if (!res.isSuccess()) {
-			log.error("设置资料失败, response message is: {}", res);
+			log.error("设置资料失败， ActionStatus : {}, ErrorCode : {}, ErrorInfo : {}", res.getActionStatus(), res.getErrorCode(), res.getErrorInfo());
 		}
 		return res;
 	}

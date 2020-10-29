@@ -19,16 +19,22 @@ public class ApiResponse {
 	private String actionStatus;
 
 	/**
+	 * 错误码，0表示成功，非0表示失败
+	 */
+	@JsonProperty("ErrorCode")
+	private int errorCode;
+	
+	/**
 	 * 错误信息。
 	 */
 	@JsonProperty("ErrorInfo")
 	private String errorInfo;
 
 	/**
-	 * 错误码，0表示成功，非0表示失败
+	 * 详细的客户端展示信息
 	 */
-	@JsonProperty("ErrorCode")
-	private int errorCode;
+	@JsonProperty("ErrorDisplay")
+	private String errorDisplay;
 
 	public boolean isSuccess() {
 		return "OK".equals(actionStatus);
