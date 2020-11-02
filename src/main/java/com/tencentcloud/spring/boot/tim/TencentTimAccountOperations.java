@@ -161,9 +161,9 @@ public class TencentTimAccountOperations extends TencentTimOperations {
 		if(needDetail) {
 			builder.put("IsNeedDetail", 1);
 		}
+		// {"ActionStatus":"OK","ErrorInfo":"","ErrorCode":0,"QueryResult":[{"To_Account":"449","State":"Offline","Status":"Offline"}]}
 		AccountStateResponse res = request(TimApiAddress.ACCOUNT_STATE.getValue() + joiner.join(getDefaultParams()),
 				builder.build(), AccountStateResponse.class);
-		System.out.println(res);
 		if (!res.isSuccess()) {
 			log.error("查询帐号在线状态失败，ActionStatus : {}, ErrorCode : {}, ErrorInfo : {}", res.getActionStatus(), res.getErrorCode(), res.getErrorInfo());
 		}

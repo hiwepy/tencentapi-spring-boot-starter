@@ -23,11 +23,11 @@ public class TencentTimSnsOperations extends TencentTimOperations {
 		message.setFromAccount(fromAccount);
 		message.setToAccount(Arrays.asList(toAccount));
 
-		BlacklistResponse request = request(
+		BlacklistResponse res = request(
 				TimApiAddress.BLACK_LIST_ADD.getValue() + joiner.join(getDefaultParams()), message,
 				BlacklistResponse.class);
-		if (!request.isSuccess()) {
-			log.error("拉黑失败, response message is: {}", request);
+		if (!res.isSuccess()) {
+			log.error("拉黑失败，ActionStatus : {}, ErrorCode : {}, ErrorInfo : {}", res.getActionStatus(), res.getErrorCode(), res.getErrorInfo());
 			return false;
 		}
 		return true;
@@ -38,11 +38,11 @@ public class TencentTimSnsOperations extends TencentTimOperations {
 		message.setFromAccount(fromAccount);
 		message.setToAccount(Arrays.asList(toAccount));
 
-		BlacklistResponse request = request(
+		BlacklistResponse res = request(
 				TimApiAddress.BLACK_LIST_DELETE.getValue() + joiner.join(getDefaultParams()), message,
 				BlacklistResponse.class);
-		if (!request.isSuccess()) {
-			log.error("取消拉黑失败, response message is: {}", request);
+		if (!res.isSuccess()) {
+			log.error("取消拉黑失败，ActionStatus : {}, ErrorCode : {}, ErrorInfo : {}", res.getActionStatus(), res.getErrorCode(), res.getErrorInfo());
 			return false;
 		}
 		return true;

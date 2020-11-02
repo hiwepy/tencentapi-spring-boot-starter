@@ -39,6 +39,8 @@ public class AccountStateQueryResult {
 	 *未登录状态（Offline）：客户端主动退出登录或者客户端自上一次登录起7天之内未登录过
 	 *如果用户是多终端登录，则只要有一个终端的状态是 Online ，该字段值就是 Online
 	 */
+	@JsonProperty("State")
+	private String state;
 	@JsonProperty("Status")
 	private String status;
 	
