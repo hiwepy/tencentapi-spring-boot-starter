@@ -20,6 +20,8 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 
 import lombok.Data;
 
+import java.util.List;
+
 @Data
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class C2cSendMsgBodyContent {
@@ -39,5 +41,17 @@ public class C2cSendMsgBodyContent {
 	 */
 	@JsonProperty(value = "Data")
 	private String Data;
+
+
+	@JsonProperty(value = "UUID")
+	private String UUID;
+
+	@JsonProperty(value = "ImageFormat")
+	private Integer ImageFormat;
+
+
+	@JsonProperty(value = "ImageInfoArray")
+	private List<ImageInfoArray> ImageInfoArray;
+
 
 }
