@@ -6,8 +6,6 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import java.util.List;
 
 /**
- * @author : cw
- * @create : 2018 - 07 - 11
  * 群组信息
  */
 @JsonInclude( JsonInclude.Include.NON_NULL)

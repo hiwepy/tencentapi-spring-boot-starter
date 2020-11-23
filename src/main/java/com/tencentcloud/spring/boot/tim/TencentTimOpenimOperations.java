@@ -37,10 +37,9 @@ public class TencentTimOpenimOperations extends TencentTimOperations {
 	/**
 	 * 1、单发单聊消息
 	 * API：https://cloud.tencent.com/document/product/269/2282
-	 * @param userId
-	 * @param nickname
-	 * @param avatar
-	 * @return
+	 * @param userId 业务用户ID
+	 * @param msgBody 消息体
+	 * @return 操作结果
 	 */
 	public TimActionResponse sendMsg(String userId, MsgBody... msgBody) {
 		String[] ForbidCallbackControl = new String[] {"ForbidBeforeSendMsgCallback",

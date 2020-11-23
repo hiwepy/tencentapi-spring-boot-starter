@@ -4,8 +4,6 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 /**
- * @author : cw
- * @create : 2018 - 07 - 09 消息具体内容
  */
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class MsgContent {

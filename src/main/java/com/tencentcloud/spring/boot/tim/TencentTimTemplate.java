@@ -105,11 +105,6 @@ public class TencentTimTemplate {
 		return tlsSigAPIv2.genSigWithUserBuf(identifier, expire, userbuf);
 	}
 
-	/**
-	 * 返回默认的参数
-	 * 
-	 * @return
-	 */
 	public Map<String, String> getDefaultParams() {
 		Map<String, String> pathParams = Maps.newHashMap();
 		pathParams.put(USER_SIG, tlsSigCache.getUnchecked(USER_SIG));
@@ -134,13 +129,6 @@ public class TencentTimTemplate {
 		return null;
 	}
 
-	/**
-	 * http 请求service
-	 *
-	 * @param url
-	 * @param params
-	 * @return
-	 */
 	public String requestInvoke(String url, Object params) {
 		String content = null;
 		try {
@@ -159,24 +147,12 @@ public class TencentTimTemplate {
 		return content;
 	}
 
-	/**
-	 * 根据im用户id获取用户id
-	 * 
-	 * @param imUser
-	 * @return
-	 */
 	public String getUserIdByImUser(String imUser) {
 		if (!StringUtils.isNumeric(imUser)) {
 		}
 		return imUser;
 	}
 
-	/**
-	 * 根据用户id获取im用户id
-	 * 
-	 * @param userId
-	 * @return
-	 */
 	public String getImUserByUserId(String userId) {
 		return String.valueOf(userId);
 	}

@@ -8,8 +8,6 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * @author : cw
- * @create : 2018 - 07 - 04
  * IM响应结果
  */
 @JsonInclude(JsonInclude.Include.NON_NULL)

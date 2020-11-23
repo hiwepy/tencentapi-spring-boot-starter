@@ -7,8 +7,6 @@ import lombok.Data;
 import java.util.List;
 
 /**
- * @author : cw
- * @create : 2018 - 07 - 09
  * 推送消息实体
  */
 @Data

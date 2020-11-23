@@ -6,8 +6,6 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Data;
 
 /**
- * @author : cw
- * @create : 2018 - 07 - 11
  * 成员信息
  */
 @Data

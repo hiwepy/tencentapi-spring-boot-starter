@@ -6,8 +6,6 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import java.util.List;
 
 /**
- * @author : cw
- * @create : 2018 - 07 - 09
  * 推送消息实体
  */
 @JsonInclude( JsonInclude.Include.NON_NULL)

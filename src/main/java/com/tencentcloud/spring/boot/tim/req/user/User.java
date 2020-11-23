@@ -1,8 +1,6 @@
 package com.tencentcloud.spring.boot.tim.req.user;
 
 /**
- * @author : cw
- * @create : 2018 - 07 - 06 账号用户
  */
 public class User {
 

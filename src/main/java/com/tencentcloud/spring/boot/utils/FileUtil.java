@@ -7,7 +7,7 @@ import java.io.*;
  */
 public class FileUtil {
 
-    /**
+    /*
      * 读取文件内容，作为字符串返回
      */
     public static String readFileAsString(String filePath) throws IOException {
@@ -34,7 +34,7 @@ public class FileUtil {
         return sb.toString();
     }
 
-    /**
+    /*
      * 根据文件路径读取byte[] 数组
      */
     public static byte[] readFileByBytes(String filePath) throws IOException {

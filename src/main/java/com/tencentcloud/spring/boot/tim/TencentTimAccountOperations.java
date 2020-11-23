@@ -31,7 +31,7 @@ import com.tencentcloud.spring.boot.tim.resp.AccountsImportResponse;
 import lombok.extern.slf4j.Slf4j;
 
 /**
- * Tim 账号管理
+ * Tim 用户管理
  * https://cloud.tencent.com/document/product/269/42440
  */
 @Slf4j
@@ -44,10 +44,10 @@ public class TencentTimAccountOperations extends TencentTimOperations {
 	/**
 	 * 1、导入单个帐号
 	 * API：https://cloud.tencent.com/document/product/269/1608
-	 * @param userId
-	 * @param nickname
-	 * @param avatar
-	 * @return
+	 * @param userId 业务用户ID
+	 * @param nickname 用户昵称
+	 * @param avatar 用户头像
+	 * @return 操作结果
 	 */
 	public AccountImportResponse aImport(String userId, String nickname, String avatar) {
 		Map<String, Object> requestBody = new ImmutableMap.Builder<String, Object>()
@@ -65,8 +65,8 @@ public class TencentTimAccountOperations extends TencentTimOperations {
 	/**
 	 * 2、导入多个帐号
 	 * API：https://cloud.tencent.com/document/product/269/4919
-	 * @param userIds
-	 * @return
+	 * @param userIds 业务用户ID集合
+	 * @return 操作结果
 	 */
 	public AccountsImportResponse aImport(String[] userIds) {
 		Map<String, Object> requestBody = new ImmutableMap.Builder<String, Object>()
@@ -82,8 +82,8 @@ public class TencentTimAccountOperations extends TencentTimOperations {
 	/**
 	 * 3、删除帐号
 	 * API：https://cloud.tencent.com/document/product/269/36443
-	 * @param userIds
-	 * @return
+	 * @param userIds 业务用户ID数组
+	 * @return 操作结果
 	 */
 	public AccountDeleteResponse delete(String... userIds) {
 		Map<String, Object> requestBody = new ImmutableMap.Builder<String, Object>()
@@ -103,10 +103,10 @@ public class TencentTimAccountOperations extends TencentTimOperations {
 	/**
 	 * 4、查询帐号
 	 * API：https://cloud.tencent.com/document/product/269/38417
-	 * @param userIds
-	 * @return
+	 * @param userIds 业务用户ID数组
+	 * @return 操作结果
 	 */
-	public AccountCheckResponse check(String[] userIds) {
+	public AccountCheckResponse check(String... userIds) {
 		Map<String, Object> requestBody = new ImmutableMap.Builder<String, Object>()
 				.put("CheckItem", Stream.of(userIds).map(uid -> {
 					Map<String, Object> userMap = new HashMap<>();
@@ -124,8 +124,8 @@ public class TencentTimAccountOperations extends TencentTimOperations {
 	/**
 	 * 5、失效帐号登录态（踢出）
 	 * API：https://cloud.tencent.com/document/product/269/3853
-	 * @param userId
-	 * @return
+	 * @param userId 业务用户ID
+	 * @return 操作结果
 	 */
 	public AccountKickResponse kick(String userId) {
 		Map<String, Object> requestBody = new ImmutableMap.Builder<String, Object>()
@@ -141,8 +141,8 @@ public class TencentTimAccountOperations extends TencentTimOperations {
 	/**
 	 * 6.1、查询帐号在线状态
 	 * API：https://cloud.tencent.com/document/product/269/2566
-	 * @param userIds
-	 * @return
+	 * @param userIds 业务用户ID数组
+	 * @return 操作结果
 	 */
 	public AccountStateResponse onlineState(String... userIds) {
 		return this.onlineState(userIds, false);
@@ -151,9 +151,9 @@ public class TencentTimAccountOperations extends TencentTimOperations {
 	/**
 	 * 6.2、查询帐号在线状态
 	 * API：https://cloud.tencent.com/document/product/269/2566
-	 * @param userIds
-	 * @param needDetail
-	 * @return
+	 * @param userIds 业务用户ID数组
+	 * @param needDetail 是否需要详情结果
+	 * @return 操作结果
 	 */
 	public AccountStateResponse onlineState(String[] userIds, boolean needDetail) {
 		ImmutableMap.Builder<String, Object> builder = new ImmutableMap.Builder<String, Object>()

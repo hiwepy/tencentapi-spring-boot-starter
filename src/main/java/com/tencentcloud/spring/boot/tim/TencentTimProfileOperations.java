@@ -68,11 +68,10 @@ public class TencentTimProfileOperations extends TencentTimOperations {
 
 	/**
 	 * 设置资料
-	 *
-	 * @param userId
-	 * @param nickname
-	 * @param avatar
-	 * @return
+	 * @param userId 业务用户ID
+	 * @param nickname 用户昵称
+	 * @param avatar 用户头像
+	 * @return 操作结果
 	 */
 	public UserProfilePortraitSetResponse portraitSet(Long userId, String nickname, String avatar) {
 		UserProfilePortraitSetResponse res = new UserProfilePortraitSetResponse();
