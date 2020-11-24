@@ -55,8 +55,8 @@ public abstract class TencentTimOperations {
 	/**
 	 * 根据im用户id获取用户id
 	 * 
-	 * @param imUser
-	 * @return
+	 * @param imUser IM 用户ID
+	 * @return IM 用户ID对应的用户ID
 	 */
 	protected String getUserIdByImUser(String imUser) {
 		return timTemplate.getUserIdByImUser(imUser);
@@ -65,8 +65,8 @@ public abstract class TencentTimOperations {
 	/**
 	 * 根据用户id获取im用户id
 	 * 
-	 * @param userId
-	 * @return
+	 * @param userId 用户ID
+	 * @return 用户ID对应的用户ID
 	 */
 	protected String getImUserByUserId(String userId) {
 		return timTemplate.getImUserByUserId(userId);
@@ -74,7 +74,7 @@ public abstract class TencentTimOperations {
 	
 	/**
 	 * 返回默认的参数
-	 * @return
+	 * @return 默认参数
 	 */
 	protected Map<String, String> getDefaultParams() {
 		return getTimTemplate().getDefaultParams();

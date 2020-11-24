@@ -7,8 +7,6 @@ import com.tencentcloud.spring.boot.tim.req.common.MapKV;
 import java.util.List;
 
 /**
- * @author : cw
- * @create : 2018 - 07 - 10
  * 初始化群成员
  */
 @JsonInclude( JsonInclude.Include.NON_NULL)
