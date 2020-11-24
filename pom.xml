@@ -14,7 +14,7 @@
 	<groupId>com.github.hiwepy</groupId>
 	<artifactId>tencentapi-spring-boot-starter</artifactId>
 	<description>Spring Boot Starter For Tencent API</description>
-	<version>1.0.1.RELEASE</version>
+	<version>1.0.2-SNAPSHOT</version>
 	<name>${project.groupId}:${project.artifactId}</name>
 	<url>https://github.com/hiwepy/${project.artifactId}</url>
 	<packaging>jar</packaging>
