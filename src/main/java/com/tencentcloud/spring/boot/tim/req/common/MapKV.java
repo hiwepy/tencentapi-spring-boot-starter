@@ -3,8 +3,6 @@ package com.tencentcloud.spring.boot.tim.req.common;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 /**
- * @author : cw
- * @create : 2018 - 07 - 10
  * 公用K V
  */
 public class MapKV {
