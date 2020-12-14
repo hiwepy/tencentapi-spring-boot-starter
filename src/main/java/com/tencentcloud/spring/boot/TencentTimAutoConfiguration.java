@@ -34,9 +34,9 @@ public class TencentTimAutoConfiguration {
 	}
 	
 	@Bean
-	public TencentTimTemplate tencentTimTemplate(TencentTimProperties webimProperties,  OkHttpClient okhttp3Client) {
+	public TencentTimTemplate tencentTimTemplate(TencentTimProperties timProperties,  OkHttpClient okhttp3Client) {
 		// tencent-tim-java-sdk
-		return new TencentTimTemplate(webimProperties, okhttp3Client);
+		return new TencentTimTemplate(timProperties, okhttp3Client);
 	}
 
 }

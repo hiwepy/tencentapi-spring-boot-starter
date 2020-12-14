@@ -40,9 +40,7 @@ public class TencentTimTemplate {
 
 	private final ObjectMapper objectMapper = new ObjectMapper();
 
-	private String identifier;
-	private Long sdkappid;
-	private long expire;
+	private TencentTimProperties timProperties;
 	private TLSSigAPIv2 tlsSigAPIv2;
 	private OkHttpClient okhttp3Client;
 
@@ -52,25 +50,23 @@ public class TencentTimTemplate {
 	private final TencentTimSnsOperations snsOps = new TencentTimSnsOperations(this);
 	private LoadingCache<String, String> tlsSigCache;
 	
-	public TencentTimTemplate(TencentTimProperties webimProperties, OkHttpClient okhttp3Client) {
-		this(webimProperties, new TLSSigAPIv2(webimProperties.getSdkappid(), webimProperties.getPrivateKey()),
+	public TencentTimTemplate(TencentTimProperties timProperties, OkHttpClient okhttp3Client) {
+		this(timProperties, new TLSSigAPIv2(timProperties.getSdkappid(), timProperties.getPrivateKey()),
 				okhttp3Client);
 	}
 
-	public TencentTimTemplate(TencentTimProperties webimProperties, TLSSigAPIv2 tlsSigAPIv2,
+	public TencentTimTemplate(TencentTimProperties timProperties, TLSSigAPIv2 tlsSigAPIv2,
 			OkHttpClient okhttp3Client) {
-		this.sdkappid = webimProperties.getSdkappid();
-		this.identifier = webimProperties.getIdentifier();
-		this.expire = webimProperties.getExpire();
+		this.timProperties = timProperties;
 		this.tlsSigAPIv2 = tlsSigAPIv2;
 		this.okhttp3Client = okhttp3Client;
 		this.tlsSigCache = CacheBuilder.newBuilder()
-						.expireAfterWrite(Duration.ofSeconds(Math.max(webimProperties.getExpire() - 60, 60)))
+						.expireAfterWrite(Duration.ofSeconds(Math.max(timProperties.getExpire() - 60, 60)))
 						.build(new CacheLoader<String, String>() {
 
 							@Override
 							public String load(String key) throws Exception {
-								return tlsSigAPIv2.genSig(webimProperties.getIdentifier(), webimProperties.getExpire());
+								return tlsSigAPIv2.genSig(timProperties.getIdentifier(), timProperties.getExpire());
 							}
 							
 						});
@@ -94,7 +90,7 @@ public class TencentTimTemplate {
 	}
 
 	public String genSig(String identifier) {
-		return tlsSigAPIv2.genSig(identifier, expire);
+		return tlsSigAPIv2.genSig(identifier, timProperties.getExpire());
 	}
 
 	public String genSig(String identifier, long expire) {
@@ -105,11 +101,15 @@ public class TencentTimTemplate {
 		return tlsSigAPIv2.genSigWithUserBuf(identifier, expire, userbuf);
 	}
 
+	public long getMsgLifeTime() {
+		return timProperties.getMsgLifeTime();
+	}
+	
 	public Map<String, String> getDefaultParams() {
 		Map<String, String> pathParams = Maps.newHashMap();
 		pathParams.put(USER_SIG, tlsSigCache.getUnchecked(USER_SIG));
-		pathParams.put(IDENTIFIER, identifier);
-		pathParams.put(SDKAPPID, sdkappid.toString());
+		pathParams.put(IDENTIFIER, timProperties.getIdentifier());
+		pathParams.put(SDKAPPID, timProperties.getSdkappid().toString());
 		pathParams.put(RANDOM, UUID.randomUUID().toString().replace("-", "").toLowerCase());
 		pathParams.put(CONTENTTYPE, CONTENTTYPE_JSON);
 		log.info("im参数   {}", pathParams);

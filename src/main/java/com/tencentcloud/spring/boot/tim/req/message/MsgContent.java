@@ -3,11 +3,14 @@ package com.tencentcloud.spring.boot.tim.req.message;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
+import lombok.Data;
+
 /**
  */
 @JsonInclude(JsonInclude.Include.NON_NULL)
+@Data
 public class MsgContent {
-	
+
 	/**
 	 * 消息内容。 
 	 * 1、当接收方为iphone后台在线时，做iOS离线Push时文本展示。
@@ -46,51 +49,4 @@ public class MsgContent {
 	@JsonProperty("Data")
 	private String data;
 
-	public String getText() {
-		return text;
-	}
-
-	public void setText(String text) {
-		this.text = text;
-	}
-
-	public String getDesc() {
-		return desc;
-	}
-
-	public void setDesc(String desc) {
-		this.desc = desc;
-	}
-
-	public Number getLatitude() {
-		return latitude;
-	}
-
-	public void setLatitude(Number latitude) {
-		this.latitude = latitude;
-	}
-
-	public Number getLongitude() {
-		return longitude;
-	}
-
-	public void setLongitude(Number longitude) {
-		this.longitude = longitude;
-	}
-
-	public Number getIndex() {
-		return index;
-	}
-
-	public void setIndex(Number index) {
-		this.index = index;
-	}
-
-	public String getData() {
-		return data;
-	}
-
-	public void setData(String data) {
-		this.data = data;
-	}
 }

@@ -40,4 +40,14 @@ public class TencentTimProperties {
 	 */
 	private long expire = EXPIRE;
 
+	/**
+	 * 消息离线保存时长（单位：秒），最长为7天（604800秒）
+	 * 若设置该字段为0，则消息只发在线用户，不保存离线
+	 * 若设置该字段超过7天（604800秒），仍只保存7天
+	 * 若不设置该字段，则默认保存7天
+	 */
+	private long msgLifeTime = 604800;
+	
+	
+
 }

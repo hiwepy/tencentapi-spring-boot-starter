@@ -17,7 +17,10 @@ package com.tencentcloud.spring.boot.tim;
 
 import java.util.Map;
 
+import org.apache.commons.lang3.RandomStringUtils;
+
 import com.google.common.collect.ImmutableMap;
+import com.tencentcloud.spring.boot.tim.req.message.Message;
 import com.tencentcloud.spring.boot.tim.req.message.MsgBody;
 import com.tencentcloud.spring.boot.tim.resp.TimActionResponse;
 
@@ -30,6 +33,9 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 public class TencentTimOpenimOperations extends TencentTimOperations {
 
+	public static final String[] FORBID_CALLBACK_CONTROL = new String[] { "ForbidBeforeSendMsgCallback",
+			"ForbidAfterSendMsgCallback" };
+	
 	public TencentTimOpenimOperations(TencentTimTemplate timTemplate) {
 		super(timTemplate);
 	}
@@ -42,16 +48,26 @@ public class TencentTimOpenimOperations extends TencentTimOperations {
 	 * @return 操作结果
 	 */
 	public TimActionResponse sendMsg(String userId, MsgBody... msgBody) {
-		String[] ForbidCallbackControl = new String[] {"ForbidBeforeSendMsgCallback",
-		                                                "ForbidAfterSendMsgCallback"} ;
+		return this.sendMsg(userId, false, msgBody);
+	}
+	
+	/**
+	 * 1、单发单聊消息
+	 * API：https://cloud.tencent.com/document/product/269/2282
+	 * @param userId 业务用户ID
+	 * @param sync 是否希望将消息同步至 From_Account
+	 * @param msgBody 消息体
+	 * @return 操作结果
+	 */
+	public TimActionResponse sendMsg(String userId, boolean sync, MsgBody... msgBody) {
 		
 		Map<String, Object> requestBody = new ImmutableMap.Builder<String, Object>()
 				.put("SyncOtherMachine", 1) // 消息不同步至发送方
 				.put("To_Account", getImUserByUserId(userId))
-				.put("MsgLifeTime", 60) // 消息保存60秒
-				.put("MsgRandom", 1)
-				.put("MsgTimeStamp", 1)
-				.put("ForbidCallbackControl", ForbidCallbackControl)
+				.put("MsgLifeTime", getTimTemplate().getMsgLifeTime())
+				.put("MsgRandom", RandomStringUtils.random(6))
+				.put("MsgTimeStamp", System.currentTimeMillis())
+				.put("ForbidCallbackControl", FORBID_CALLBACK_CONTROL)
 				.put("MsgBody", msgBody).build();
 		TimActionResponse res = request(TimApiAddress.SEND_MSG.getValue() + joiner.join(getDefaultParams()),
 				requestBody, TimActionResponse.class);
@@ -61,21 +77,49 @@ public class TencentTimOpenimOperations extends TencentTimOperations {
 		return res;
 	}
 	
+	/**
+	 * 1、单发单聊消息
+	 * API：https://cloud.tencent.com/document/product/269/2282
+	 * @param fromUid 发送方用户ID
+	 * @param userId 业务用户ID
+	 * @param msgBody 消息体
+	 * @return 操作结果
+	 */
 	public TimActionResponse sendMsg(String fromUid, String userId, MsgBody... msgBody) {
-		String[] ForbidCallbackControl = new String[] {"ForbidBeforeSendMsgCallback",
-		                                                "ForbidAfterSendMsgCallback"} ;
-		
+		return this.sendMsg(fromUid, userId, false, msgBody);
+	}
+
+	/**
+	 * 1、单发单聊消息
+	 * API：https://cloud.tencent.com/document/product/269/2282
+	 * @param fromUid 发送方用户ID
+	 * @param userId 业务用户ID
+	 * @param sync 是否希望将消息同步至 From_Account
+	 * @param msgBody 消息体
+	 * @return 操作结果
+	 */
+	public TimActionResponse sendMsg(String fromUid, String userId, boolean sync, MsgBody... msgBody) {
 		Map<String, Object> requestBody = new ImmutableMap.Builder<String, Object>()
-				.put("SyncOtherMachine", 1) // 消息不同步至发送方
+				.put("SyncOtherMachine", sync ? 1 : 2) // 若不希望将消息同步至 From_Account，则 SyncOtherMachine 填写2；若希望将消息同步至 From_Account，则 SyncOtherMachine 填写1。
 				.put("From_Account", getImUserByUserId(fromUid))
 				.put("To_Account", getImUserByUserId(userId))
-				.put("MsgLifeTime", 60) // 消息保存60秒
-				.put("MsgRandom", 1)
-				.put("MsgTimeStamp", 1)
-				.put("ForbidCallbackControl", ForbidCallbackControl)
+				.put("MsgLifeTime", getTimTemplate().getMsgLifeTime())
+				.put("MsgRandom", RandomStringUtils.random(6))
+				.put("MsgTimeStamp", System.currentTimeMillis())
+				.put("ForbidCallbackControl", FORBID_CALLBACK_CONTROL)
 				.put("MsgBody", msgBody).build();
 		TimActionResponse res = request(TimApiAddress.SEND_MSG.getValue() + joiner.join(getDefaultParams()),
 				requestBody, TimActionResponse.class);
+		if (!res.isSuccess()) {
+			log.error("导入单个帐号失败, response message is: {}", res);
+		}
+		return res;
+	}
+	
+	
+	public TimActionResponse sendMsg(Message message) {
+		TimActionResponse res = request(TimApiAddress.SEND_MSG.getValue() + joiner.join(getDefaultParams()),
+				message, TimActionResponse.class);
 		if (!res.isSuccess()) {
 			log.error("导入单个帐号失败, response message is: {}", res);
 		}
