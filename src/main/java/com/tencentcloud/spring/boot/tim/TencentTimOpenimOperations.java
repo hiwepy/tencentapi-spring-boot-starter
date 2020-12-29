@@ -17,7 +17,7 @@ package com.tencentcloud.spring.boot.tim;
 
 import java.util.Map;
 
-import org.apache.commons.lang3.RandomStringUtils;
+import org.apache.commons.lang3.RandomUtils;
 
 import com.google.common.collect.ImmutableMap;
 import com.tencentcloud.spring.boot.tim.req.message.Message;
@@ -65,7 +65,7 @@ public class TencentTimOpenimOperations extends TencentTimOperations {
 				.put("SyncOtherMachine", 1) // 消息不同步至发送方
 				.put("To_Account", getImUserByUserId(userId))
 				.put("MsgLifeTime", getTimTemplate().getMsgLifeTime())
-				.put("MsgRandom", RandomStringUtils.random(6))
+				.put("MsgRandom", RandomUtils.nextInt())
 				.put("MsgTimeStamp", System.currentTimeMillis())
 				.put("ForbidCallbackControl", FORBID_CALLBACK_CONTROL)
 				.put("MsgBody", msgBody).build();
@@ -104,7 +104,7 @@ public class TencentTimOpenimOperations extends TencentTimOperations {
 				.put("From_Account", getImUserByUserId(fromUid))
 				.put("To_Account", getImUserByUserId(userId))
 				.put("MsgLifeTime", getTimTemplate().getMsgLifeTime())
-				.put("MsgRandom", RandomStringUtils.random(6))
+				.put("MsgRandom", RandomUtils.nextInt())
 				.put("MsgTimeStamp", System.currentTimeMillis())
 				.put("ForbidCallbackControl", FORBID_CALLBACK_CONTROL)
 				.put("MsgBody", msgBody).build();
