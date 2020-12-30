@@ -66,7 +66,7 @@ public class TencentTimOpenimOperations extends TencentTimOperations {
 				.put("To_Account", getImUserByUserId(userId))
 				.put("MsgLifeTime", getTimTemplate().getMsgLifeTime())
 				.put("MsgRandom", RandomUtils.nextInt())
-				.put("MsgTimeStamp", System.currentTimeMillis())
+				.put("MsgTimeStamp", System.currentTimeMillis() / 1000)
 				.put("ForbidCallbackControl", FORBID_CALLBACK_CONTROL)
 				.put("MsgBody", msgBody).build();
 		TimActionResponse res = request(TimApiAddress.SEND_MSG.getValue() + joiner.join(getDefaultParams()),
@@ -105,7 +105,7 @@ public class TencentTimOpenimOperations extends TencentTimOperations {
 				.put("To_Account", getImUserByUserId(userId))
 				.put("MsgLifeTime", getTimTemplate().getMsgLifeTime())
 				.put("MsgRandom", RandomUtils.nextInt())
-				.put("MsgTimeStamp", System.currentTimeMillis())
+				.put("MsgTimeStamp", System.currentTimeMillis() / 1000)
 				.put("ForbidCallbackControl", FORBID_CALLBACK_CONTROL)
 				.put("MsgBody", msgBody).build();
 		TimActionResponse res = request(TimApiAddress.SEND_MSG.getValue() + joiner.join(getDefaultParams()),
