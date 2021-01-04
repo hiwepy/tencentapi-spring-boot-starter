@@ -3,10 +3,13 @@ package com.tencentcloud.spring.boot.tim.req.message;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
+import lombok.Data;
+
 /**
  * 离线推送信息配置
  */
 @JsonInclude(JsonInclude.Include.NON_NULL)
+@Data
 public class OfflinePushInfo {
 
 	/**
@@ -37,6 +40,7 @@ public class OfflinePushInfo {
 	private ApnsInfo apnsInfo;
 
 	@JsonInclude(JsonInclude.Include.NON_NULL)
+	@Data
 	class ApnsInfo {
 		/**
 		 * 这个字段缺省或者为 0 表示需要计数， 为 1 表示本条消息不需要计数，即右上角图标数字不增加
@@ -66,85 +70,7 @@ public class OfflinePushInfo {
 		 */
 		@JsonProperty("image")
 		private String image;
-
-		public Integer getBadgeMode() {
-			return badgeMode;
-		}
-
-		public void setBadgeMode(Integer badgeMode) {
-			this.badgeMode = badgeMode;
-		}
-
-		public String getSound() {
-			return sound;
-		}
-
-		public void setSound(String sound) {
-			this.sound = sound;
-		}
-
-		public String getTitle() {
-			return title;
-		}
-
-		public void setTitle(String title) {
-			this.title = title;
-		}
-
-		public String getSubTitle() {
-			return subTitle;
-		}
-
-		public void setSubTitle(String subTitle) {
-			this.subTitle = subTitle;
-		}
-
-		public String getImage() {
-			return image;
-		}
-
-		public void setImage(String image) {
-			this.image = image;
-		}
+ 
 	}
-
-	public Integer getPushFlag() {
-		return pushFlag;
-	}
-
-	public void setPushFlag(Integer pushFlag) {
-		this.pushFlag = pushFlag;
-	}
-
-	public String getTitle() {
-		return title;
-	}
-
-	public void setTitle(String title) {
-		this.title = title;
-	}
-
-	public String getDesc() {
-		return desc;
-	}
-
-	public void setDesc(String desc) {
-		this.desc = desc;
-	}
-
-	public String getExt() {
-		return ext;
-	}
-
-	public void setExt(String ext) {
-		this.ext = ext;
-	}
-
-	public ApnsInfo getApnsInfo() {
-		return apnsInfo;
-	}
-
-	public void setApnsInfo(ApnsInfo apnsInfo) {
-		this.apnsInfo = apnsInfo;
-	}
+ 
 }

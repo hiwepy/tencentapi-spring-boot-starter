@@ -55,6 +55,10 @@ public enum TimApiAddress {
 	 * 撤回单聊消息
 	 */
 	ADMIN_MSG_WITHDRAW(TencentTimOperations.PREFIX + "/v4/openim/admin_msgwithdraw?"),
+	/**
+	 * 设置单聊消息已读
+	 */
+	ADMIN_SET_MSG_READ(TencentTimOperations.PREFIX + "/v4/openim/admin_set_msg_read?"),
 	
 	// ---------------- 全员推送 ------------------
 	

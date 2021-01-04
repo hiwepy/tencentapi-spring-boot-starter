@@ -7,9 +7,11 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 
 @JsonInclude( JsonInclude.Include.NON_NULL)
 @Data
+@EqualsAndHashCode(callSuper=false)
 public class BlacklistResponse extends TimActionResponse{
     /**
      * 黑名单对象数组，每一个黑名单对象都包括了 To_Account 和 AddBlackTimeStamp
