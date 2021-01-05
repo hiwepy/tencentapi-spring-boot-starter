@@ -131,7 +131,7 @@ public class TencentTimOpenimOperations extends TencentTimOperations {
 	 * @return 操作结果
 	 */
 	public TimActionResponse sendMsg(String fromUid, String userId, boolean syncOtherMachine, MsgBody... msgBody) {
-		return this.sendMsg(userId, syncOtherMachine, FORBID_CALLBACK_CONTROL, msgBody);
+		return this.sendMsg(fromUid, userId, syncOtherMachine, FORBID_CALLBACK_CONTROL, msgBody);
 	}
 	
 	/**
@@ -280,7 +280,7 @@ public class TencentTimOpenimOperations extends TencentTimOperations {
 	 * @return 操作结果
 	 */
 	public TimActionResponse sendMsg(String fromUid, List<String> userIds, boolean syncOtherMachine, MsgBody... msgBody) {
-		return this.sendMsg(userIds, syncOtherMachine, FORBID_CALLBACK_CONTROL, msgBody);
+		return this.sendMsg(fromUid, userIds, syncOtherMachine, FORBID_CALLBACK_CONTROL, msgBody);
 	}
 	
 	/**
