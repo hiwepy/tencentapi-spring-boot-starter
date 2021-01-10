@@ -370,9 +370,10 @@ public class TencentTimOpenimOperations extends TencentTimOperations {
 	 * 4、查询单聊消息
      * API：https://cloud.tencent.com/document/product/269/42794
 	 * @param fromUid 发送方用户ID
-	 * @param userId 业务用户ID
+	 * @param userId 接收方用户ID
 	 * @param maxCnt 是否历史消息导入,该字段只能填1或2，其他值是非法值；1表示实时消息导入，消息加入未读计数；2表示历史消息导入，消息不计入未读
-	 * @param msgBody 消息体
+	 * @param minTime 请求的消息时间范围的最小值
+	 * @param maxTime 请求的消息时间范围的最大值
 	 * @return 操作结果
 	 */
 	public MessageQueryResponse getMsgs(String fromUid, String userId, int maxCnt, int minTime, int maxTime) {
@@ -391,12 +392,38 @@ public class TencentTimOpenimOperations extends TencentTimOperations {
 	}
 	
 	/**
+	 * 4、查询单聊消息
+     * API：https://cloud.tencent.com/document/product/269/42794
+	 * @param fromUid 发送方用户ID
+	 * @param userId 接收方用户ID
+	 * @param maxCnt 是否历史消息导入,该字段只能填1或2，其他值是非法值；1表示实时消息导入，消息加入未读计数；2表示历史消息导入，消息不计入未读
+	 * @param minTime 请求的消息时间范围的最小值
+	 * @param maxTime 请求的消息时间范围的最大值
+	 * @param lastMsgKey 上一次拉取到的最后一条消息的 MsgKey，续拉时需要填该字段，填写方法见上方 
+	 * @return 操作结果
+	 */
+	public MessageQueryResponse getMsgs(String fromUid, String userId, int maxCnt, int minTime, int maxTime, String lastMsgKey) {
+		Map<String, Object> requestBody = new ImmutableMap.Builder<String, Object>()
+				.put("From_Account", getImUserByUserId(fromUid))
+				.put("To_Account", getImUserByUserId(userId))
+				.put("MaxCnt", maxCnt)
+				.put("MinTime", minTime)
+				.put("MaxTime", maxTime)
+				.put("LastMsgKey", lastMsgKey).build();
+		MessageQueryResponse res = request(TimApiAddress.ADMIN_GET_ROAMMSG.getValue() + joiner.join(getDefaultParams()),
+				requestBody, MessageQueryResponse.class);
+		if (!res.isSuccess()) {
+			log.error("查询单聊消息失败, response message is: {}", res);
+		}
+		return res;
+	}
+	
+	/**
 	 * 5、撤回单聊消息
      * API：https://cloud.tencent.com/document/product/269/38980
 	 * @param fromUid 发送方用户ID
-	 * @param userId 业务用户ID
-	 * @param maxCnt 是否历史消息导入,该字段只能填1或2，其他值是非法值；1表示实时消息导入，消息加入未读计数；2表示历史消息导入，消息不计入未读
-	 * @param msgBody 消息体
+	 * @param userId 接收方用户ID
+	 * @param msgKey 待撤回消息的唯一标识。该字段由 REST API 接口 单发单聊消息 和 批量发单聊消息 返回
 	 * @return 操作结果
 	 */
 	public TimActionResponse withdrawMsg(String fromUid, String userId, String msgKey) {
@@ -419,7 +446,7 @@ public class TencentTimOpenimOperations extends TencentTimOperations {
 	 * @param peerUid 进行消息已读的单聊会话的另一方用户 UserId
 	 * @return 操作结果
 	 */
-	public TimActionResponse readMsg(String reportUid, String peerUid, String msgKey) {
+	public TimActionResponse readMsg(String reportUid, String peerUid) {
 		Map<String, Object> requestBody = new ImmutableMap.Builder<String, Object>()
 				.put("Report_Account", getImUserByUserId(reportUid))
 				.put("Peer_Account", getImUserByUserId(peerUid)).build();
