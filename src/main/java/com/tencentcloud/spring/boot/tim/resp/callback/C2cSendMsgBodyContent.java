@@ -41,14 +41,17 @@ public class C2cSendMsgBodyContent {
 	 */
 	@JsonProperty(value = "Data")
 	private String Data;
-
+	/**
+	 *  数据
+	 */
+	@JsonProperty(value = "Ext")
+	private String Ext;
 
 	@JsonProperty(value = "UUID")
 	private String UUID;
 
 	@JsonProperty(value = "ImageFormat")
 	private Integer ImageFormat;
-
 
 	@JsonProperty(value = "ImageInfoArray")
 	private List<ImageInfoArray> ImageInfoArray;
