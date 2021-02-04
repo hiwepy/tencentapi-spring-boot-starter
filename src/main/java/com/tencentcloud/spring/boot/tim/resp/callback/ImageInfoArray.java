@@ -7,22 +7,34 @@ import lombok.Data;
 @Data
 public class ImageInfoArray {
 
-    @JsonProperty(value = "Type")
-    private Integer Type;
+	/**
+	 *  图片类型： 1-原图，2-大图，3-缩略图。
+	 */
+	@JsonProperty(value = "Type")
+	private Long type;
+	
+	/**
+	 *  图片数据大小，单位：字节。
+	 */
+	@JsonProperty(value = "Size")
+	private Long size;
 
-    @JsonProperty(value = "Size")
-    private Integer Size;
-
-
+	/**
+	 *  图片宽度
+	 */
     @JsonProperty(value = "Width")
-    private Integer Width;
+    private Integer width;
 
-
+    /**
+	 *  图片高度
+	 */
     @JsonProperty(value = "Height")
-    private Integer Height;
+    private Integer height;
 
-
+    /**
+	 *  图片下载地址
+	 */
     @JsonProperty(value = "URL")
-    private String URL;
+    private String url;
 
 }
