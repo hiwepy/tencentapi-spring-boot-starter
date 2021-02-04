@@ -70,6 +70,12 @@ public class C2cAfterSendMsg {
 	private String ErrorInfo;
     
 	/**
+	 * 未读消息数
+	 */
+	@JsonProperty(value = "UnreadMsgNum")
+	private Integer unreadMsgNum;
+	
+	/**
 	 * 消息体，参见 TIMMessage 消息对象
 	 */
 	@JsonProperty(value = "MsgBody")
