@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.time.Duration;
 import java.util.Map;
 import java.util.UUID;
+import java.util.function.Consumer;
 
 import org.apache.commons.lang3.StringUtils;
 
@@ -16,6 +17,8 @@ import com.tencentcloud.spring.boot.TencentTimProperties;
 import com.tencentyun.TLSSigAPIv2;
 
 import lombok.extern.slf4j.Slf4j;
+import okhttp3.Call;
+import okhttp3.Callback;
 import okhttp3.MediaType;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
@@ -130,6 +133,7 @@ public class TencentTimTemplate {
 	}
 
 	public String requestInvoke(String url, Object params) {
+		long start = System.currentTimeMillis();
 		String content = null;
 		try {
 			RequestBody requestBody = RequestBody.create(MediaType.parse(APPLICATION_JSON_VALUE),
@@ -138,14 +142,45 @@ public class TencentTimTemplate {
 			Response response = okhttp3Client.newCall(request).execute();
 			if (response.isSuccessful()) {
                 content = response.body().string();
-                log.debug("response : {}", content);
+                log.debug("Request Success: code : {}, body : {} , use time : {} ", response.code(), content , System.currentTimeMillis() - start);
                 return content;
             }
 		} catch (Exception e) {
-			log.error("请求异常", e);
+			log.error("Request Failure : {}, use time : {} ", e.getMessage(), System.currentTimeMillis() - start);
 		}
 		return content;
 	}
+	
+	public void requestAsyncInvoke(String url, Object params, Consumer<Response> consumer) {
+		long start = System.currentTimeMillis();
+		try {
+			
+			RequestBody requestBody = RequestBody.create(MediaType.parse(APPLICATION_JSON_VALUE),
+					objectMapper.writeValueAsString(params));
+			Request request = new Request.Builder().url(url).post(requestBody).build();
+			okhttp3Client.newCall(request).enqueue(new Callback() {
+				
+                @Override
+                public void onFailure(Call call, IOException e) {
+                	log.error("Request Failure : {}, use time : {} ", e.getMessage(), System.currentTimeMillis() - start);
+                }
+                
+                @Override
+                public void onResponse(Call call, Response response) {
+                    try {
+                    	log.debug("Request Success: code : {}, , use time : {} ", response.code(), System.currentTimeMillis() - start);
+                    	consumer.accept(response); 
+					} finally {
+						response.close();
+					}
+                }
+                
+            });
+		} catch (Exception e) {
+			log.error("请求异常", e);
+		}
+	}
+	
 
 	public String getUserIdByImUser(String imUser) {
 		if (!StringUtils.isNumeric(imUser)) {

@@ -16,8 +16,11 @@
 package com.tencentcloud.spring.boot.tim;
 
 import java.util.Map;
+import java.util.function.Consumer;
 
 import com.google.common.base.Joiner;
+
+import okhttp3.Response;
 
 /**
  * Tim 接口集成
@@ -82,6 +85,10 @@ public abstract class TencentTimOperations {
 
 	protected <T> T request(String url, Object params, Class<T> cls) {
 		return getTimTemplate().toBean(getTimTemplate().requestInvoke(url, params), cls);
+	}
+	
+	protected void asyncRequest(String url, Object params, Consumer<Response> consumer) {
+		getTimTemplate().requestAsyncInvoke(url, params, consumer);
 	}
 	
 	public TencentTimTemplate getTimTemplate() {
