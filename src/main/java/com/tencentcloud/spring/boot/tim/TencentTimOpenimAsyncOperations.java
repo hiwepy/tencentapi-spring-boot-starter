@@ -38,7 +38,7 @@ public class TencentTimOpenimAsyncOperations extends TencentTimOpenimOperations 
 	public TencentTimOpenimAsyncOperations(TencentTimTemplate timTemplate) {
 		super(timTemplate);
 	}
-
+	
 	/**
 	 * 1、单发单聊消息
 	 * a、管理员向帐号发消息，接收方看到消息发送者是管理员。
@@ -49,8 +49,8 @@ public class TencentTimOpenimAsyncOperations extends TencentTimOpenimOperations 
 	 * @param msgBody 消息体
 	 * @return 操作结果
 	 */
-	public TimActionResponse sendAsyncMsg(String userId, MsgBody... msgBody) {
-		return this.sendAsyncMsg(userId, false, msgBody);
+	public void sendAsyncMsg(String userId, MsgBody... msgBody) {
+		this.sendAsyncMsg(userId, false, msgBody);
 	}
 	
 	/**
@@ -64,8 +64,8 @@ public class TencentTimOpenimAsyncOperations extends TencentTimOpenimOperations 
 	 * @param msgBody 消息体
 	 * @return 操作结果
 	 */
-	public TimActionResponse sendAsyncMsg(String userId, boolean syncOtherMachine, MsgBody... msgBody) {
-		return this.sendAsyncMsg(userId, syncOtherMachine, FORBID_CALLBACK_CONTROL, msgBody);
+	public void sendAsyncMsg(String userId, boolean syncOtherMachine, MsgBody... msgBody) {
+		this.sendAsyncMsg(userId, syncOtherMachine, FORBID_CALLBACK_CONTROL, msgBody);
 	}
 	
 	/**
@@ -80,7 +80,7 @@ public class TencentTimOpenimAsyncOperations extends TencentTimOpenimOperations 
 	 * @param msgBody 消息体
 	 * @return 操作结果
 	 */
-	public TimActionResponse sendAsyncMsg(String userId, boolean syncOtherMachine, String[] forbidCallbackControl, MsgBody... msgBody) {
+	public void sendAsyncMsg(String userId, boolean syncOtherMachine, String[] forbidCallbackControl, MsgBody... msgBody) {
 		
 		Map<String, Object> requestBody = new ImmutableMap.Builder<String, Object>()
 				.put("SyncOtherMachine", syncOtherMachine ? 1 : 2) // 消息不同步至发送方
@@ -90,12 +90,22 @@ public class TencentTimOpenimAsyncOperations extends TencentTimOpenimOperations 
 				.put("MsgTimeStamp", System.currentTimeMillis() / 1000)
 				.put("ForbidCallbackControl", forbidCallbackControl)
 				.put("MsgBody", msgBody).build();
-		TimActionResponse res = request(TimApiAddress.SEND_MSG.getValue() + joiner.join(getDefaultParams()),
-				requestBody, TimActionResponse.class);
-		if (!res.isSuccess()) {
-			log.error("单发单聊消息失败, response message is: {}", res);
-		}
-		return res;
+		
+		this.asyncRequest(TimApiAddress.SEND_MSG.getValue() + joiner.join(getDefaultParams()), requestBody, (response) -> {
+			if (response.isSuccessful()) {
+                try {
+					String content = response.body().string();
+					TimActionResponse res = getTimTemplate().toBean(content, TimActionResponse.class);
+					if (res.isSuccess()) {
+						log.debug("单发单聊消息成功, response message is: {}", res);
+					} else {
+						log.error("单发单聊消息失败, response message is: {}", res);
+					}
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
+            }
+		});
 	}
 	
 	/**
@@ -109,8 +119,8 @@ public class TencentTimOpenimAsyncOperations extends TencentTimOpenimOperations 
 	 * @param msgBody 消息体
 	 * @return 操作结果
 	 */
-	public TimActionResponse sendAsyncMsg(String fromUid, String userId, MsgBody... msgBody) {
-		return this.sendAsyncMsg(fromUid, userId, false, msgBody);
+	public void sendAsyncMsg(String fromUid, String userId, MsgBody... msgBody) {
+		this.sendAsyncMsg(fromUid, userId, false, msgBody);
 	}
 
 	/**
@@ -125,8 +135,8 @@ public class TencentTimOpenimAsyncOperations extends TencentTimOpenimOperations 
 	 * @param msgBody 消息体
 	 * @return 操作结果
 	 */
-	public TimActionResponse sendAsyncMsg(String fromUid, String userId, boolean syncOtherMachine, MsgBody... msgBody) {
-		return this.sendAsyncMsg(fromUid, userId, syncOtherMachine, FORBID_CALLBACK_CONTROL, msgBody);
+	public void sendAsyncMsg(String fromUid, String userId, boolean syncOtherMachine, MsgBody... msgBody) {
+		this.sendAsyncMsg(fromUid, userId, syncOtherMachine, FORBID_CALLBACK_CONTROL, msgBody);
 	}
 	
 	/**
@@ -142,7 +152,7 @@ public class TencentTimOpenimAsyncOperations extends TencentTimOpenimOperations 
 	 * @param msgBody 消息体
 	 * @return 操作结果
 	 */
-	public TimActionResponse sendAsyncMsg(String fromUid, String userId, boolean syncOtherMachine, String[] forbidCallbackControl, MsgBody... msgBody) {
+	public void sendAsyncMsg(String fromUid, String userId, boolean syncOtherMachine, String[] forbidCallbackControl, MsgBody... msgBody) {
 		Map<String, Object> requestBody = new ImmutableMap.Builder<String, Object>()
 				.put("SyncOtherMachine", syncOtherMachine ? 1 : 2) // 若不希望将消息同步至 From_Account，则 SyncOtherMachine 填写2；若希望将消息同步至 From_Account，则 SyncOtherMachine 填写1。
 				.put("From_Account", getImUserByUserId(fromUid))
@@ -152,12 +162,21 @@ public class TencentTimOpenimAsyncOperations extends TencentTimOpenimOperations 
 				.put("MsgTimeStamp", System.currentTimeMillis() / 1000)
 				.put("ForbidCallbackControl", FORBID_CALLBACK_CONTROL)
 				.put("MsgBody", msgBody).build();
-		TimActionResponse res = request(TimApiAddress.SEND_MSG.getValue() + joiner.join(getDefaultParams()),
-				requestBody, TimActionResponse.class);
-		if (!res.isSuccess()) {
-			log.error("单发单聊消息失败, response message is: {}", res);
-		}
-		return res;
+		this.asyncRequest(TimApiAddress.SEND_MSG.getValue() + joiner.join(getDefaultParams()), requestBody, (response) -> {
+			if (response.isSuccessful()) {
+                try {
+					String content = response.body().string();
+					TimActionResponse res = getTimTemplate().toBean(content, TimActionResponse.class);
+					if (res.isSuccess()) {
+						log.debug("单发单聊消息成功, response message is: {}", res);
+					} else {
+						log.error("单发单聊消息失败, response message is: {}", res);
+					}
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
+            }
+		});
 	}
 	
 	/**
@@ -169,13 +188,22 @@ public class TencentTimOpenimAsyncOperations extends TencentTimOpenimOperations 
 	 * @param message 消息实体
 	 * @return 操作结果
 	 */
-	public TimActionResponse sendAsyncMsg(Message message) {
-		TimActionResponse res = request(TimApiAddress.SEND_MSG.getValue() + joiner.join(getDefaultParams()),
-				message, TimActionResponse.class);
-		if (!res.isSuccess()) {
-			log.error("单发单聊消息失败, response message is: {}", res);
-		}
-		return res;
+	public void sendAsyncMsg(Message message) {
+		this.asyncRequest(TimApiAddress.SEND_MSG.getValue() + joiner.join(getDefaultParams()), message, (response) -> {
+			if (response.isSuccessful()) {
+                try {
+					String content = response.body().string();
+					TimActionResponse res = getTimTemplate().toBean(content, TimActionResponse.class);
+					if (res.isSuccess()) {
+						log.debug("单发单聊消息成功, response message is: {}", res);
+					} else {
+						log.error("单发单聊消息失败, response message is: {}", res);
+					}
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
+            }
+		});
 	}
 	
 	/**
@@ -190,8 +218,8 @@ public class TencentTimOpenimAsyncOperations extends TencentTimOpenimOperations 
 	 * @param msgBody 消息体
 	 * @return 操作结果
 	 */
-	public TimActionResponse sendAsyncMsg(List<String> userIds, MsgBody... msgBody) {
-		return this.sendAsyncMsg(userIds, false, msgBody);
+	public void sendAsyncMsg(List<String> userIds, MsgBody... msgBody) {
+		this.sendAsyncMsg(userIds, false, msgBody);
 	}
 	
 	/**
@@ -207,8 +235,8 @@ public class TencentTimOpenimAsyncOperations extends TencentTimOpenimOperations 
 	 * @param msgBody 消息体
 	 * @return 操作结果
 	 */
-	public TimActionResponse sendAsyncMsg(List<String> userIds, boolean syncOtherMachine, MsgBody... msgBody) {
-		return this.sendAsyncMsg(userIds, syncOtherMachine, FORBID_CALLBACK_CONTROL, msgBody);
+	public void sendAsyncMsg(List<String> userIds, boolean syncOtherMachine, MsgBody... msgBody) {
+		this.sendAsyncMsg(userIds, syncOtherMachine, FORBID_CALLBACK_CONTROL, msgBody);
 	}
 	
 	/**
@@ -225,7 +253,7 @@ public class TencentTimOpenimAsyncOperations extends TencentTimOpenimOperations 
 	 * @param msgBody 消息体
 	 * @return 操作结果
 	 */
-	public TimActionResponse sendAsyncMsg(List<String> userIds, boolean syncOtherMachine, String[] forbidCallbackControl, MsgBody... msgBody) {
+	public void sendAsyncMsg(List<String> userIds, boolean syncOtherMachine, String[] forbidCallbackControl, MsgBody... msgBody) {
 		
 		Map<String, Object> requestBody = new ImmutableMap.Builder<String, Object>()
 				.put("SyncOtherMachine", syncOtherMachine ? 1 : 2) // 消息不同步至发送方
@@ -235,12 +263,21 @@ public class TencentTimOpenimAsyncOperations extends TencentTimOpenimOperations 
 				.put("MsgTimeStamp", System.currentTimeMillis() / 1000)
 				.put("ForbidCallbackControl", forbidCallbackControl)
 				.put("MsgBody", msgBody).build();
-		TimActionResponse res = request(TimApiAddress.SEND_BATCH_MSG.getValue() + joiner.join(getDefaultParams()),
-				requestBody, TimActionResponse.class);
-		if (!res.isSuccess()) {
-			log.error("单发单聊消息失败, response message is: {}", res);
-		}
-		return res;
+		this.asyncRequest(TimApiAddress.SEND_BATCH_MSG.getValue() + joiner.join(getDefaultParams()), requestBody, (response) -> {
+			if (response.isSuccessful()) {
+                try {
+					String content = response.body().string();
+					TimActionResponse res = getTimTemplate().toBean(content, TimActionResponse.class);
+					if (res.isSuccess()) {
+						log.debug("批量发单聊消息成功, response message is: {}", res);
+					} else {
+						log.error("批量发单聊消息失败, response message is: {}", res);
+					}
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
+            }
+		});
 	}
 	
 	/**
@@ -256,8 +293,8 @@ public class TencentTimOpenimAsyncOperations extends TencentTimOpenimOperations 
 	 * @param msgBody 消息体
 	 * @return 操作结果
 	 */
-	public TimActionResponse sendAsyncMsg(String fromUid, List<String> userIds, MsgBody... msgBody) {
-		return this.sendAsyncMsg(fromUid, userIds, false, msgBody);
+	public void sendAsyncMsg(String fromUid, List<String> userIds, MsgBody... msgBody) {
+		this.sendAsyncMsg(fromUid, userIds, false, msgBody);
 	}
 
 	/**
@@ -274,8 +311,8 @@ public class TencentTimOpenimAsyncOperations extends TencentTimOpenimOperations 
 	 * @param msgBody 消息体
 	 * @return 操作结果
 	 */
-	public TimActionResponse sendAsyncMsg(String fromUid, List<String> userIds, boolean syncOtherMachine, MsgBody... msgBody) {
-		return this.sendAsyncMsg(fromUid, userIds, syncOtherMachine, FORBID_CALLBACK_CONTROL, msgBody);
+	public void sendAsyncMsg(String fromUid, List<String> userIds, boolean syncOtherMachine, MsgBody... msgBody) {
+		this.sendAsyncMsg(fromUid, userIds, syncOtherMachine, FORBID_CALLBACK_CONTROL, msgBody);
 	}
 	
 	/**
@@ -293,7 +330,7 @@ public class TencentTimOpenimAsyncOperations extends TencentTimOpenimOperations 
 	 * @param msgBody 消息体
 	 * @return 操作结果
 	 */
-	public TimActionResponse sendAsyncMsg(String fromUid, List<String> userIds, boolean syncOtherMachine, String[] forbidCallbackControl, MsgBody... msgBody) {
+	public void sendAsyncMsg(String fromUid, List<String> userIds, boolean syncOtherMachine, String[] forbidCallbackControl, MsgBody... msgBody) {
 		Map<String, Object> requestBody = new ImmutableMap.Builder<String, Object>()
 				.put("SyncOtherMachine", syncOtherMachine ? 1 : 2) // 若不希望将消息同步至 From_Account，则 SyncOtherMachine 填写2；若希望将消息同步至 From_Account，则 SyncOtherMachine 填写1。
 				.put("From_Account", getImUserByUserId(fromUid))
@@ -303,12 +340,21 @@ public class TencentTimOpenimAsyncOperations extends TencentTimOpenimOperations 
 				.put("MsgTimeStamp", System.currentTimeMillis() / 1000)
 				.put("ForbidCallbackControl", FORBID_CALLBACK_CONTROL)
 				.put("MsgBody", msgBody).build();
-		TimActionResponse res = request(TimApiAddress.SEND_BATCH_MSG.getValue() + joiner.join(getDefaultParams()),
-				requestBody, TimActionResponse.class);
-		if (!res.isSuccess()) {
-			log.error("批量发单聊消息失败, response message is: {}", res);
-		}
-		return res;
+		this.asyncRequest(TimApiAddress.SEND_BATCH_MSG.getValue() + joiner.join(getDefaultParams()), requestBody, (response) -> {
+			if (response.isSuccessful()) {
+                try {
+					String content = response.body().string();
+					TimActionResponse res = getTimTemplate().toBean(content, TimActionResponse.class);
+					if (res.isSuccess()) {
+						log.debug("批量发单聊消息成功, response message is: {}", res);
+					} else {
+						log.error("批量发单聊消息失败, response message is: {}", res);
+					}
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
+            }
+		});
 	}
 	
 	/**

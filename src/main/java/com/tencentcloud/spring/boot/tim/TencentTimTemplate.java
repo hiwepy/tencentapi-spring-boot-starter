@@ -47,10 +47,10 @@ public class TencentTimTemplate {
 	private TLSSigAPIv2 tlsSigAPIv2;
 	private OkHttpClient okhttp3Client;
 
-	private final TencentTimAccountOperations accountOps = new TencentTimAccountOperations(this);
-	private final TencentTimOpenimOperations imOps = new TencentTimOpenimOperations(this);
-	private final TencentTimProfileOperations profileOps = new TencentTimProfileOperations(this);
-	private final TencentTimSnsOperations snsOps = new TencentTimSnsOperations(this);
+	private final TencentTimAccountAsyncOperations accountOps = new TencentTimAccountAsyncOperations(this);
+	private final TencentTimOpenimAsyncOperations imOps = new TencentTimOpenimAsyncOperations(this);
+	private final TencentTimProfileAsyncOperations profileOps = new TencentTimProfileAsyncOperations(this);
+	private final TencentTimSnsAsyncOperations snsOps = new TencentTimSnsAsyncOperations(this);
 	private LoadingCache<String, String> tlsSigCache;
 	
 	public TencentTimTemplate(TencentTimProperties timProperties, OkHttpClient okhttp3Client) {
@@ -76,19 +76,19 @@ public class TencentTimTemplate {
 		
 	}
 
-	public TencentTimAccountOperations opsForAccount() {
+	public TencentTimAccountAsyncOperations opsForAccount() {
 		return accountOps;
 	}
 
-	public TencentTimOpenimOperations opsForOpenim() {
+	public TencentTimOpenimAsyncOperations opsForOpenim() {
 		return imOps;
 	}
 
-	public TencentTimProfileOperations opsForProfile() {
+	public TencentTimProfileAsyncOperations opsForProfile() {
 		return profileOps;
 	}
 
-	public TencentTimSnsOperations opsForSns() {
+	public TencentTimSnsAsyncOperations opsForSns() {
 		return snsOps;
 	}
 
@@ -180,7 +180,6 @@ public class TencentTimTemplate {
 			log.error("请求异常", e);
 		}
 	}
-	
 
 	public String getUserIdByImUser(String imUser) {
 		if (!StringUtils.isNumeric(imUser)) {
