@@ -77,7 +77,6 @@ public class TencentTimProfileAsyncOperations extends TencentTimProfileOperation
 	 * @param userId 业务用户ID
 	 * @param nickname 用户昵称
 	 * @param avatar 用户头像
-	 * @return 操作结果
 	 */
 	public void asyncPortraitSet(Long userId, String nickname, String avatar) {
 		if (userId == null || userId <= 0) {
