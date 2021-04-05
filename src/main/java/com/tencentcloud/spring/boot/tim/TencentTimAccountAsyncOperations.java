@@ -42,7 +42,6 @@ public class TencentTimAccountAsyncOperations extends TencentTimAccountOperation
 	 * @param userId 业务用户ID
 	 * @param nickname 用户昵称
 	 * @param avatar 用户头像
-	 * @return 操作结果
 	 */
 	public void asyncImport(String userId, String nickname, String avatar) {
 		Map<String, Object> requestBody = new ImmutableMap.Builder<String, Object>()
@@ -70,7 +69,6 @@ public class TencentTimAccountAsyncOperations extends TencentTimAccountOperation
 	 * 2、导入多个帐号
 	 * API：https://cloud.tencent.com/document/product/269/4919
 	 * @param userIds 业务用户ID集合
-	 * @return 操作结果
 	 */
 	public void asyncImport(String[] userIds) {
 		Map<String, Object> requestBody = new ImmutableMap.Builder<String, Object>()
@@ -96,7 +94,6 @@ public class TencentTimAccountAsyncOperations extends TencentTimAccountOperation
 	 * 3、删除帐号
 	 * API：https://cloud.tencent.com/document/product/269/36443
 	 * @param userIds 业务用户ID数组
-	 * @return 操作结果
 	 */
 	public void asyncDelete(String... userIds) {
 		Map<String, Object> requestBody = new ImmutableMap.Builder<String, Object>()
@@ -126,7 +123,6 @@ public class TencentTimAccountAsyncOperations extends TencentTimAccountOperation
 	 * 5、失效帐号登录态（踢出）
 	 * API：https://cloud.tencent.com/document/product/269/3853
 	 * @param userId 业务用户ID
-	 * @return 操作结果
 	 */
 	public void asyncKick(String userId) {
 		Map<String, Object> requestBody = new ImmutableMap.Builder<String, Object>()
