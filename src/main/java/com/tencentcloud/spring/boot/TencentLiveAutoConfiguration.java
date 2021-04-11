@@ -10,10 +10,9 @@ import com.tencentcloud.spring.boot.live.TencentLiveTemplate;
 import com.tencentcloudapi.common.Credential;
 import com.tencentcloudapi.common.profile.ClientProfile;
 import com.tencentcloudapi.live.v20180801.LiveClient;
-import com.tencentcloudapi.sms.v20190711.SmsClient;
 
 @Configuration
-@ConditionalOnClass(SmsClient.class)
+@ConditionalOnClass(LiveClient.class)
 @ConditionalOnProperty(prefix = TencentLiveProperties.PREFIX, value = "enabled", havingValue = "true")
 @EnableConfigurationProperties({ TencentLiveProperties.class })
 public class TencentLiveAutoConfiguration {

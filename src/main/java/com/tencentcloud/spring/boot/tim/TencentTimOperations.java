@@ -43,16 +43,12 @@ public abstract class TencentTimOperations {
 		this.timTemplate = timTemplate;
 	}
 	
-	protected String genSig(String identifier) {
-		return timTemplate.genSig(identifier);
+	protected String genUserSig(String identifier) {
+		return timTemplate.genUserSig(identifier);
 	}
 
-	protected String genSig(String identifier, long expire) {
-		return timTemplate.genSig(identifier, expire);
-	}
-
-	protected String genSigWithUserBuf(String identifier, long expire, byte[] userbuf) {
-		return timTemplate.genSigWithUserBuf(identifier, expire, userbuf);
+	protected String genUserSig(String identifier, long expire) {
+		return timTemplate.genUserSig(identifier, expire);
 	}
 
 	/**

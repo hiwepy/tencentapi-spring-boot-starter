@@ -28,5 +28,4 @@ public class TencentLiveTemplate {
 		this.smsProperties = smsProperties;
 	}
  
-
 }

@@ -69,7 +69,7 @@ public class TencentTimTemplate {
 
 							@Override
 							public String load(String key) throws Exception {
-								return tlsSigAPIv2.genSig(timProperties.getIdentifier(), timProperties.getExpire());
+								return tlsSigAPIv2.genUserSig(timProperties.getIdentifier(), timProperties.getExpire());
 							}
 							
 						});
@@ -92,18 +92,18 @@ public class TencentTimTemplate {
 		return snsOps;
 	}
 
-	public String genSig(String identifier) {
-		return tlsSigAPIv2.genSig(identifier, timProperties.getExpire());
+	public String genUserSig(String identifier) {
+		return tlsSigAPIv2.genUserSig(identifier, timProperties.getExpire());
 	}
 
-	public String genSig(String identifier, long expire) {
-		return tlsSigAPIv2.genSig(identifier, expire);
+	public String genUserSig(String identifier, long expire) {
+		return tlsSigAPIv2.genUserSig(identifier, expire);
 	}
 
-	public String genSigWithUserBuf(String identifier, long expire, byte[] userbuf) {
-		return tlsSigAPIv2.genSigWithUserBuf(identifier, expire, userbuf);
+	public TLSSigAPIv2 getTlsSigAPIv2() {
+		return tlsSigAPIv2;
 	}
-
+	
 	public long getMsgLifeTime() {
 		return timProperties.getMsgLifeTime();
 	}

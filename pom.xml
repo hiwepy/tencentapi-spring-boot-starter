@@ -75,7 +75,6 @@
 					<artifactId>maven-compiler-plugin</artifactId>
 					<version>${maven-compiler-plugin.version}</version>
 					<configuration>
-						<defaultLibBundleDir>lib</defaultLibBundleDir>
 						<source>${java.version}</source>
 						<target>${java.version}</target>
 						<encoding>${project.build.sourceEncoding}</encoding>
@@ -155,11 +154,6 @@
 					<groupId>org.apache.maven.plugins</groupId>
 					<artifactId>maven-source-plugin</artifactId>
 					<version>${maven-source-plugin.version}</version>
-					<configuration>
-						<testFailureIgnore>true</testFailureIgnore>
-						<attach>true</attach>
-						<encoding>${project.build.sourceEncoding}</encoding>
-					</configuration>
 					<executions>
 						<execution>
 							<id>attach-sources</id>
@@ -201,7 +195,6 @@
 					<artifactId>maven-jar-plugin</artifactId>
 					<version>${maven-jar-plugin.version}</version>
 					<configuration>
-						<encoding>${project.build.sourceEncoding}</encoding>
 						<skipIfEmpty>true</skipIfEmpty>
 						<archive>
 							<manifest>
@@ -217,8 +210,6 @@
 					<artifactId>maven-javadoc-plugin</artifactId>
 					<version>${maven-javadoc-plugin.version}</version>
 					<configuration>
-						<aggregate>true</aggregate>
-						<argLine>-Dfile.encoding=UTF-8</argLine>
 						<charset>${project.build.sourceEncoding}</charset>
 						<encoding>${project.build.sourceEncoding}</encoding>
 						<docencoding>${project.build.sourceEncoding}</docencoding>
@@ -376,14 +367,10 @@
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
 		
-		<libphonenumber.version>8.12.7</libphonenumber.version>
-		<libphonenumber-carrier.version>1.133</libphonenumber-carrier.version>
-		<libphonenumber-prefixmapper.version>2.143</libphonenumber-prefixmapper.version>
-		<libphonenumber-geocoder.version>2.143</libphonenumber-geocoder.version>
-		<tencentcloud-sdk-java.version>3.1.143</tencentcloud-sdk-java.version>
-		<tencentcloud-tls-sig-api-v2.version>1.1</tencentcloud-tls-sig-api-v2.version>
+		<tencentcloud-sdk-java.version>4.0.11</tencentcloud-sdk-java.version>
+		<tencentcloud-tls-sig-api-v2.version>2.0</tencentcloud-tls-sig-api-v2.version>
 		<guava.version>30.0-jre</guava.version>
-		<fastjson.version>1.2.75</fastjson.version>
+		<fastjson.version>1.2.76</fastjson.version>
 		
 		<maven.version>3.0</maven.version>
 		<maven-gpg-plugin.version>1.6</maven-gpg-plugin.version>
@@ -397,30 +384,7 @@
 
 	<dependencyManagement>
 		<dependencies>
-			<!-- https://mvnrepository.com/artifact/com.googlecode.libphonenumber/libphonenumber -->
-			<dependency>
-			    <groupId>com.googlecode.libphonenumber</groupId>
-			    <artifactId>libphonenumber</artifactId>
-			    <version>${libphonenumber.version}</version>
-			</dependency>
-			<!-- https://mvnrepository.com/artifact/com.googlecode.libphonenumber/carrier -->
-			<dependency>
-			    <groupId>com.googlecode.libphonenumber</groupId>
-			    <artifactId>carrier</artifactId>
-			    <version>${libphonenumber-carrier.version}</version>
-			</dependency>
-			<!-- https://mvnrepository.com/artifact/com.googlecode.libphonenumber/libphonenumber-prefixmapper -->
-			<dependency>
-			    <groupId>com.googlecode.libphonenumber</groupId>
-			    <artifactId>libphonenumber-prefixmapper</artifactId>
-			    <version>${libphonenumber-libphonenumber-prefixmapper.version}</version>
-			</dependency>
-			<!-- https://mvnrepository.com/artifact/com.googlecode.libphonenumber/geocoder -->
-			<dependency>
-			    <groupId>com.googlecode.libphonenumber</groupId>
-			    <artifactId>geocoder</artifactId>
-			    <version>${libphonenumber-geocoder.version}</version>
-			</dependency>
+			
 			<!-- https://mvnrepository.com/artifact/com.google.guava/guava -->
 			<dependency>
 			    <groupId>com.google.guava</groupId>
