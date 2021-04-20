@@ -4,3 +4,6 @@ tencent:
     identifier: 
     expire: 1111
     private-key: sss
+    
+  okhttp3:    write-timeout: 10
+    keep-alive-duration: 20s
