@@ -17,11 +17,10 @@ package com.tencentcloud.spring.boot.tim;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
-
-import org.apache.commons.lang3.StringUtils;
 
 import com.google.common.collect.ImmutableMap;
 import com.tencentcloud.spring.boot.tim.resp.UserProfilePortraitGetResponse;
@@ -40,9 +39,54 @@ public class TencentTimProfileOperations extends TencentTimOperations {
 		super(timTemplate);
 	}
 
+	/**
+	 * 1、设置资料
+	 * API：https://cloud.tencent.com/document/product/269/1640
+	 * @param userId 业务用户ID
+	 * @param nickname 用户昵称
+	 * @param avatar 用户头像
+	 * @return 操作结果
+	 */
+	public UserProfilePortraitSetResponse portraitSet(String userId, String nickname, String avatar) {
+		Map<String, String> profile = new HashMap<>();
+		profile.put("Tag_Profile_IM_Nick", nickname);
+		profile.put("Tag_Profile_IM_Image", avatar);
+		return this.portraitSet(userId, profile);
+	}
+
+	/**
+	 * 2、设置资料
+	 * API：https://cloud.tencent.com/document/product/269/1640
+	 * @param userId 业务用户ID
+	 * @param profile 用户资料
+	 * @return 操作结果
+	 */
+	public UserProfilePortraitSetResponse portraitSet(String userId, Map<String, String> profile) {
+		Map<String, Object> requestBody = new ImmutableMap.Builder<String, Object>()
+				.put("From_Account", String.valueOf(userId))
+				.put("ProfileItem", profile.entrySet().stream().map(entry -> {
+					HashMap<String, String> hashMap = new HashMap<>();
+					hashMap.put("Tag", entry.getKey());
+					hashMap.put("Value", entry.getValue());
+					return hashMap;
+				}).collect(Collectors.toList()))
+				.build();
+		UserProfilePortraitSetResponse res = request(TimApiAddress.PORTRAIT_SET.getValue() + joiner.join(getDefaultParams()), requestBody,
+				UserProfilePortraitSetResponse.class);
+		if (!res.isSuccess()) {
+			log.error("设置资料失败， ActionStatus : {}, ErrorCode : {}, ErrorInfo : {}", res.getActionStatus(), res.getErrorCode(), res.getErrorInfo());
+		}
+		return res;
+	}
 	
+	/**
+	 * 3、拉取标配资料
+	 * API：https://cloud.tencent.com/document/product/269/1639
+	 * @param userIds 业务用户ID数组
+	 * @return 操作结果
+	 */
 	public UserProfilePortraitGetResponse portraitGet(String... userIds) {
-		ArrayList<String> tagList = new ArrayList<String>();
+		List<String> tagList = new ArrayList<String>();
 		tagList.add("Tag_Profile_IM_Nick");
 		tagList.add("Tag_Profile_IM_Gender");
 		tagList.add("Tag_Profile_IM_BirthDay");
@@ -54,6 +98,18 @@ public class TencentTimProfileOperations extends TencentTimOperations {
 		tagList.add("Tag_Profile_IM_AdminForbidType");
 		tagList.add("Tag_Profile_IM_Level");
 		tagList.add("Tag_Profile_IM_Role");
+		return this.portraitGet(tagList, userIds);
+	}
+	
+	/**
+	 * 4、拉取资料
+	 * API：https://cloud.tencent.com/document/product/269/1639
+	 * @param tagList 指定要拉取的资料字段的 Tag，支持的字段有： 标配资料字段，自定义资料字段
+	 * @param userIds 业务用户ID数组
+	 * @return 操作结果
+	 */
+	public UserProfilePortraitGetResponse portraitGet(List<String> tagList, String... userIds) {
+		 
 		Map<String, Object> requestBody = new ImmutableMap.Builder<String, Object>()
 				.put("To_Account", Stream.of(userIds).map(uid -> this.getImUserByUserId(uid)).collect(Collectors.toList()))
 				.put("TagList", tagList).build();
@@ -65,40 +121,6 @@ public class TencentTimProfileOperations extends TencentTimOperations {
 		}
 		return res;
 	}
-
-	/**
-	 * 设置资料
-	 * @param userId 业务用户ID
-	 * @param nickname 用户昵称
-	 * @param avatar 用户头像
-	 * @return 操作结果
-	 */
-	public UserProfilePortraitSetResponse portraitSet(Long userId, String nickname, String avatar) {
-		UserProfilePortraitSetResponse res = new UserProfilePortraitSetResponse();
-		if (userId == null || userId <= 0) {
-			return res;
-		}
-		if (StringUtils.isBlank(nickname) && StringUtils.isBlank(avatar)) {
-			return res;
-		}
-		ArrayList<HashMap<String, String>> objects = new ArrayList<>();
-		HashMap<String, String> hashMap = new HashMap<>();
-		hashMap.put("Tag", "Tag_Profile_IM_Nick");
-		hashMap.put("Value", nickname);
-		HashMap<String, String> hashMap1 = new HashMap<>();
-		hashMap1.put("Tag", "Tag_Profile_IM_Image");
-		hashMap1.put("Value", avatar);
-		objects.add(hashMap);
-		objects.add(hashMap1);
-
-		Map<String, Object> requestBody = new ImmutableMap.Builder<String, Object>()
-				.put("From_Account", String.valueOf(userId)).put("ProfileItem", objects).build();
-		res = request(TimApiAddress.PORTRAIT_SET.getValue() + joiner.join(getDefaultParams()), requestBody,
-				UserProfilePortraitSetResponse.class);
-		if (!res.isSuccess()) {
-			log.error("设置资料失败， ActionStatus : {}, ErrorCode : {}, ErrorInfo : {}", res.getActionStatus(), res.getErrorCode(), res.getErrorInfo());
-		}
-		return res;
-	}
+	
 	
 }

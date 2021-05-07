@@ -25,9 +25,9 @@ import com.tencentcloud.spring.boot.tim.resp.BlacklistResponse;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
-public class TencentTimSnsAsyncOperations extends TencentTimSnsOperations {
+public class TencentTimGroupAsyncOperations extends TencentTimGroupOperations {
 
-	public TencentTimSnsAsyncOperations(TencentTimTemplate timTemplate) {
+	public TencentTimGroupAsyncOperations(TencentTimTemplate timTemplate) {
 		super(timTemplate);
 	}
 	

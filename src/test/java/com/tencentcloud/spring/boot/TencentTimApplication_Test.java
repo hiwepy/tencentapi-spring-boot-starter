@@ -23,7 +23,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.tencentcloud.spring.boot.tim.TencentTimTemplate;
-import com.tencentcloud.spring.boot.tim.resp.AccountKickResponse;
+import com.tencentcloud.spring.boot.tim.resp.account.AccountKickResponse;
 
 @SpringBootApplication
 public class TencentTimApplication_Test {
@@ -38,7 +38,7 @@ public class TencentTimApplication_Test {
 
 		try {
 
-			AccountKickResponse response =  template.opsForAccount().kick("");
+			AccountKickResponse response =  template.opsForAccount().kickout("");
 			System.out.println(objectMapper.writeValueAsString(response));
 			
 			template.opsForAccount().delete(new String[] {"111"});

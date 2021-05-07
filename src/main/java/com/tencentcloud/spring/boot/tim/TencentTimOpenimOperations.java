@@ -31,8 +31,8 @@ import com.tencentcloud.spring.boot.tim.resp.TimActionResponse;
 import lombok.extern.slf4j.Slf4j;
 
 /**
- * Tim 单聊管理
- * https://cloud.tencent.com/document/product/269/42440
+ * 2、单聊信息
+ * https://cloud.tencent.com/document/product/269/2282
  */
 @Slf4j
 public class TencentTimOpenimOperations extends TencentTimOperations {

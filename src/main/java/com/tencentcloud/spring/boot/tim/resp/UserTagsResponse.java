@@ -4,7 +4,7 @@ import java.util.List;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.tencentcloud.spring.boot.tim.resp.push.UserAttrs;
+import com.tencentcloud.spring.boot.tim.resp.push.UserTags;
 
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -12,11 +12,11 @@ import lombok.EqualsAndHashCode;
 @Data
 @EqualsAndHashCode(callSuper = false)
 @JsonInclude(JsonInclude.Include.NON_NULL)
-public class UserAttrsResponse extends ApiResponse {
+public class UserTagsResponse extends ApiResponse {
 
 	/**
 	 * 用户标签内容列表
 	 */
-	@JsonProperty("UserAttrs")
-	private List<UserAttrs> userAttrs;
+	@JsonProperty("UserTags")
+	private List<UserTags> userTags;
 }

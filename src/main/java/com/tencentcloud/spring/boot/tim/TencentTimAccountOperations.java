@@ -21,18 +21,18 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import com.google.common.collect.ImmutableMap;
-import com.tencentcloud.spring.boot.tim.resp.AccountCheckResponse;
-import com.tencentcloud.spring.boot.tim.resp.AccountDeleteResponse;
-import com.tencentcloud.spring.boot.tim.resp.AccountImportResponse;
-import com.tencentcloud.spring.boot.tim.resp.AccountKickResponse;
-import com.tencentcloud.spring.boot.tim.resp.AccountStateResponse;
-import com.tencentcloud.spring.boot.tim.resp.AccountsImportResponse;
+import com.tencentcloud.spring.boot.tim.resp.account.AccountCheckResponse;
+import com.tencentcloud.spring.boot.tim.resp.account.AccountDeleteResponse;
+import com.tencentcloud.spring.boot.tim.resp.account.AccountImportResponse;
+import com.tencentcloud.spring.boot.tim.resp.account.AccountKickResponse;
+import com.tencentcloud.spring.boot.tim.resp.account.AccountStateResponse;
+import com.tencentcloud.spring.boot.tim.resp.account.AccountsImportResponse;
 
 import lombok.extern.slf4j.Slf4j;
 
 /**
- * Tim 用户管理
- * https://cloud.tencent.com/document/product/269/42440
+ * 1、帐号管理
+ * https://cloud.tencent.com/document/product/269/1608
  */
 @Slf4j
 public class TencentTimAccountOperations extends TencentTimOperations {
@@ -68,7 +68,7 @@ public class TencentTimAccountOperations extends TencentTimOperations {
 	 * @param userIds 业务用户ID集合
 	 * @return 操作结果
 	 */
-	public AccountsImportResponse aImport(String[] userIds) {
+	public AccountsImportResponse aImport(String... userIds) {
 		Map<String, Object> requestBody = new ImmutableMap.Builder<String, Object>()
 				.put("Accounts", Stream.of(userIds).map(uid -> this.getImUserByUserId(uid)).collect(Collectors.toList())).build();
 		AccountsImportResponse res = request(TimApiAddress.MULTI_ACCOUNT_IMPORT.getValue() + joiner.join(getDefaultParams()),
@@ -127,7 +127,7 @@ public class TencentTimAccountOperations extends TencentTimOperations {
 	 * @param userId 业务用户ID
 	 * @return 操作结果
 	 */
-	public AccountKickResponse kick(String userId) {
+	public AccountKickResponse kickout(String userId) {
 		Map<String, Object> requestBody = new ImmutableMap.Builder<String, Object>()
 				.put("Identifier", this.getImUserByUserId(userId)).build();
 		AccountKickResponse res = request(TimApiAddress.ACCOUNT_KICK.getValue() + joiner.join(getDefaultParams()),
@@ -144,8 +144,8 @@ public class TencentTimAccountOperations extends TencentTimOperations {
 	 * @param userIds 业务用户ID数组
 	 * @return 操作结果
 	 */
-	public AccountStateResponse onlineState(String... userIds) {
-		return this.onlineState(userIds, false);
+	public AccountStateResponse getState(String... userIds) {
+		return this.getState(userIds, false);
 	}
 	
 	/**
@@ -155,7 +155,7 @@ public class TencentTimAccountOperations extends TencentTimOperations {
 	 * @param needDetail 是否需要详情结果
 	 * @return 操作结果
 	 */
-	public AccountStateResponse onlineState(String[] userIds, boolean needDetail) {
+	public AccountStateResponse getState(String[] userIds, boolean needDetail) {
 		ImmutableMap.Builder<String, Object> builder = new ImmutableMap.Builder<String, Object>()
 			.put("To_Account", Stream.of(userIds).map(uid -> this.getImUserByUserId(uid)).collect(Collectors.toList()));
 		if(needDetail) {

@@ -1,19 +1,22 @@
 package com.tencentcloud.spring.boot.tim;
 
 import java.util.Arrays;
-import java.util.HashMap;
 import java.util.Map;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-import org.springframework.util.StringUtils;
-
 import com.google.common.collect.ImmutableMap;
 import com.tencentcloud.spring.boot.tim.req.message.BlacklistMessage;
-import com.tencentcloud.spring.boot.tim.req.sns.FriendItem;
-import com.tencentcloud.spring.boot.tim.resp.AccountCheckResponse;
-import com.tencentcloud.spring.boot.tim.resp.AddFriendResponse;
+import com.tencentcloud.spring.boot.tim.req.sns.FriendAddItem;
+import com.tencentcloud.spring.boot.tim.req.sns.FriendImportItem;
+import com.tencentcloud.spring.boot.tim.req.sns.FriendUpdateItem;
 import com.tencentcloud.spring.boot.tim.resp.BlacklistResponse;
+import com.tencentcloud.spring.boot.tim.resp.sns.FriendAddResponse;
+import com.tencentcloud.spring.boot.tim.resp.sns.FriendCheckResponse;
+import com.tencentcloud.spring.boot.tim.resp.sns.FriendDeleteAllResponse;
+import com.tencentcloud.spring.boot.tim.resp.sns.FriendDeleteResponse;
+import com.tencentcloud.spring.boot.tim.resp.sns.FriendImportResponse;
+import com.tencentcloud.spring.boot.tim.resp.sns.FriendUpdateResponse;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -37,31 +40,143 @@ public class TencentTimSnsOperations extends TencentTimOperations {
 	 * @param friends 添加的好友数组
 	 * @return 操作结果
 	 */
-	public AddFriendResponse addFriend(String userId, String addType, boolean forceAdd, FriendItem ... friends) {
+	public FriendAddResponse addFriend(String userId, String addType, boolean forceAdd, FriendAddItem ... friends) {
 		Map<String, Object> requestBody = new ImmutableMap.Builder<String, Object>()
 				.put("From_Account", this.getImUserByUserId(userId))
 				.put("AddFriendItem", Stream.of(friends).map(friend -> {
-					Map<String, Object> userMap = new HashMap<>();
-					userMap.put("To_Account", this.getImUserByUserId(friend.getAccount()));
-					if(StringUtils.hasText(friend.getRemark())) {
-						userMap.put("Remark", friend.getRemark());
-					}
-					if(StringUtils.hasText(friend.getGroupName())) {
-						userMap.put("GroupName", friend.getGroupName());
-					}
-					userMap.put("AddSource", this.getImUserByUserId(friend.getAccount()));
-					if(StringUtils.hasText(friend.getWording())) {
-						userMap.put("AddWording", friend.getWording());
-					}
-					return userMap;
+					friend.setAccount(this.getImUserByUserId(friend.getAccount()));
+					return friend;
 				}).collect(Collectors.toList()))
 				.put("AddType", addType)
 				.put("ForceAddFlags", forceAdd ? 1 : 0)
 				.build();
-		AddFriendResponse res = request(TimApiAddress.FRIEND_ADD.getValue() + joiner.join(getDefaultParams()),
-				requestBody, AddFriendResponse.class);
+		FriendAddResponse res = request(TimApiAddress.FRIEND_ADD.getValue() + joiner.join(getDefaultParams()),
+				requestBody, FriendAddResponse.class);
 		if (!res.isSuccess()) {
 			log.error("添加好友失败， ActionStatus : {}, ErrorCode : {}, ErrorInfo : {}", res.getActionStatus(), res.getErrorCode(), res.getErrorInfo());
+		}
+		return res;
+	}
+	
+	/**
+	 * 2、导入好友
+	 * API：https://cloud.tencent.com/document/product/269/8301
+	 * @param userId 业务用户ID
+	 * @param friends 导入的好友数组
+	 * @return 操作结果
+	 */
+	public FriendImportResponse importFriend(String userId, FriendImportItem ... friends) {
+		Map<String, Object> requestBody = new ImmutableMap.Builder<String, Object>()
+				.put("From_Account", this.getImUserByUserId(userId))
+				.put("AddFriendItem", Stream.of(friends).map(friend -> {
+					friend.setAccount(this.getImUserByUserId(friend.getAccount()));
+					return friend;
+				}).collect(Collectors.toList()))
+				.build();
+		FriendImportResponse res = request(TimApiAddress.FRIEND_IMPORT.getValue() + joiner.join(getDefaultParams()),
+				requestBody, FriendImportResponse.class);
+		if (!res.isSuccess()) {
+			log.error("导入好友失败， ActionStatus : {}, ErrorCode : {}, ErrorInfo : {}", res.getActionStatus(), res.getErrorCode(), res.getErrorInfo());
+		}
+		return res;
+	}
+	
+
+	/**
+	 * 3、更新好友
+	 * API：https://cloud.tencent.com/document/product/269/12525
+	 * @param userId 业务用户ID
+	 * @param friends 需要更新的好友对象数组
+	 * @return 操作结果
+	 */
+	public FriendUpdateResponse updateFriend(String userId, FriendUpdateItem ... friends) {
+		Map<String, Object> requestBody = new ImmutableMap.Builder<String, Object>()
+				.put("From_Account", this.getImUserByUserId(userId))
+				.put("UpdateItem", Stream.of(friends).map(friend -> {
+					friend.setAccount(this.getImUserByUserId(friend.getAccount()));
+					return friend;
+				}).collect(Collectors.toList()))
+				.build();
+		FriendUpdateResponse res = request(TimApiAddress.FRIEND_UPDATE.getValue() + joiner.join(getDefaultParams()),
+				requestBody, FriendUpdateResponse.class);
+		if (!res.isSuccess()) {
+			log.error("更新好友失败， ActionStatus : {}, ErrorCode : {}, ErrorInfo : {}", res.getActionStatus(), res.getErrorCode(), res.getErrorInfo());
+		}
+		return res;
+	}
+	
+	/**
+	 * 4、删除好友
+	 * API：https://cloud.tencent.com/document/product/269/1644
+	 * @param userId 业务用户ID
+	 * @param deleteType 删除模式；
+	 * <pre>
+	 * 	单向删除好友 	Delete_Type_Single 	只将 To_Account 从 From_Account 的好友表中删除，但不会将 From_Account 从 To_Account 的好友表中删除
+	 * 	双向删除好友 	Delete_Type_Both 	将 To_Account 从 From_Account 的好友表中删除，同时将 From_Account 从 To_Account 的好友表中删除
+	 * <pre/>
+	 * @param friends 待删除的好友的 UserID 列表，单次请求的 To_Account 数不得超过1000
+	 * @return 操作结果
+	 */
+	public FriendDeleteResponse deleteFriend(String userId, String deleteType ,String ... friends) {
+		Map<String, Object> requestBody = new ImmutableMap.Builder<String, Object>()
+				.put("From_Account", this.getImUserByUserId(userId))
+				.put("To_Account", Stream.of(friends).map(friend -> {
+					return this.getImUserByUserId(friend);
+				}).collect(Collectors.toList()))
+				.put("DeleteType", deleteType)
+				.build();
+		FriendDeleteResponse res = request(TimApiAddress.FRIEND_DELETE.getValue() + joiner.join(getDefaultParams()),
+				requestBody, FriendDeleteResponse.class);
+		if (!res.isSuccess()) {
+			log.error("删除好友失败， ActionStatus : {}, ErrorCode : {}, ErrorInfo : {}", res.getActionStatus(), res.getErrorCode(), res.getErrorInfo());
+		}
+		return res;
+	}
+
+	/**
+	 * 5、删除所有好友
+	 * API：https://cloud.tencent.com/document/product/269/1645
+	 * @param userId 业务用户ID
+	 * @param deleteType 删除模式；
+	 * <pre>
+	 * 	单向删除好友 	Delete_Type_Single 	只将 To_Account 从 From_Account 的好友表中删除，但不会将 From_Account 从 To_Account 的好友表中删除
+	 * 	双向删除好友 	Delete_Type_Both 	将 To_Account 从 From_Account 的好友表中删除，同时将 From_Account 从 To_Account 的好友表中删除
+	 * <pre/>
+	 * @return 操作结果
+	 */
+	public FriendDeleteAllResponse deleteAllFriend(String userId, String deleteType) {
+		Map<String, Object> requestBody = new ImmutableMap.Builder<String, Object>()
+				.put("From_Account", this.getImUserByUserId(userId))
+				.put("DeleteType", deleteType)
+				.build();
+		FriendDeleteAllResponse res = request(TimApiAddress.FRIEND_DELETE_ALL.getValue() + joiner.join(getDefaultParams()),
+				requestBody, FriendDeleteAllResponse.class);
+		if (!res.isSuccess()) {
+			log.error("删除所有好友失败， ActionStatus : {}, ErrorCode : {}, ErrorInfo : {}", res.getActionStatus(), res.getErrorCode(), res.getErrorInfo());
+		}
+		return res;
+	}
+	
+	/**
+	 * 6、校验好友
+	 * API：https://cloud.tencent.com/document/product/269/1646
+	 * @param userId 业务用户ID
+	 * @param checkType 校验模式； https://cloud.tencent.com/document/product/269/1501#.E6.A0.A1.E9.AA.8C.E5.A5.BD.E5.8F.8B
+	 * @param friends 待删除的好友的 UserID 列表，单次请求的 To_Account 数不得超过1000
+	 * @return 操作结果
+	 */
+	public FriendCheckResponse checkFriend(String userId, String checkType ,String ... friends) {
+		Map<String, Object> requestBody = new ImmutableMap.Builder<String, Object>()
+				.put("From_Account", this.getImUserByUserId(userId))
+				.put("To_Account", Stream.of(friends).map(friend -> {
+					return this.getImUserByUserId(friend);
+				}).collect(Collectors.toList()))
+				.put("CheckType", checkType)
+				.build();
+		FriendCheckResponse res = request(TimApiAddress.FRIEND_CHECK.getValue() + joiner.join(getDefaultParams()),
+				requestBody, FriendCheckResponse.class);
+		if (!res.isSuccess()) {
+			log.error("校验好友失败， ActionStatus : {}, ErrorCode : {}, ErrorInfo : {}", res.getActionStatus(), res.getErrorCode(), res.getErrorInfo());
 		}
 		return res;
 	}

@@ -15,29 +15,45 @@ public class OfflinePushInfo {
 	/**
 	 * 0表示推送，1表示不离线推送。
 	 */
-	@JsonProperty("pushFlag")
+	@JsonProperty("PushFlag")
 	private Integer pushFlag;
 
 	/**
 	 * 离线推送标题。该字段为ios和android共用
 	 */
-	@JsonProperty("title")
+	@JsonProperty("Title")
 	private String title;
 
 	/**
 	 * 离线推送内容 。
 	 */
-	@JsonProperty("desc")
+	@JsonProperty("Desc")
 	private String desc;
 
 	/**
 	 * 离线推送透传内容。
 	 */
-	@JsonProperty("ext")
+	@JsonProperty("Ext")
 	private String ext;
 
-	@JsonProperty("apnsInfo")
+	@JsonProperty("AndroidInfo")
+	private AndroidInfo androidInfo;
+	
+	@JsonProperty("ApnsInfo")
 	private ApnsInfo apnsInfo;
+
+	@JsonInclude(JsonInclude.Include.NON_NULL)
+	@Data
+	class AndroidInfo {
+		
+		/**
+		 * 离线推送声音文件路径。
+		 */
+		@JsonProperty("Sound")
+		private String sound;
+ 
+	}
+	
 
 	@JsonInclude(JsonInclude.Include.NON_NULL)
 	@Data

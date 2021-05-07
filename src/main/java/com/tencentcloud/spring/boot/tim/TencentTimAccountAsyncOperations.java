@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2018, vindell (https://github.com/vindell).
+ * Copyright (c) 2018, hiwepy (https://github.com/hiwepy).
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not
  * use this file except in compliance with the License. You may obtain a copy of
@@ -22,10 +22,10 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import com.google.common.collect.ImmutableMap;
-import com.tencentcloud.spring.boot.tim.resp.AccountDeleteResponse;
-import com.tencentcloud.spring.boot.tim.resp.AccountImportResponse;
-import com.tencentcloud.spring.boot.tim.resp.AccountsImportResponse;
 import com.tencentcloud.spring.boot.tim.resp.TimActionResponse;
+import com.tencentcloud.spring.boot.tim.resp.account.AccountDeleteResponse;
+import com.tencentcloud.spring.boot.tim.resp.account.AccountImportResponse;
+import com.tencentcloud.spring.boot.tim.resp.account.AccountsImportResponse;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -124,7 +124,7 @@ public class TencentTimAccountAsyncOperations extends TencentTimAccountOperation
 	 * API：https://cloud.tencent.com/document/product/269/3853
 	 * @param userId 业务用户ID
 	 */
-	public void asyncKick(String userId) {
+	public void asyncKickout(String userId) {
 		Map<String, Object> requestBody = new ImmutableMap.Builder<String, Object>()
 				.put("Identifier", this.getImUserByUserId(userId)).build();
 		this.asyncRequest(TimApiAddress.ACCOUNT_KICK.getValue() + joiner.join(getDefaultParams()), requestBody, (response) -> {

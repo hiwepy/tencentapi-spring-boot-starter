@@ -6,7 +6,7 @@ import org.junit.Test;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.tencentcloud.spring.boot.tim.TencentTimTemplate;
-import com.tencentcloud.spring.boot.tim.resp.AccountKickResponse;
+import com.tencentcloud.spring.boot.tim.resp.account.AccountKickResponse;
 
 import okhttp3.OkHttpClient;
 
@@ -29,7 +29,7 @@ public class TencentTim_Test {
 		try {
 			
 			TencentTimTemplate template = new TencentTimTemplate(properties, okhttp3Client);
-			AccountKickResponse response =  template.opsForAccount().kick("");
+			AccountKickResponse response =  template.opsForAccount().kickout("");
 			System.out.println(objectMapper.writeValueAsString(response));
 			
 			template.opsForAccount().delete(new String[] {"111"});

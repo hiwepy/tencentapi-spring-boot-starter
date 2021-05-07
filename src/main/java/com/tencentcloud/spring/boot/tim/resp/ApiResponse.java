@@ -39,4 +39,5 @@ public class ApiResponse {
 	public boolean isSuccess() {
 		return "OK".equals(actionStatus);
 	}
+	 
 }

@@ -2,6 +2,8 @@ package com.tencentcloud.spring.boot.tim.resp;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.tencentcloud.spring.boot.tim.resp.push.UserAttrs;
+
 import lombok.Data;
 
 import java.util.List;
@@ -12,25 +14,8 @@ import java.util.Map;
  */
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @Data
-public class TimActionResponse {
+public class TimActionResponse extends ApiResponse {
 
-	/**
-	 * 请求处理的结果，OK 表示处理成功，FAIL 表示失败。
-	 */
-	@JsonProperty("ActionStatus")
-	private String actionStatus;
-
-	/**
-	 * 错误信息。
-	 */
-	@JsonProperty("ErrorInfo")
-	private String errorInfo;
-
-	/**
-	 * 错误码。
-	 */
-	@JsonProperty("ErrorCode")
-	private int errorCode;
 
 	/**
 	 * 消息时间戳，unix 时间戳。
@@ -73,7 +58,7 @@ public class TimActionResponse {
 	 * @return
 	 */
 	@JsonProperty("UserAttrs")
-	private List<UserAttrsResponse> userAttrs;
+	private List<UserAttrs> userAttrs;
 
 	/**
 	 * 应用属性名称
@@ -105,10 +90,5 @@ public class TimActionResponse {
 	@JsonProperty("MemberNum")
 	private Integer memberNum;
 
-	@JsonProperty("ErrorDisplay")
-	private String errorDisplay;
 
-	public boolean isSuccess() {
-		return "OK".equals(actionStatus);
-	}
 }
