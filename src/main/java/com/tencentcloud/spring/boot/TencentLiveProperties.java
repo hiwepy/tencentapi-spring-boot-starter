@@ -47,22 +47,9 @@ public class TencentLiveProperties {
 
 	private String region;
 
-	/**
-	 * 短信签名内容，使用 UTF-8 编码，必须填写已审核通过的签名，签名信息可登录
-	 * [短信控制台](https://console.cloud.tencent.com/smsv2) 查看。注：国内短信为必填参数。
-	 */
-	private String sign;
-
-	/**
-	 * 国际/港澳台短信 senderid，国内短信填空，默认未开通，如需开通请联系 [sms
-	 * helper](https://cloud.tencent.com/document/product/382/3773)。
-	 */
-	private String senderId;
-
-	/**
-	 * 短信码号扩展号，默认未开通，如需开通请联系 [sms
-	 * helper](https://cloud.tencent.com/document/product/382/3773)。
-	 */
-	private String encode;
+  	private String pushDomain;
+    private String playDomain;
+    private String appName;
+    private String tencentStreamUrlKey;
 	
 }
