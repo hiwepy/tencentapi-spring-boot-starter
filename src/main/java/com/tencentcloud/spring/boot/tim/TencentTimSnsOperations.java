@@ -1,6 +1,8 @@
 package com.tencentcloud.spring.boot.tim;
 
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -10,11 +12,14 @@ import com.tencentcloud.spring.boot.tim.req.message.BlacklistMessage;
 import com.tencentcloud.spring.boot.tim.req.sns.FriendAddItem;
 import com.tencentcloud.spring.boot.tim.req.sns.FriendImportItem;
 import com.tencentcloud.spring.boot.tim.req.sns.FriendUpdateItem;
+import com.tencentcloud.spring.boot.tim.resp.BlacklistAddResponse;
 import com.tencentcloud.spring.boot.tim.resp.BlacklistResponse;
 import com.tencentcloud.spring.boot.tim.resp.sns.FriendAddResponse;
 import com.tencentcloud.spring.boot.tim.resp.sns.FriendCheckResponse;
 import com.tencentcloud.spring.boot.tim.resp.sns.FriendDeleteAllResponse;
 import com.tencentcloud.spring.boot.tim.resp.sns.FriendDeleteResponse;
+import com.tencentcloud.spring.boot.tim.resp.sns.FriendGetListResponse;
+import com.tencentcloud.spring.boot.tim.resp.sns.FriendGetResponse;
 import com.tencentcloud.spring.boot.tim.resp.sns.FriendImportResponse;
 import com.tencentcloud.spring.boot.tim.resp.sns.FriendUpdateResponse;
 
@@ -181,16 +186,95 @@ public class TencentTimSnsOperations extends TencentTimOperations {
 		return res;
 	}
 	
-	public Boolean addBlackList(String fromAccount, String toAccount) {
-		BlacklistMessage message = new BlacklistMessage();
-		message.setFromAccount(fromAccount);
-		message.setToAccount(Arrays.asList(toAccount));
-
-		BlacklistResponse res = request(
-				TimApiAddress.BLACK_LIST_ADD.getValue() + joiner.join(getDefaultParams()), message,
-				BlacklistResponse.class);
+	/**
+	 * 7、拉取好友
+	 * API：https://cloud.tencent.com/document/product/269/1647
+	 * @param userId 业务用户ID
+	 * @param startIndex 分页的起始位置
+	 * @param standardSequence 上次拉好友数据时返回的 StandardSequence，如果 StandardSequence 字段的值与后台一致，后台不会返回标配好友数据
+	 * @param customSequence 上次拉好友数据时返回的 CustomSequence，如果 CustomSequence 字段的值与后台一致，后台不会返回自定义好友数据
+	 * @return 操作结果
+	 */
+	public FriendGetResponse getFriends(String userId, Integer startIndex, Integer standardSequence, Integer customSequence) {
+		Map<String, Object> requestBody = new ImmutableMap.Builder<String, Object>()
+				.put("From_Account", this.getImUserByUserId(userId))
+				.put("StartIndex", startIndex)
+				.put("StandardSequence", standardSequence)
+				.put("CustomSequence", customSequence)
+				.build();
+		FriendGetResponse res = request(TimApiAddress.FRIEND_GET.getValue() + joiner.join(getDefaultParams()),
+				requestBody, FriendGetResponse.class);
 		if (!res.isSuccess()) {
-			log.error("拉黑失败，ActionStatus : {}, ErrorCode : {}, ErrorInfo : {}", res.getActionStatus(), res.getErrorCode(), res.getErrorInfo());
+			log.error("拉取好友失败， ActionStatus : {}, ErrorCode : {}, ErrorInfo : {}", res.getActionStatus(), res.getErrorCode(), res.getErrorInfo());
+		}
+		return res;
+	}
+	
+	/**
+	 * 7、拉取好友
+	 * API：https://cloud.tencent.com/document/product/269/1647
+	 * @param fromUserId 业务用户ID
+	 * @param userIds 业务用户ID数组
+	 * @return 操作结果
+	 */
+	public FriendGetListResponse getFriends(String fromUserId, String... userIds) {
+		List<String> tagList = new ArrayList<String>();
+		tagList.add("Tag_Profile_IM_Nick");
+		tagList.add("Tag_Profile_IM_Gender");
+		tagList.add("Tag_Profile_IM_BirthDay");
+		tagList.add("Tag_Profile_IM_Location");
+		tagList.add("Tag_Profile_IM_SelfSignature");
+		tagList.add("Tag_Profile_IM_AllowType");
+		tagList.add("Tag_Profile_IM_Language");
+		tagList.add("Tag_Profile_IM_MsgSettings");
+		tagList.add("Tag_Profile_IM_AdminForbidType");
+		tagList.add("Tag_Profile_IM_Level");
+		tagList.add("Tag_Profile_IM_Role");
+		return this.getFriends(fromUserId, tagList, userIds);
+	}
+	
+	/**
+	 * 8、拉取好友
+	 * API：https://cloud.tencent.com/document/product/269/1647
+	 * @param fromUserId 业务用户ID
+	 * @param tagList 指定要拉取的资料字段的 Tag，支持的字段有： 标配资料字段，自定义资料字段
+	 * @param userIds 业务用户ID数组
+	 * @return 操作结果
+	 */
+	public FriendGetListResponse getFriends(String fromUserId, List<String> tagList, String... userIds) {
+		Map<String, Object> requestBody = new ImmutableMap.Builder<String, Object>()
+				.put("From_Account", this.getImUserByUserId(fromUserId))
+				.put("To_Account", Stream.of(userIds).map(uid -> this.getImUserByUserId(uid)).collect(Collectors.toList()))
+				.put("TagList", tagList)
+				.build();
+		FriendGetListResponse res = request(TimApiAddress.FRIEND_GET.getValue() + joiner.join(getDefaultParams()),
+				requestBody, FriendGetListResponse.class);
+		if (!res.isSuccess()) {
+			log.error("拉取好友失败， ActionStatus : {}, ErrorCode : {}, ErrorInfo : {}", res.getActionStatus(), res.getErrorCode(), res.getErrorInfo());
+		}
+		return res;
+	}
+	
+	/**
+	 * 9、添加黑名单
+	 * API：https://cloud.tencent.com/document/product/269/3718
+	 * @author 		： <a href="https://github.com/vindell">vindell</a>
+	 * @param fromAccount
+	 * @param toAccount
+	 * @return
+	 */
+	public Boolean addBlackList(String fromUserId, String... userIds) {
+		
+		Map<String, Object> requestBody = new ImmutableMap.Builder<String, Object>()
+				.put("From_Account", this.getImUserByUserId(fromUserId))
+				.put("To_Account", Stream.of(userIds).map(uid -> this.getImUserByUserId(uid)).collect(Collectors.toList()))
+				.build();
+		
+		BlacklistAddResponse res = request(
+				TimApiAddress.BLACK_LIST_ADD.getValue() + joiner.join(getDefaultParams()), requestBody,
+				BlacklistAddResponse.class);
+		if (!res.isSuccess()) {
+			log.error("添加黑名单失败，ActionStatus : {}, ErrorCode : {}, ErrorInfo : {}", res.getActionStatus(), res.getErrorCode(), res.getErrorInfo());
 			return false;
 		}
 		return true;
