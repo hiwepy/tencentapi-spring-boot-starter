@@ -17,40 +17,60 @@ package com.tencentcloud.spring.boot.tim;
 
 import java.util.Map;
 import java.util.function.Consumer;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 import com.google.common.collect.ImmutableMap;
-import com.tencentcloud.spring.boot.tim.req.sns.FriendAddItem;
-import com.tencentcloud.spring.boot.tim.resp.sns.FriendAddResponse;
+import com.tencentcloud.spring.boot.tim.resp.group.AppGroupGetResponse;
 
 public class TencentTimGroupAsyncOperations extends TencentTimGroupOperations {
 
 	public TencentTimGroupAsyncOperations(TencentTimTemplate timTemplate) {
 		super(timTemplate);
 	}
-	 
-
+	
 	/**
-	 * 1、添加好友
-	 * API：https://cloud.tencent.com/document/product/269/1643
-	 * @param userId 业务用户ID
-	 * @param addType  加好友方式（默认双向加好友方式）：Add_Type_Single 表示单向加好友, Add_Type_Both 表示双向加好友
-	 * @param forceAdd 是否强制相互添加好友
-	 * @param friends 添加的好友数组
+	 * 1、获取 App 中的所有群组
+	 * API：https://cloud.tencent.com/document/product/269/1614
+	 * @param limit 本次获取的群组 ID 数量的上限，不得超过 10000。如果不填，默认为最大值 10000
 	 * @param consumer 响应处理回调函数
 	 */
-	public void asyncAddFriend(String userId, String addType, boolean forceAdd, FriendAddItem[] friends, Consumer<FriendAddResponse> consumer) {
+	public void asyncGetAppGroupList(Integer limit, Consumer<AppGroupGetResponse> consumer) {
 		Map<String, Object> requestBody = new ImmutableMap.Builder<String, Object>()
-				.put("From_Account", this.getImUserByUserId(userId))
-				.put("AddFriendItem", Stream.of(friends).map(friend -> {
-					friend.setAccount(this.getImUserByUserId(friend.getAccount()));
-					return friend;
-				}).collect(Collectors.toList()))
-				.put("AddType", addType)
-				.put("ForceAddFlags", forceAdd ? 1 : 0)
+				.put("Limit", limit)
 				.build();
-		this.asyncRequest(TimApiAddress.FRIEND_ADD, requestBody, FriendAddResponse.class, consumer);
+		this.asyncRequest(TimApiAddress.GET_APPID_GROUP_LIST, requestBody, AppGroupGetResponse.class, consumer);
+	}
+	
+	/**
+	 * 2、获取 App 中的所有群组
+	 * API：https://cloud.tencent.com/document/product/269/1614
+	 * @param limit 本次获取的群组 ID 数量的上限，不得超过 10000。如果不填，默认为最大值 10000
+	 * @param next  群太多时分页拉取标志，第一次填0，以后填上一次返回的值，返回的 Next 为0代表拉完了
+	 * @param consumer 响应处理回调函数
+	 */
+	public void asyncGetAppGroupList(Integer limit, Integer next, Consumer<AppGroupGetResponse> consumer) {
+		Map<String, Object> requestBody = new ImmutableMap.Builder<String, Object>()
+				.put("Limit", limit)
+				.put("Next", next)
+				.build();
+		this.asyncRequest(TimApiAddress.GET_APPID_GROUP_LIST, requestBody, AppGroupGetResponse.class, consumer);
+	}
+
+	/**
+	 * 3、获取 App 中的所有群组
+	 * API：https://cloud.tencent.com/document/product/269/1614
+	 * @param limit 本次获取的群组 ID 数量的上限，不得超过 10000。如果不填，默认为最大值 10000
+	 * @param next  群太多时分页拉取标志，第一次填0，以后填上一次返回的值，返回的 Next 为0代表拉完了
+	 * @param groupType 如果仅需要返回特定群组形态的群组，可以通过 GroupType 进行过滤，但此时返回的 TotalCount 的含义就变成了 App 中属于该群组形态的群组总数。不填为获取所有类型的群组。
+	 * 群组形态包括 Public（公开群），Private（私密群），ChatRoom（聊天室），AVChatRoom（音视频聊天室）和 BChatRoom（在线成员广播大群）
+	 * @param consumer 响应处理回调函数
+	 */
+	public void asyncGetAppGroupList(Integer limit, Integer next, String groupType, Consumer<AppGroupGetResponse> consumer) {
+		Map<String, Object> requestBody = new ImmutableMap.Builder<String, Object>()
+				.put("Limit", limit)
+				.put("Next", next)
+				.put("GroupType", groupType)
+				.build();
+		this.asyncRequest(TimApiAddress.GET_APPID_GROUP_LIST, requestBody, AppGroupGetResponse.class, consumer);
 	}
 	
 }

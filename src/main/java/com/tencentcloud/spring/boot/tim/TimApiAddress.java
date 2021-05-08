@@ -182,8 +182,7 @@ public enum TimApiAddress {
 	/**
 	 * 获取APP中的所有群组
 	 */
-	GROUP_OPENHTTP_SVC("获取APP中的所有群组", "https://console.tim.qq.com/v4/group_open_http_svc/get_appid_group_list"),
-	
+	GET_APPID_GROUP_LIST("获取APP中的所有群组", "https://console.tim.qq.com/v4/group_open_http_svc/get_appid_group_list"),
 	/**
 	 * 创建群组
 	 */
