@@ -18,13 +18,10 @@ import com.tencentcloud.spring.boot.tim.resp.UserTagsResponse;
 import com.tencentcloud.spring.boot.tim.resp.push.UserAttrs;
 import com.tencentcloud.spring.boot.tim.resp.push.UserTags;
 
-import lombok.extern.slf4j.Slf4j;
-
 /**
  * 3、全员推送
  * https://cloud.tencent.com/document/product/269/45933
  */
-@Slf4j
 public class TencentTimAllMemberPushOperations extends TencentTimOperations {
 
 	public TencentTimAllMemberPushOperations(TencentTimTemplate timTemplate) {
@@ -82,7 +79,7 @@ public class TencentTimAllMemberPushOperations extends TencentTimOperations {
 	 * @param msgBody  消息内容，具体格式请参考 MsgBody 消息内容说明（一条消息可包括多种消息元素，所以 MsgBody 为 Array 类型）
 	 * @return 操作结果
 	 */
-	public AllMemberPushResponse imPush(String userId, String msgRandom, Integer msgLifeTime, Condition condition, OfflinePushInfo offlinePushInfo,MsgBody... msgBody) {
+	public AllMemberPushResponse imPush(String userId, String msgRandom, Integer msgLifeTime, Condition condition, OfflinePushInfo offlinePushInfo, MsgBody... msgBody) {
 		Map<String, Object> requestBody = new ImmutableMap.Builder<String, Object>()
 				.put("From_Account", this.getImUserByUserId(userId))
 				.put("MsgRandom", msgRandom)
@@ -91,12 +88,7 @@ public class TencentTimAllMemberPushOperations extends TencentTimOperations {
 				.put("Condition", condition)
 				.put("OfflinePushInfo", offlinePushInfo)
 				.build();
-		AllMemberPushResponse res = request(TimApiAddress.IM_PUSH.getValue() + joiner.join(getDefaultParams()),
-				requestBody, AllMemberPushResponse.class);
-		if (!res.isSuccess()) {
-			log.error("全员推送失败， ActionStatus : {}, ErrorCode : {}, ErrorInfo : {}", res.getActionStatus(), res.getErrorCode(), res.getErrorInfo());
-		}
-		return res;
+		return super.request(TimApiAddress.IM_PUSH, requestBody, AllMemberPushResponse.class);
 	}
 	
 	/**
@@ -113,12 +105,7 @@ public class TencentTimAllMemberPushOperations extends TencentTimOperations {
 		Map<String, Object> requestBody = new ImmutableMap.Builder<String, Object>()
 				.put("AttrNames", attrNameMap)
 				.build();
-		ApiResponse res = request(TimApiAddress.IM_SET_ATTR_NAME.getValue() + joiner.join(getDefaultParams()),
-				requestBody, ApiResponse.class);
-		if (!res.isSuccess()) {
-			log.error("设置应用属性名称失败， ActionStatus : {}, ErrorCode : {}, ErrorInfo : {}", res.getActionStatus(), res.getErrorCode(), res.getErrorInfo());
-		}
-		return res;
+		return super.request(TimApiAddress.IM_SET_ATTR_NAME, requestBody, ApiResponse.class);
 	}
 	
 	/**
@@ -127,12 +114,7 @@ public class TencentTimAllMemberPushOperations extends TencentTimOperations {
 	 * @return 操作结果
 	 */
 	public AppAttrNameResponse getAppAttrNames() {
-		AppAttrNameResponse res = request(TimApiAddress.IM_GET_ATTR_NAME.getValue() + joiner.join(getDefaultParams()),
-				Maps.newHashMap(), AppAttrNameResponse.class);
-		if (!res.isSuccess()) {
-			log.error("获取应用属性名称失败， ActionStatus : {}, ErrorCode : {}, ErrorInfo : {}", res.getActionStatus(), res.getErrorCode(), res.getErrorInfo());
-		}
-		return res;
+		return super.request(TimApiAddress.IM_GET_ATTR_NAME, Maps.newHashMap(), AppAttrNameResponse.class);
 	}
 	
 	/**
@@ -145,12 +127,7 @@ public class TencentTimAllMemberPushOperations extends TencentTimOperations {
 		Map<String, Object> requestBody = new ImmutableMap.Builder<String, Object>()
 				.put("UserAttrs", userAttrs)
 				.build();
-		ApiResponse res = request(TimApiAddress.IM_SET_ATTR.getValue() + joiner.join(getDefaultParams()),
-				requestBody, ApiResponse.class);
-		if (!res.isSuccess()) {
-			log.error("设置用户属性失败， ActionStatus : {}, ErrorCode : {}, ErrorInfo : {}", res.getActionStatus(), res.getErrorCode(), res.getErrorInfo());
-		}
-		return res;
+		return super.request(TimApiAddress.IM_SET_ATTR, requestBody, ApiResponse.class);
 	}
 	
 	/**
@@ -160,13 +137,9 @@ public class TencentTimAllMemberPushOperations extends TencentTimOperations {
 	 */
 	public UserAttrsResponse getUserAttrs(String ... userIds) {
 		Map<String, Object> requestBody = new ImmutableMap.Builder<String, Object>()
-				.put("To_Account", Stream.of(userIds).map(uid -> this.getImUserByUserId(uid)).collect(Collectors.toList())).build();
-		UserAttrsResponse res = request(TimApiAddress.IM_GET_ATTR.getValue() + joiner.join(getDefaultParams()),
-				requestBody, UserAttrsResponse.class);
-		if (!res.isSuccess()) {
-			log.error("获取用户属性失败， ActionStatus : {}, ErrorCode : {}, ErrorInfo : {}", res.getActionStatus(), res.getErrorCode(), res.getErrorInfo());
-		}
-		return res;
+				.put("To_Account", Stream.of(userIds).map(uid -> this.getImUserByUserId(uid)).collect(Collectors.toList()))
+				.build();
+		return super.request(TimApiAddress.IM_GET_ATTR, requestBody, UserAttrsResponse.class);
 	}
 	
 	/**
@@ -178,12 +151,7 @@ public class TencentTimAllMemberPushOperations extends TencentTimOperations {
 		Map<String, Object> requestBody = new ImmutableMap.Builder<String, Object>()
 				.put("UserAttrs", userAttrs)
 				.build();
-		ApiResponse res = request(TimApiAddress.IM_REMOVE_ATTR.getValue() + joiner.join(getDefaultParams()),
-				requestBody, ApiResponse.class);
-		if (!res.isSuccess()) {
-			log.error("删除用户属性失败， ActionStatus : {}, ErrorCode : {}, ErrorInfo : {}", res.getActionStatus(), res.getErrorCode(), res.getErrorInfo());
-		}
-		return res;
+		return super.request(TimApiAddress.IM_REMOVE_ATTR, requestBody, ApiResponse.class);
 	}
 	
 	/**
@@ -199,12 +167,7 @@ public class TencentTimAllMemberPushOperations extends TencentTimOperations {
 		Map<String, Object> requestBody = new ImmutableMap.Builder<String, Object>()
 				.put("UserTags", userTags)
 				.build();
-		ApiResponse res = request(TimApiAddress.IM_ADD_TAG.getValue() + joiner.join(getDefaultParams()),
-				requestBody, ApiResponse.class);
-		if (!res.isSuccess()) {
-			log.error("添加用户标签失败， ActionStatus : {}, ErrorCode : {}, ErrorInfo : {}", res.getActionStatus(), res.getErrorCode(), res.getErrorInfo());
-		}
-		return res;
+		return super.request(TimApiAddress.IM_ADD_TAG, requestBody, ApiResponse.class);
 	}
 	
 	/**
@@ -214,13 +177,9 @@ public class TencentTimAllMemberPushOperations extends TencentTimOperations {
 	 */
 	public UserTagsResponse getUserTags(String ... userIds) {
 		Map<String, Object> requestBody = new ImmutableMap.Builder<String, Object>()
-				.put("To_Account", Stream.of(userIds).map(uid -> this.getImUserByUserId(uid)).collect(Collectors.toList())).build();
-		UserTagsResponse res = request(TimApiAddress.IM_GET_ATTR.getValue() + joiner.join(getDefaultParams()),
-				requestBody, UserTagsResponse.class);
-		if (!res.isSuccess()) {
-			log.error("获取用户标签失败， ActionStatus : {}, ErrorCode : {}, ErrorInfo : {}", res.getActionStatus(), res.getErrorCode(), res.getErrorInfo());
-		}
-		return res;
+				.put("To_Account", Stream.of(userIds).map(uid -> this.getImUserByUserId(uid)).collect(Collectors.toList()))
+				.build();
+		return super.request(TimApiAddress.IM_GET_TAG, requestBody, UserTagsResponse.class);
 	}
 	
 	/**
@@ -232,12 +191,7 @@ public class TencentTimAllMemberPushOperations extends TencentTimOperations {
 		Map<String, Object> requestBody = new ImmutableMap.Builder<String, Object>()
 				.put("UserTags", userTags)
 				.build();
-		ApiResponse res = request(TimApiAddress.IM_REMOVE_TAG.getValue() + joiner.join(getDefaultParams()),
-				requestBody, ApiResponse.class);
-		if (!res.isSuccess()) {
-			log.error("删除用户标签失败， ActionStatus : {}, ErrorCode : {}, ErrorInfo : {}", res.getActionStatus(), res.getErrorCode(), res.getErrorInfo());
-		}
-		return res;
+		return super.request(TimApiAddress.IM_REMOVE_TAG, requestBody, ApiResponse.class);
 	}
 
 	/**
@@ -247,13 +201,9 @@ public class TencentTimAllMemberPushOperations extends TencentTimOperations {
 	 */
 	public ApiResponse removeUserTags(String ... userIds) {
 		Map<String, Object> requestBody = new ImmutableMap.Builder<String, Object>()
-				.put("To_Account", Stream.of(userIds).map(uid -> this.getImUserByUserId(uid)).collect(Collectors.toList())).build();
-		ApiResponse res = request(TimApiAddress.IM_REMOVE_ALL_TAGS.getValue() + joiner.join(getDefaultParams()),
-				requestBody, ApiResponse.class);
-		if (!res.isSuccess()) {
-			log.error("删除用户所有标签失败， ActionStatus : {}, ErrorCode : {}, ErrorInfo : {}", res.getActionStatus(), res.getErrorCode(), res.getErrorInfo());
-		}
-		return res;
+				.put("To_Account", Stream.of(userIds).map(uid -> this.getImUserByUserId(uid)).collect(Collectors.toList()))
+				.build();
+		return super.request(TimApiAddress.IM_REMOVE_ALL_TAGS, requestBody, ApiResponse.class);
 	}
 	
 }

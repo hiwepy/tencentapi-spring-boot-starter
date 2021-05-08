@@ -10,13 +10,10 @@ import com.google.common.collect.Maps;
 import com.tencentcloud.spring.boot.tim.resp.AppInfoResponse;
 import com.tencentcloud.spring.boot.tim.resp.AppIpResponse;
 
-import lombok.extern.slf4j.Slf4j;
-
 /**
  *  运营管理
  * https://cloud.tencent.com/document/product/269/1519
  */
-@Slf4j
 public class TencentTimOpsOperations extends TencentTimOperations {
 
 	public TencentTimOpsOperations(TencentTimTemplate timTemplate) {
@@ -39,16 +36,10 @@ public class TencentTimOpsOperations extends TencentTimOperations {
 	 * @return 操作结果
 	 */
 	public AppInfoResponse getAppInfo(List<String> friendItems) {
-		
 		Map<String, Object> requestBody = CollectionUtils.isEmpty(friendItems) ? Maps.newHashMap() : new ImmutableMap.Builder<String, Object>()
 				.put("RequestField", friendItems)
 				.build();
-		AppInfoResponse res = request(TimApiAddress.GET_APP_INFO.getValue() + joiner.join(getDefaultParams()),
-				requestBody, AppInfoResponse.class);
-		if (!res.isSuccess()) {
-			log.error("拉取运营数据失败， ActionStatus : {}, ErrorCode : {}, ErrorInfo : {}", res.getActionStatus(), res.getErrorCode(), res.getErrorInfo());
-		}
-		return res;
+		return super.request(TimApiAddress.GET_APP_INFO, requestBody, AppInfoResponse.class);
 	}
 	
 	/**
@@ -57,13 +48,7 @@ public class TencentTimOpsOperations extends TencentTimOperations {
 	 * @return 操作结果
 	 */
 	public AppIpResponse getIPList() {
-		
-		AppIpResponse res = request(TimApiAddress.GET_IP_LIST.getValue() + joiner.join(getDefaultParams()),
-				Maps.newHashMap(), AppIpResponse.class);
-		if (!res.isSuccess()) {
-			log.error("获取服务器 IP 地址失败， ActionStatus : {}, ErrorCode : {}, ErrorInfo : {}", res.getActionStatus(), res.getErrorCode(), res.getErrorInfo());
-		}
-		return res;
+		return super.request(TimApiAddress.GET_IP_LIST, Maps.newHashMap(), AppIpResponse.class);
 	}
 	
 }

@@ -28,13 +28,10 @@ import com.tencentcloud.spring.boot.tim.req.message.MsgBody;
 import com.tencentcloud.spring.boot.tim.resp.MessageQueryResponse;
 import com.tencentcloud.spring.boot.tim.resp.TimActionResponse;
 
-import lombok.extern.slf4j.Slf4j;
-
 /**
  * 2、单聊信息
  * https://cloud.tencent.com/document/product/269/2282
  */
-@Slf4j
 public class TencentTimOpenimOperations extends TencentTimOperations {
 
 	public static final String[] FORBID_CALLBACK_CONTROL = new String[] { "ForbidBeforeSendMsgCallback",
@@ -95,12 +92,8 @@ public class TencentTimOpenimOperations extends TencentTimOperations {
 				.put("MsgTimeStamp", System.currentTimeMillis() / 1000)
 				.put("ForbidCallbackControl", forbidCallbackControl)
 				.put("MsgBody", msgBody).build();
-		TimActionResponse res = request(TimApiAddress.SEND_MSG.getValue() + joiner.join(getDefaultParams()),
-				requestBody, TimActionResponse.class);
-		if (!res.isSuccess()) {
-			log.error("单发单聊消息失败, response message is: {}", res);
-		}
-		return res;
+
+		return super.request(TimApiAddress.SEND_MSG, requestBody, TimActionResponse.class);
 	}
 	
 	/**
@@ -156,13 +149,9 @@ public class TencentTimOpenimOperations extends TencentTimOperations {
 				.put("MsgRandom", RandomUtils.nextInt())
 				.put("MsgTimeStamp", System.currentTimeMillis() / 1000)
 				.put("ForbidCallbackControl", FORBID_CALLBACK_CONTROL)
-				.put("MsgBody", msgBody).build();
-		TimActionResponse res = request(TimApiAddress.SEND_MSG.getValue() + joiner.join(getDefaultParams()),
-				requestBody, TimActionResponse.class);
-		if (!res.isSuccess()) {
-			log.error("单发单聊消息失败, response message is: {}", res);
-		}
-		return res;
+				.put("MsgBody", msgBody)
+				.build();
+		return super.request(TimApiAddress.SEND_MSG, requestBody, TimActionResponse.class);
 	}
 	
 	/**
@@ -175,12 +164,7 @@ public class TencentTimOpenimOperations extends TencentTimOperations {
 	 * @return 操作结果
 	 */
 	public TimActionResponse sendMsg(Message message) {
-		TimActionResponse res = request(TimApiAddress.SEND_MSG.getValue() + joiner.join(getDefaultParams()),
-				message, TimActionResponse.class);
-		if (!res.isSuccess()) {
-			log.error("单发单聊消息失败, response message is: {}", res);
-		}
-		return res;
+		return super.request(TimApiAddress.SEND_MSG, message, TimActionResponse.class);
 	}
 	
 	/**
@@ -231,7 +215,6 @@ public class TencentTimOpenimOperations extends TencentTimOperations {
 	 * @return 操作结果
 	 */
 	public TimActionResponse sendMsg(List<String> userIds, boolean syncOtherMachine, String[] forbidCallbackControl, MsgBody... msgBody) {
-		
 		Map<String, Object> requestBody = new ImmutableMap.Builder<String, Object>()
 				.put("SyncOtherMachine", syncOtherMachine ? 1 : 2) // 消息不同步至发送方
 				.put("To_Account", userIds.stream().map(uid -> this.getImUserByUserId(uid)).collect(Collectors.toList()))
@@ -239,13 +222,9 @@ public class TencentTimOpenimOperations extends TencentTimOperations {
 				.put("MsgRandom", RandomUtils.nextInt())
 				.put("MsgTimeStamp", System.currentTimeMillis() / 1000)
 				.put("ForbidCallbackControl", forbidCallbackControl)
-				.put("MsgBody", msgBody).build();
-		TimActionResponse res = request(TimApiAddress.SEND_BATCH_MSG.getValue() + joiner.join(getDefaultParams()),
-				requestBody, TimActionResponse.class);
-		if (!res.isSuccess()) {
-			log.error("单发单聊消息失败, response message is: {}", res);
-		}
-		return res;
+				.put("MsgBody", msgBody)
+				.build();
+		return super.request(TimApiAddress.SEND_BATCH_MSG, requestBody, TimActionResponse.class);
 	}
 	
 	/**
@@ -307,13 +286,9 @@ public class TencentTimOpenimOperations extends TencentTimOperations {
 				.put("MsgRandom", RandomUtils.nextInt())
 				.put("MsgTimeStamp", System.currentTimeMillis() / 1000)
 				.put("ForbidCallbackControl", FORBID_CALLBACK_CONTROL)
-				.put("MsgBody", msgBody).build();
-		TimActionResponse res = request(TimApiAddress.SEND_BATCH_MSG.getValue() + joiner.join(getDefaultParams()),
-				requestBody, TimActionResponse.class);
-		if (!res.isSuccess()) {
-			log.error("批量发单聊消息失败, response message is: {}", res);
-		}
-		return res;
+				.put("MsgBody", msgBody)
+				.build();
+		return super.request(TimApiAddress.SEND_BATCH_MSG, requestBody, TimActionResponse.class);
 	}
 	
 	/**
@@ -328,12 +303,7 @@ public class TencentTimOpenimOperations extends TencentTimOperations {
 	 * @return 操作结果
 	 */
 	public TimActionResponse sendMsg(BatchMessage message) {
-		TimActionResponse res = request(TimApiAddress.SEND_BATCH_MSG.getValue() + joiner.join(getDefaultParams()),
-				message, TimActionResponse.class);
-		if (!res.isSuccess()) {
-			log.error("批量发单聊消息失败, response message is: {}", res);
-		}
-		return res;
+		return super.request(TimApiAddress.SEND_BATCH_MSG, message, TimActionResponse.class);
 	}
     
 	/**
@@ -357,13 +327,9 @@ public class TencentTimOpenimOperations extends TencentTimOperations {
 				.put("To_Account", this.getImUserByUserId(userId))
 				.put("MsgRandom", RandomUtils.nextInt())
 				.put("MsgTimeStamp", System.currentTimeMillis() / 1000)
-				.put("MsgBody", msgBody).build();
-		TimActionResponse res = request(TimApiAddress.IMPORT_MSG.getValue() + joiner.join(getDefaultParams()),
-				requestBody, TimActionResponse.class);
-		if (!res.isSuccess()) {
-			log.error("导入单聊消息失败, response message is: {}", res);
-		}
-		return res;
+				.put("MsgBody", msgBody)
+				.build();
+		return super.request(TimApiAddress.IMPORT_MSG, requestBody, TimActionResponse.class);
 	}
 	
 	/**
@@ -382,13 +348,9 @@ public class TencentTimOpenimOperations extends TencentTimOperations {
 				.put("To_Account", getImUserByUserId(userId))
 				.put("MaxCnt", maxCnt)
 				.put("MinTime", minTime)
-				.put("MaxTime", maxTime).build();
-		MessageQueryResponse res = request(TimApiAddress.ADMIN_GET_ROAMMSG.getValue() + joiner.join(getDefaultParams()),
-				requestBody, MessageQueryResponse.class);
-		if (!res.isSuccess()) {
-			log.error("查询单聊消息失败, response message is: {}", res);
-		}
-		return res;
+				.put("MaxTime", maxTime)
+				.build();
+		return super.request(TimApiAddress.ADMIN_GET_ROAMMSG, requestBody, MessageQueryResponse.class);
 	}
 	
 	/**
@@ -409,13 +371,9 @@ public class TencentTimOpenimOperations extends TencentTimOperations {
 				.put("MaxCnt", maxCnt)
 				.put("MinTime", minTime)
 				.put("MaxTime", maxTime)
-				.put("LastMsgKey", lastMsgKey).build();
-		MessageQueryResponse res = request(TimApiAddress.ADMIN_GET_ROAMMSG.getValue() + joiner.join(getDefaultParams()),
-				requestBody, MessageQueryResponse.class);
-		if (!res.isSuccess()) {
-			log.error("查询单聊消息失败, response message is: {}", res);
-		}
-		return res;
+				.put("LastMsgKey", lastMsgKey)
+				.build();
+		return super.request(TimApiAddress.ADMIN_GET_ROAMMSG, requestBody, MessageQueryResponse.class);
 	}
 	
 	/**
@@ -430,13 +388,9 @@ public class TencentTimOpenimOperations extends TencentTimOperations {
 		Map<String, Object> requestBody = new ImmutableMap.Builder<String, Object>()
 				.put("From_Account", getImUserByUserId(fromUid))
 				.put("To_Account", getImUserByUserId(userId))
-				.put("MsgKey", msgKey).build();
-		TimActionResponse res = request(TimApiAddress.ADMIN_MSG_WITHDRAW.getValue() + joiner.join(getDefaultParams()),
-				requestBody, TimActionResponse.class);
-		if (!res.isSuccess()) {
-			log.error("撤回单聊消息失败, response message is: {}", res);
-		}
-		return res;
+				.put("MsgKey", msgKey)
+				.build();
+		return super.request(TimApiAddress.ADMIN_MSG_WITHDRAW, requestBody, TimActionResponse.class);
 	}
 	
 	/**
@@ -449,13 +403,9 @@ public class TencentTimOpenimOperations extends TencentTimOperations {
 	public TimActionResponse readMsg(String reportUid, String peerUid) {
 		Map<String, Object> requestBody = new ImmutableMap.Builder<String, Object>()
 				.put("Report_Account", getImUserByUserId(reportUid))
-				.put("Peer_Account", getImUserByUserId(peerUid)).build();
-		TimActionResponse res = request(TimApiAddress.ADMIN_SET_MSG_READ.getValue() + joiner.join(getDefaultParams()),
-				requestBody, TimActionResponse.class);
-		if (!res.isSuccess()) {
-			log.error("设置单聊消息已读失败, response message is: {}", res);
-		}
-		return res;
+				.put("Peer_Account", getImUserByUserId(peerUid))
+				.build();
+		return super.request(TimApiAddress.ADMIN_SET_MSG_READ, requestBody, TimActionResponse.class);
 	}
 	
 }

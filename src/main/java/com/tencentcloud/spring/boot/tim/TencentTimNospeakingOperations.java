@@ -6,13 +6,10 @@ import com.google.common.collect.ImmutableMap;
 import com.tencentcloud.spring.boot.tim.resp.ApiResponse;
 import com.tencentcloud.spring.boot.tim.resp.NoSpeakingResponse;
 
-import lombok.extern.slf4j.Slf4j;
-
 /**
  * 全局禁言管理
  * https://cloud.tencent.com/document/product/269/1519
  */
-@Slf4j
 public class TencentTimNospeakingOperations extends TencentTimOperations {
 
 	public TencentTimNospeakingOperations(TencentTimTemplate timTemplate) {
@@ -33,12 +30,7 @@ public class TencentTimNospeakingOperations extends TencentTimOperations {
 				.put("C2CmsgNospeakingTime", c2CmsgNospeakingTime)
 				.put("GroupmsgNospeakingTime", groupmsgNospeakingTime)
 				.build();
-		ApiResponse res = request(TimApiAddress.SET_NO_SPEAKING.getValue() + joiner.join(getDefaultParams()),
-				requestBody, ApiResponse.class);
-		if (!res.isSuccess()) {
-			log.error("设置全局禁言失败， ActionStatus : {}, ErrorCode : {}, ErrorInfo : {}", res.getActionStatus(), res.getErrorCode(), res.getErrorInfo());
-		}
-		return res;
+		return super.request(TimApiAddress.SET_NO_SPEAKING, requestBody, ApiResponse.class);
 	}
 	
 	/**
@@ -48,15 +40,10 @@ public class TencentTimNospeakingOperations extends TencentTimOperations {
 	 * @return 操作结果
 	 */
 	public NoSpeakingResponse getNoSpeaking(String userId) {
-		
 		Map<String, Object> requestBody = new ImmutableMap.Builder<String, Object>()
 				.put("Get_Account", this.getImUserByUserId(userId))
 				.build();
-		
-		NoSpeakingResponse res = request(
-				TimApiAddress.GET_NO_SPEAKING.getValue() + joiner.join(getDefaultParams()), requestBody,
-				NoSpeakingResponse.class);
-		return res;
+		return super.request(TimApiAddress.GET_NO_SPEAKING, requestBody, NoSpeakingResponse.class);
 	}
 	
 }

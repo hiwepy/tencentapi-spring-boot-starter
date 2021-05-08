@@ -1,19 +1,19 @@
 package com.tencentcloud.spring.boot.tim;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import com.google.common.collect.ImmutableMap;
-import com.tencentcloud.spring.boot.tim.req.message.BlacklistMessage;
 import com.tencentcloud.spring.boot.tim.req.sns.FriendAddItem;
 import com.tencentcloud.spring.boot.tim.req.sns.FriendImportItem;
 import com.tencentcloud.spring.boot.tim.req.sns.FriendUpdateItem;
-import com.tencentcloud.spring.boot.tim.resp.BlacklistAddResponse;
-import com.tencentcloud.spring.boot.tim.resp.BlacklistResponse;
+import com.tencentcloud.spring.boot.tim.resp.sns.BlacklistAddResponse;
+import com.tencentcloud.spring.boot.tim.resp.sns.BlacklistCheckResponse;
+import com.tencentcloud.spring.boot.tim.resp.sns.BlacklistDeleteResponse;
+import com.tencentcloud.spring.boot.tim.resp.sns.BlacklistGetResponse;
 import com.tencentcloud.spring.boot.tim.resp.sns.FriendAddResponse;
 import com.tencentcloud.spring.boot.tim.resp.sns.FriendCheckResponse;
 import com.tencentcloud.spring.boot.tim.resp.sns.FriendDeleteAllResponse;
@@ -22,14 +22,14 @@ import com.tencentcloud.spring.boot.tim.resp.sns.FriendGetListResponse;
 import com.tencentcloud.spring.boot.tim.resp.sns.FriendGetResponse;
 import com.tencentcloud.spring.boot.tim.resp.sns.FriendImportResponse;
 import com.tencentcloud.spring.boot.tim.resp.sns.FriendUpdateResponse;
-
-import lombok.extern.slf4j.Slf4j;
+import com.tencentcloud.spring.boot.tim.resp.sns.GroupAddResponse;
+import com.tencentcloud.spring.boot.tim.resp.sns.GroupDeleteResponse;
+import com.tencentcloud.spring.boot.tim.resp.sns.GroupGetResponse;
 
 /**
  * 关系链管理
  * https://cloud.tencent.com/document/product/269/1519
  */
-@Slf4j
 public class TencentTimSnsOperations extends TencentTimOperations {
 
 	public TencentTimSnsOperations(TencentTimTemplate timTemplate) {
@@ -55,12 +55,7 @@ public class TencentTimSnsOperations extends TencentTimOperations {
 				.put("AddType", addType)
 				.put("ForceAddFlags", forceAdd ? 1 : 0)
 				.build();
-		FriendAddResponse res = request(TimApiAddress.FRIEND_ADD.getValue() + joiner.join(getDefaultParams()),
-				requestBody, FriendAddResponse.class);
-		if (!res.isSuccess()) {
-			log.error("添加好友失败， ActionStatus : {}, ErrorCode : {}, ErrorInfo : {}", res.getActionStatus(), res.getErrorCode(), res.getErrorInfo());
-		}
-		return res;
+		return super.request(TimApiAddress.FRIEND_ADD, requestBody, FriendAddResponse.class);
 	}
 	
 	/**
@@ -78,12 +73,7 @@ public class TencentTimSnsOperations extends TencentTimOperations {
 					return friend;
 				}).collect(Collectors.toList()))
 				.build();
-		FriendImportResponse res = request(TimApiAddress.FRIEND_IMPORT.getValue() + joiner.join(getDefaultParams()),
-				requestBody, FriendImportResponse.class);
-		if (!res.isSuccess()) {
-			log.error("导入好友失败， ActionStatus : {}, ErrorCode : {}, ErrorInfo : {}", res.getActionStatus(), res.getErrorCode(), res.getErrorInfo());
-		}
-		return res;
+		return super.request(TimApiAddress.FRIEND_IMPORT, requestBody, FriendImportResponse.class);
 	}
 	
 
@@ -102,12 +92,7 @@ public class TencentTimSnsOperations extends TencentTimOperations {
 					return friend;
 				}).collect(Collectors.toList()))
 				.build();
-		FriendUpdateResponse res = request(TimApiAddress.FRIEND_UPDATE.getValue() + joiner.join(getDefaultParams()),
-				requestBody, FriendUpdateResponse.class);
-		if (!res.isSuccess()) {
-			log.error("更新好友失败， ActionStatus : {}, ErrorCode : {}, ErrorInfo : {}", res.getActionStatus(), res.getErrorCode(), res.getErrorInfo());
-		}
-		return res;
+		return super.request(TimApiAddress.FRIEND_UPDATE, requestBody, FriendUpdateResponse.class);
 	}
 	
 	/**
@@ -130,12 +115,7 @@ public class TencentTimSnsOperations extends TencentTimOperations {
 				}).collect(Collectors.toList()))
 				.put("DeleteType", deleteType)
 				.build();
-		FriendDeleteResponse res = request(TimApiAddress.FRIEND_DELETE.getValue() + joiner.join(getDefaultParams()),
-				requestBody, FriendDeleteResponse.class);
-		if (!res.isSuccess()) {
-			log.error("删除好友失败， ActionStatus : {}, ErrorCode : {}, ErrorInfo : {}", res.getActionStatus(), res.getErrorCode(), res.getErrorInfo());
-		}
-		return res;
+		return super.request(TimApiAddress.FRIEND_DELETE, requestBody, FriendDeleteResponse.class);
 	}
 
 	/**
@@ -153,13 +133,8 @@ public class TencentTimSnsOperations extends TencentTimOperations {
 		Map<String, Object> requestBody = new ImmutableMap.Builder<String, Object>()
 				.put("From_Account", this.getImUserByUserId(userId))
 				.put("DeleteType", deleteType)
-				.build();
-		FriendDeleteAllResponse res = request(TimApiAddress.FRIEND_DELETE_ALL.getValue() + joiner.join(getDefaultParams()),
-				requestBody, FriendDeleteAllResponse.class);
-		if (!res.isSuccess()) {
-			log.error("删除所有好友失败， ActionStatus : {}, ErrorCode : {}, ErrorInfo : {}", res.getActionStatus(), res.getErrorCode(), res.getErrorInfo());
-		}
-		return res;
+				.build(); 
+		return super.request(TimApiAddress.FRIEND_DELETE_ALL, requestBody, FriendDeleteAllResponse.class);
 	}
 	
 	/**
@@ -178,12 +153,7 @@ public class TencentTimSnsOperations extends TencentTimOperations {
 				}).collect(Collectors.toList()))
 				.put("CheckType", checkType)
 				.build();
-		FriendCheckResponse res = request(TimApiAddress.FRIEND_CHECK.getValue() + joiner.join(getDefaultParams()),
-				requestBody, FriendCheckResponse.class);
-		if (!res.isSuccess()) {
-			log.error("校验好友失败， ActionStatus : {}, ErrorCode : {}, ErrorInfo : {}", res.getActionStatus(), res.getErrorCode(), res.getErrorInfo());
-		}
-		return res;
+		return super.request(TimApiAddress.FRIEND_CHECK, requestBody, FriendCheckResponse.class);
 	}
 	
 	/**
@@ -202,12 +172,7 @@ public class TencentTimSnsOperations extends TencentTimOperations {
 				.put("StandardSequence", standardSequence)
 				.put("CustomSequence", customSequence)
 				.build();
-		FriendGetResponse res = request(TimApiAddress.FRIEND_GET.getValue() + joiner.join(getDefaultParams()),
-				requestBody, FriendGetResponse.class);
-		if (!res.isSuccess()) {
-			log.error("拉取好友失败， ActionStatus : {}, ErrorCode : {}, ErrorInfo : {}", res.getActionStatus(), res.getErrorCode(), res.getErrorInfo());
-		}
-		return res;
+		return super.request(TimApiAddress.FRIEND_GET, requestBody, FriendGetResponse.class);
 	}
 	
 	/**
@@ -247,65 +212,165 @@ public class TencentTimSnsOperations extends TencentTimOperations {
 				.put("To_Account", Stream.of(userIds).map(uid -> this.getImUserByUserId(uid)).collect(Collectors.toList()))
 				.put("TagList", tagList)
 				.build();
-		FriendGetListResponse res = request(TimApiAddress.FRIEND_GET.getValue() + joiner.join(getDefaultParams()),
-				requestBody, FriendGetListResponse.class);
-		if (!res.isSuccess()) {
-			log.error("拉取好友失败， ActionStatus : {}, ErrorCode : {}, ErrorInfo : {}", res.getActionStatus(), res.getErrorCode(), res.getErrorInfo());
-		}
-		return res;
+		return super.request(TimApiAddress.FRIEND_GET, requestBody, FriendGetListResponse.class);
 	}
 	
 	/**
 	 * 9、添加黑名单
 	 * API：https://cloud.tencent.com/document/product/269/3718
-	 * @author 		： <a href="https://github.com/vindell">vindell</a>
-	 * @param fromAccount
-	 * @param toAccount
-	 * @return
+	 * @author 		： <a href="https://github.com/hiwepy">hiwepy</a>
+	  * @param fromUserId 需要添加该 UserID 的黑名单
+	 * @param userIds 待添加的黑名单的 UserID 列表，单次请求的 To_Account 数不得超过1000
+	 * @return 操作结果
 	 */
-	public Boolean addBlackList(String fromUserId, String... userIds) {
-		
+	public BlacklistAddResponse addBlackList(String fromUserId, String... userIds) {
 		Map<String, Object> requestBody = new ImmutableMap.Builder<String, Object>()
 				.put("From_Account", this.getImUserByUserId(fromUserId))
 				.put("To_Account", Stream.of(userIds).map(uid -> this.getImUserByUserId(uid)).collect(Collectors.toList()))
 				.build();
-		
-		BlacklistAddResponse res = request(
-				TimApiAddress.BLACK_LIST_ADD.getValue() + joiner.join(getDefaultParams()), requestBody,
-				BlacklistAddResponse.class);
-		if (!res.isSuccess()) {
-			log.error("添加黑名单失败，ActionStatus : {}, ErrorCode : {}, ErrorInfo : {}", res.getActionStatus(), res.getErrorCode(), res.getErrorInfo());
-			return false;
-		}
-		return true;
+		return super.request(TimApiAddress.BLACK_LIST_ADD, requestBody, BlacklistAddResponse.class);
 	}
-
-	public Boolean deleteBlackList(String fromAccount, String toAccount) {
-		BlacklistMessage message = new BlacklistMessage();
-		message.setFromAccount(fromAccount);
-		message.setToAccount(Arrays.asList(toAccount));
-
-		BlacklistResponse res = request(
-				TimApiAddress.BLACK_LIST_DELETE.getValue() + joiner.join(getDefaultParams()), message,
-				BlacklistResponse.class);
-		if (!res.isSuccess()) {
-			log.error("取消拉黑失败，ActionStatus : {}, ErrorCode : {}, ErrorInfo : {}", res.getActionStatus(), res.getErrorCode(), res.getErrorInfo());
-			return false;
-		}
-		return true;
+	
+	/**
+	 * 10、删除黑名单
+	 * API：https://cloud.tencent.com/document/product/269/3719
+	 * @author 		： <a href="https://github.com/hiwepy">hiwepy</a>
+	 * @param fromUserId 需要删除该 UserID 的黑名单
+	 * @param userIds 待删除的黑名单的 UserID 列表，单次请求的 To_Account 数不得超过1000
+	 * @return 操作结果
+	 */
+	public BlacklistDeleteResponse deleteBlackList(String fromUserId, String... userIds) {
+		Map<String, Object> requestBody = new ImmutableMap.Builder<String, Object>()
+				.put("From_Account", this.getImUserByUserId(fromUserId))
+				.put("To_Account", Stream.of(userIds).map(uid -> this.getImUserByUserId(uid)).collect(Collectors.toList()))
+				.build();
+		return super.request(TimApiAddress.BLACK_LIST_DELETE, requestBody, BlacklistDeleteResponse.class);
 	}
-
-	public BlacklistResponse getBlackList(String fromAccount, Integer lastSequence) {
-		BlacklistMessage message = new BlacklistMessage();
-		message.setFromAccount(fromAccount);
-		message.setStartIndex(0);
-		message.setMaxLimited(20);
-		message.setLastSequence(lastSequence);
-
-		BlacklistResponse blacklistResponse = request(
-				TimApiAddress.BLACK_LIST_GET.getValue() + joiner.join(getDefaultParams()), message,
-				BlacklistResponse.class);
-		return blacklistResponse;
+	
+	/**
+	 * 11、拉取黑名单
+	 * API：https://cloud.tencent.com/document/product/269/3722
+	 * @author 		： <a href="https://github.com/hiwepy">hiwepy</a>
+	 * @param userId 需要拉取该 UserID 的黑名单
+	 * @param startIndex 拉取的起始位置
+	 * @param maxLimited 每页最多拉取的黑名单数
+	 * @param lastSequence 上一次拉黑名单时后台返回给客户端的 Seq，初次拉取时为0
+	 * @return 操作结果
+	 */
+	public BlacklistGetResponse getBlackList(String userId, Integer startIndex, Integer maxLimited, Integer lastSequence) {
+		Map<String, Object> requestBody = new ImmutableMap.Builder<String, Object>()
+				.put("From_Account", this.getImUserByUserId(userId))
+				.put("StartIndex", startIndex)
+				.put("MaxLimited", maxLimited)
+				.put("LastSequence", lastSequence)
+				.build();
+		return super.request(TimApiAddress.BLACK_LIST_GET, requestBody, BlacklistGetResponse.class);
+	}
+	
+	/**
+	 * 12、校验黑名单
+	 * API：https://cloud.tencent.com/document/product/269/3725
+	 * @author 		： <a href="https://github.com/hiwepy">hiwepy</a>
+	 * @param checkType 校验模式，详情可参见 校验黑名单
+	 * @param fromUserId 需要校验该 UserID 的黑名单
+	 * @param userIds 待校验的黑名单的 UserID 列表，单次请求的 To_Account 数不得超过1000
+	 * @return 操作结果
+	 */
+	public BlacklistCheckResponse checkBlackList(String checkType, String fromUserId, String... userIds) {
+		Map<String, Object> requestBody = new ImmutableMap.Builder<String, Object>()
+				.put("From_Account", this.getImUserByUserId(fromUserId))
+				.put("To_Account", Stream.of(userIds).map(uid -> this.getImUserByUserId(uid)).collect(Collectors.toList()))
+				.put("CheckType", checkType)
+				.build();
+		return super.request(TimApiAddress.BLACK_LIST_CHECK, requestBody, BlacklistCheckResponse.class);
+	}
+	
+	/**
+	 * 12、添加分组
+	 * API：https://cloud.tencent.com/document/product/269/10107
+	 * @author 		： <a href="https://github.com/hiwepy">hiwepy</a>
+	 * @param fromUserId 需要为该 UserID 添加新分组
+	 * @param groupNames 新增分组列表
+	 * @return 操作结果
+	 */
+	public GroupAddResponse addGroup(String fromUserId, String... groupNames) {
+		Map<String, Object> requestBody = new ImmutableMap.Builder<String, Object>()
+				.put("From_Account", this.getImUserByUserId(fromUserId))
+				.put("GroupName", groupNames)
+				.build();
+		return super.request(TimApiAddress.GROUP_ADD, requestBody, GroupAddResponse.class);
+	}
+	
+	/**
+	 * 12、添加分组
+	 * API：https://cloud.tencent.com/document/product/269/10107
+	 * @author 		： <a href="https://github.com/hiwepy">hiwepy</a>
+	 * @param fromUserId 需要为该 UserID 添加新分组
+	 * @param groupNames 新增分组列表
+	 * @param userIds 需要加入新增分组的好友的 UserID 列表
+	 * @return 操作结果
+	 */
+	public GroupAddResponse addGroup(String fromUserId, String[] groupNames, String... userIds) {
+		Map<String, Object> requestBody = new ImmutableMap.Builder<String, Object>()
+				.put("From_Account", this.getImUserByUserId(fromUserId))
+				.put("GroupName", groupNames)
+				.put("To_Account", Stream.of(userIds).map(uid -> this.getImUserByUserId(uid)).collect(Collectors.toList()))
+				.build();
+		return super.request(TimApiAddress.GROUP_ADD, requestBody, GroupAddResponse.class);
+	}
+	
+	/**
+	 * 13、删除分组
+	 * API：https://cloud.tencent.com/document/product/269/3719
+	 * @author 		： <a href="https://github.com/hiwepy">hiwepy</a>
+	 * @param fromUserId 需要删除该 UserID 的黑名单
+	 * @param groupNames 要删除的分组列表
+	 * @return 操作结果
+	 */
+	public GroupDeleteResponse deleteGroups(String fromUserId, String... groupNames) {
+		Map<String, Object> requestBody = new ImmutableMap.Builder<String, Object>()
+				.put("From_Account", this.getImUserByUserId(fromUserId))
+				.put("GroupName", groupNames)
+				.build();
+		return super.request(TimApiAddress.GROUP_DELETE, requestBody, GroupDeleteResponse.class);
+	}
+	
+	/**
+	 * 14、拉取分组
+	 * API：https://cloud.tencent.com/document/product/269/3722
+	 * @author 		： <a href="https://github.com/hiwepy">hiwepy</a>
+	 * @param userId 指定要拉取分组的用户的 UserID
+	 * @param lastSequence 上一次拉取分组时后台返回给客户端的 Seq，初次拉取时为0，只有 GroupName 为空时有效
+	 * @param groupNames 要拉取的分组名称
+	 * @return 操作结果
+	 */
+	public GroupGetResponse getGroups(String userId, Integer lastSequence, String... groupNames) {
+		Map<String, Object> requestBody = new ImmutableMap.Builder<String, Object>()
+				.put("From_Account", this.getImUserByUserId(userId))
+				.put("LastSequence", lastSequence)
+				.put("GroupName", groupNames)
+				.build();
+		return super.request(TimApiAddress.GROUP_GET, requestBody, GroupGetResponse.class);
+	}
+	
+	/**
+	 * 15、拉取分组
+	 * API：https://cloud.tencent.com/document/product/269/3722
+	 * @author 		： <a href="https://github.com/hiwepy">hiwepy</a>
+	 * @param userId 指定要拉取分组的用户的 UserID
+	 * @param lastSequence 上一次拉取分组时后台返回给客户端的 Seq，初次拉取时为0，只有 GroupName 为空时有效
+	 * @param needFriend 是否需要拉取分组下的 User 列表, Need_Friend_Type_Yes: 需要拉取, 不填时默认不拉取, 只有 GroupName 为空时有效
+	 * @param groupNames 要拉取的分组名称
+	 * @return 操作结果
+	 */
+	public GroupGetResponse getGroups(String userId, Integer lastSequence, String needFriend, String... groupNames) {
+		Map<String, Object> requestBody = new ImmutableMap.Builder<String, Object>()
+				.put("From_Account", this.getImUserByUserId(userId))
+				.put("LastSequence", lastSequence)
+				.put("NeedFriend", needFriend)
+				.put("GroupName", groupNames)
+				.build();
+		return super.request(TimApiAddress.GROUP_GET, requestBody, GroupGetResponse.class);
 	}
 	
 }

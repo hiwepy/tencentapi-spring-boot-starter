@@ -31,7 +31,8 @@ public class TencentTimProperties {
 	 * Enable Tencent Tim.
 	 */
 	private boolean enabled = false;
-	
+
+	private String domain;
 	private String identifier = ADMINISTRATOR;
 	private Long sdkappid;
 	private String privateKey;

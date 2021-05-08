@@ -15,9 +15,9 @@
  */
 package com.tencentcloud.spring.boot.tim;
 
-import java.io.IOException;
 import java.util.Map;
 import java.util.Objects;
+import java.util.function.Consumer;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -31,9 +31,6 @@ import com.tencentcloud.spring.boot.tim.resp.ApiResponse;
 import com.tencentcloud.spring.boot.tim.resp.push.UserAttrs;
 import com.tencentcloud.spring.boot.tim.resp.push.UserTags;
 
-import lombok.extern.slf4j.Slf4j;
-
-@Slf4j
 public class TencentTimAllMemberPushAsyncOperations extends TencentTimAllMemberPushOperations {
 
 	public TencentTimAllMemberPushAsyncOperations(TencentTimTemplate timTemplate) {
@@ -46,9 +43,10 @@ public class TencentTimAllMemberPushAsyncOperations extends TencentTimAllMemberP
 	 * @param userId 业务用户ID
 	 * @param msgRandom 消息随机数，由随机函数产生。用于推送任务去重。对于不同的推送请求，MsgRandom7 天之内不能重复，否则视为相同的推送任务（调用推送 API 返回失败的时候可以用相同的 MsgRandom 进行重试）
 	 * @param msgBody  消息内容，具体格式请参考 MsgBody 消息内容说明（一条消息可包括多种消息元素，所以 MsgBody 为 Array 类型）
+	 * @param consumer 响应处理回调函数
 	 */
-	public void asyncPush(String userId, String msgRandom, MsgBody... msgBody) {
-		this.asyncPush(userId, msgRandom, null, null, null, msgBody);
+	public void asyncPush(String userId, String msgRandom, MsgBody[] msgBody, Consumer<AllMemberPushResponse> consumer) {
+		this.asyncPush(userId, msgRandom, null, null, null, msgBody, consumer);
 	}
 	
 	/**
@@ -58,9 +56,10 @@ public class TencentTimAllMemberPushAsyncOperations extends TencentTimAllMemberP
 	 * @param msgRandom 消息随机数，由随机函数产生。用于推送任务去重。对于不同的推送请求，MsgRandom7 天之内不能重复，否则视为相同的推送任务（调用推送 API 返回失败的时候可以用相同的 MsgRandom 进行重试）
 	 * @param msgLifeTime 消息离线存储时间，单位秒，最多保存7天（604800秒）。默认为0，表示不离线存储
 	 * @param msgBody  消息内容，具体格式请参考 MsgBody 消息内容说明（一条消息可包括多种消息元素，所以 MsgBody 为 Array 类型）
+	 * @param consumer 响应处理回调函数
 	 */
-	public void asyncPush(String userId, String msgRandom, Integer msgLifeTime, MsgBody... msgBody) {
-		this.asyncPush(userId, msgRandom, msgLifeTime, null, null, msgBody);
+	public void asyncPush(String userId, String msgRandom, Integer msgLifeTime, MsgBody[] msgBody, Consumer<AllMemberPushResponse> consumer) {
+		this.asyncPush(userId, msgRandom, msgLifeTime, null, null, msgBody, consumer);
 	}
 	
 	/**
@@ -71,10 +70,11 @@ public class TencentTimAllMemberPushAsyncOperations extends TencentTimAllMemberP
 	 * @param msgLifeTime 消息离线存储时间，单位秒，最多保存7天（604800秒）。默认为0，表示不离线存储
 	 * @param offlinePushInfo 离线推送信息配置，具体可参考 消息格式描述
 	 * @param msgBody  消息内容，具体格式请参考 MsgBody 消息内容说明（一条消息可包括多种消息元素，所以 MsgBody 为 Array 类型）
-	 * @return 操作结果
+	 * @param consumer 响应处理回调函数
 	 */
-	public void asyncPush(String userId, String msgRandom, Integer msgLifeTime, OfflinePushInfo offlinePushInfo, MsgBody... msgBody) {
-		this.asyncPush(userId, msgRandom, msgLifeTime, null, offlinePushInfo, msgBody);
+	public void asyncPush(String userId, String msgRandom, Integer msgLifeTime, OfflinePushInfo offlinePushInfo, 
+			MsgBody[] msgBody, Consumer<AllMemberPushResponse> consumer) {
+		this.asyncPush(userId, msgRandom, msgLifeTime, null, offlinePushInfo, msgBody, consumer);
 	}
 	
 	/**
@@ -86,9 +86,10 @@ public class TencentTimAllMemberPushAsyncOperations extends TencentTimAllMemberP
 	 * @param condition AttrsOr 和 AttrsAnd 可以并存，TagsOr 和 TagsAnd 也可以并存。但是标签和属性条件不能并存。如果没有 Condition，则推送给全部用户
 	 * @param offlinePushInfo 离线推送信息配置，具体可参考 消息格式描述
 	 * @param msgBody  消息内容，具体格式请参考 MsgBody 消息内容说明（一条消息可包括多种消息元素，所以 MsgBody 为 Array 类型）
+	 * @param consumer 响应处理回调函数
 	 */
 	public void asyncPush(String userId, String msgRandom, Integer msgLifeTime, Condition condition,
-			OfflinePushInfo offlinePushInfo, MsgBody... msgBody) {
+			OfflinePushInfo offlinePushInfo, MsgBody[] msgBody, Consumer<AllMemberPushResponse> consumer) {
 		Map<String, Object> requestBody = new ImmutableMap.Builder<String, Object>()
 				.put("From_Account", this.getImUserByUserId(userId))
 				.put("MsgRandom", msgRandom)
@@ -97,29 +98,16 @@ public class TencentTimAllMemberPushAsyncOperations extends TencentTimAllMemberP
 				.put("Condition", condition)
 				.put("OfflinePushInfo", offlinePushInfo)
 				.build();
-		this.asyncRequest(TimApiAddress.IM_PUSH.getValue() + joiner.join(getDefaultParams()), requestBody, (response) -> {
-			if (response.isSuccessful()) {
-                try {
-					String content = response.body().string();
-					AllMemberPushResponse res = getTimTemplate().toBean(content, AllMemberPushResponse.class);
-					if (res.isSuccess()) {
-						log.debug("全员推送成功, response message is: {}", res);
-					} else {
-						log.error("全员推送失败, response message is: {}", res);
-					}
-				} catch (IOException e) {
-					e.printStackTrace();
-				}
-            }
-		});
+		this.asyncRequest(TimApiAddress.IM_PUSH, requestBody, AllMemberPushResponse.class, consumer);
 	}
 	
 	/**
 	 * 2、设置应用属性名称
 	 * API：https://cloud.tencent.com/document/product/269/45935
 	 * @param attrNames 属性名数组，单个属性最长不超过50字节。应用最多可以有10个推送属性（编号从0到9），用户自定义每个属性的含义
+	 * @param consumer 响应处理回调函数
 	 */
-	public void asyncSetAppAttrNames(String ... attrNames) {
+	public void asyncSetAppAttrNames(String[] attrNames, Consumer<ApiResponse> consumer) {
 		Map<String, String> attrNameMap = Maps.newHashMap();
 		for (int i = 0; i < attrNames.length; i++) {
 			attrNameMap.put(String.valueOf(i), attrNames[i]);
@@ -127,72 +115,32 @@ public class TencentTimAllMemberPushAsyncOperations extends TencentTimAllMemberP
 		Map<String, Object> requestBody = new ImmutableMap.Builder<String, Object>()
 				.put("AttrNames", attrNameMap)
 				.build();
-		this.asyncRequest(TimApiAddress.IM_SET_ATTR_NAME.getValue() + joiner.join(getDefaultParams()), requestBody, (response) -> {
-			if (response.isSuccessful()) {
-                try {
-					String content = response.body().string();
-					ApiResponse res = getTimTemplate().toBean(content, ApiResponse.class);
-					if (res.isSuccess()) {
-						log.debug("设置应用属性名称成功, response message is: {}", res);
-					} else {
-						log.error("设置应用属性名称失败, response message is: {}", res);
-					}
-				} catch (IOException e) {
-					e.printStackTrace();
-				}
-            }
-		});
+		this.asyncRequest(TimApiAddress.IM_SET_ATTR_NAME, requestBody, ApiResponse.class, consumer);
 	}
 	
 	/**
 	 * 3、设置用户属性
 	 * API：https://cloud.tencent.com/document/product/269/45938
 	 * @param userAttrs 属性名数组，单个属性最长不超过50字节。应用最多可以有10个推送属性（编号从0到9），用户自定义每个属性的含义
+	 * @param consumer 响应处理回调函数
 	 */
-	public void asyncSetUserAttrs(UserAttrs ... userAttrs) {
+	public void asyncSetUserAttrs(UserAttrs[] userAttrs, Consumer<ApiResponse> consumer) {
 		Map<String, Object> requestBody = new ImmutableMap.Builder<String, Object>()
 				.put("UserAttrs", userAttrs)
 				.build();
-		this.asyncRequest(TimApiAddress.IM_SET_ATTR.getValue() + joiner.join(getDefaultParams()), requestBody, (response) -> {
-			if (response.isSuccessful()) {
-                try {
-					String content = response.body().string();
-					ApiResponse res = getTimTemplate().toBean(content, ApiResponse.class);
-					if (res.isSuccess()) {
-						log.debug("设置用户属性成功, response message is: {}", res);
-					} else {
-						log.error("设置用户属性失败, response message is: {}", res);
-					}
-				} catch (IOException e) {
-					e.printStackTrace();
-				}
-            }
-		});
+		this.asyncRequest(TimApiAddress.IM_SET_ATTR, requestBody, ApiResponse.class, consumer);
 	}
 	
 	/**
 	 * 4、删除用户属性
 	 * API：https://cloud.tencent.com/document/product/269/45939
+	 * @param consumer 响应处理回调函数
 	 */
-	public void asyncRemoveUserAttrs(UserAttrs ... userAttrs) {
+	public void asyncRemoveUserAttrs(UserAttrs[] userAttrs, Consumer<ApiResponse> consumer) {
 		Map<String, Object> requestBody = new ImmutableMap.Builder<String, Object>()
 				.put("UserAttrs", userAttrs)
 				.build();
-		this.asyncRequest(TimApiAddress.IM_REMOVE_ATTR.getValue() + joiner.join(getDefaultParams()), requestBody, (response) -> {
-			if (response.isSuccessful()) {
-                try {
-					String content = response.body().string();
-					ApiResponse res = getTimTemplate().toBean(content, ApiResponse.class);
-					if (res.isSuccess()) {
-						log.debug("删除用户属性成功, response message is: {}", res);
-					} else {
-						log.error("删除用户属性失败, response message is: {}", res);
-					}
-				} catch (IOException e) {
-					e.printStackTrace();
-				}
-            }
-		});
+		this.asyncRequest(TimApiAddress.IM_REMOVE_ATTR, requestBody, ApiResponse.class, consumer);
 	}
 	
 	/**
@@ -202,75 +150,39 @@ public class TencentTimAllMemberPushAsyncOperations extends TencentTimAllMemberP
 	 * b、单个用户可设置最大标签数为100个，若用户当前标签超过100，则添加新标签之前请先删除旧标签。
 	 * c、单个标签最大长度为50字节。
 	 * @param userTags 用户标签数组
+	 * @param consumer 响应处理回调函数
 	 */
-	public void asyncAddUserTags(UserTags ... userTags) {
+	public void asyncAddUserTags(UserTags[] userTags, Consumer<ApiResponse> consumer) {
 		Map<String, Object> requestBody = new ImmutableMap.Builder<String, Object>()
 				.put("UserTags", userTags)
 				.build();
-		this.asyncRequest(TimApiAddress.IM_ADD_TAG.getValue() + joiner.join(getDefaultParams()), requestBody, (response) -> {
-			if (response.isSuccessful()) {
-                try {
-					String content = response.body().string();
-					ApiResponse res = getTimTemplate().toBean(content, ApiResponse.class);
-					if (res.isSuccess()) {
-						log.debug("添加用户标签成功, response message is: {}", res);
-					} else {
-						log.error("添加用户标签失败, response message is: {}", res);
-					}
-				} catch (IOException e) {
-					e.printStackTrace();
-				}
-            }
-		});
+		this.asyncRequest(TimApiAddress.IM_ADD_TAG, requestBody, ApiResponse.class, consumer);
 	}
 	 
 	/**
 	 * 6、删除用户标签
 	 * API：https://cloud.tencent.com/document/product/269/45942
+	 * @param userTags 用户标签数组
+	 * @param consumer 响应处理回调函数
 	 */
-	public void asyncRemoveUserTags(UserTags ... userTags) {
+	public void asyncRemoveUserTags(UserTags[] userTags, Consumer<ApiResponse> consumer) {
 		Map<String, Object> requestBody = new ImmutableMap.Builder<String, Object>()
 				.put("UserTags", userTags)
 				.build();
-		this.asyncRequest(TimApiAddress.IM_REMOVE_TAG.getValue() + joiner.join(getDefaultParams()), requestBody, (response) -> {
-			if (response.isSuccessful()) {
-                try {
-					String content = response.body().string();
-					ApiResponse res = getTimTemplate().toBean(content, ApiResponse.class);
-					if (res.isSuccess()) {
-						log.debug("删除用户标签成功, response message is: {}", res);
-					} else {
-						log.error("删除用户标签失败, response message is: {}", res);
-					}
-				} catch (IOException e) {
-					e.printStackTrace();
-				}
-            }
-		});
+		this.asyncRequest(TimApiAddress.IM_REMOVE_TAG, requestBody, ApiResponse.class, consumer);
 	}
 
 	/**
 	 * 7、删除用户所有标签
 	 * API：https://cloud.tencent.com/document/product/269/45943
+	 * @param userIds 用户ID数组
+	 * @param consumer 响应处理回调函数
 	 */
-	public void asyncRemoveUserTags(String ... userIds) {
+	public void asyncRemoveUserTags(String[] userIds, Consumer<ApiResponse> consumer) {
 		Map<String, Object> requestBody = new ImmutableMap.Builder<String, Object>()
-				.put("To_Account", Stream.of(userIds).map(uid -> this.getImUserByUserId(uid)).collect(Collectors.toList())).build();
-		this.asyncRequest(TimApiAddress.IM_REMOVE_ALL_TAGS.getValue() + joiner.join(getDefaultParams()), requestBody, (response) -> {
-			if (response.isSuccessful()) {
-                try {
-					String content = response.body().string();
-					ApiResponse res = getTimTemplate().toBean(content, ApiResponse.class);
-					if (res.isSuccess()) {
-						log.debug("删除用户所有标签成功, response message is: {}", res);
-					} else {
-						log.error("删除用户所有标签失败, response message is: {}", res);
-					}
-				} catch (IOException e) {
-					e.printStackTrace();
-				}
-            }
-		});
+				.put("To_Account", Stream.of(userIds).map(uid -> this.getImUserByUserId(uid)).collect(Collectors.toList()))
+				.build();
+		this.asyncRequest(TimApiAddress.IM_REMOVE_ALL_TAGS, requestBody, ApiResponse.class, consumer);
 	}
 
 }

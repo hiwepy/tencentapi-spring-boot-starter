@@ -1,9 +1,11 @@
-package com.tencentcloud.spring.boot.tim.resp;
+package com.tencentcloud.spring.boot.tim.resp.sns;
 
 import java.util.List;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.tencentcloud.spring.boot.tim.resp.ResultItem;
+import com.tencentcloud.spring.boot.tim.resp.TimActionResponse;
 
 import lombok.Data;
 import lombok.EqualsAndHashCode;

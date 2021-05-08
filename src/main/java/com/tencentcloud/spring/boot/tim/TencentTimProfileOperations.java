@@ -26,13 +26,10 @@ import com.google.common.collect.ImmutableMap;
 import com.tencentcloud.spring.boot.tim.resp.UserProfilePortraitGetResponse;
 import com.tencentcloud.spring.boot.tim.resp.UserProfilePortraitSetResponse;
 
-import lombok.extern.slf4j.Slf4j;
-
 /**
  * Tim 资料管理接口集成
  * https://cloud.tencent.com/document/product/269/42440
  */
-@Slf4j
 public class TencentTimProfileOperations extends TencentTimOperations {
 
 	public TencentTimProfileOperations(TencentTimTemplate timTemplate) {
@@ -71,12 +68,7 @@ public class TencentTimProfileOperations extends TencentTimOperations {
 					return hashMap;
 				}).collect(Collectors.toList()))
 				.build();
-		UserProfilePortraitSetResponse res = request(TimApiAddress.PORTRAIT_SET.getValue() + joiner.join(getDefaultParams()), requestBody,
-				UserProfilePortraitSetResponse.class);
-		if (!res.isSuccess()) {
-			log.error("设置资料失败， ActionStatus : {}, ErrorCode : {}, ErrorInfo : {}", res.getActionStatus(), res.getErrorCode(), res.getErrorInfo());
-		}
-		return res;
+		return super.request(TimApiAddress.PORTRAIT_SET, requestBody, UserProfilePortraitSetResponse.class);
 	}
 	
 	/**
@@ -109,17 +101,10 @@ public class TencentTimProfileOperations extends TencentTimOperations {
 	 * @return 操作结果
 	 */
 	public UserProfilePortraitGetResponse portraitGet(List<String> tagList, String... userIds) {
-		 
 		Map<String, Object> requestBody = new ImmutableMap.Builder<String, Object>()
 				.put("To_Account", Stream.of(userIds).map(uid -> this.getImUserByUserId(uid)).collect(Collectors.toList()))
 				.put("TagList", tagList).build();
-		UserProfilePortraitGetResponse res = request(
-				TimApiAddress.PORTRAIT_GET.getValue() + joiner.join(getDefaultParams()), requestBody,
-				UserProfilePortraitGetResponse.class);
-		if (!res.isSuccess()) {
-			log.error("获取信息失败， ActionStatus : {}, ErrorCode : {}, ErrorInfo : {}", res.getActionStatus(), res.getErrorCode(), res.getErrorInfo());
-		}
-		return res;
+		return super.request(TimApiAddress.PORTRAIT_GET, requestBody, UserProfilePortraitGetResponse.class);
 	}
 	
 	

@@ -15,86 +15,42 @@
  */
 package com.tencentcloud.spring.boot.tim;
 
-import java.io.IOException;
-import java.util.Arrays;
+import java.util.Map;
 import java.util.function.Consumer;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
-import com.tencentcloud.spring.boot.tim.req.message.BlacklistMessage;
-import com.tencentcloud.spring.boot.tim.resp.BlacklistResponse;
+import com.google.common.collect.ImmutableMap;
+import com.tencentcloud.spring.boot.tim.req.sns.FriendAddItem;
+import com.tencentcloud.spring.boot.tim.resp.sns.FriendAddResponse;
 
-import lombok.extern.slf4j.Slf4j;
-
-@Slf4j
 public class TencentTimGroupAsyncOperations extends TencentTimGroupOperations {
 
 	public TencentTimGroupAsyncOperations(TencentTimTemplate timTemplate) {
 		super(timTemplate);
 	}
+	 
+
+	/**
+	 * 1、添加好友
+	 * API：https://cloud.tencent.com/document/product/269/1643
+	 * @param userId 业务用户ID
+	 * @param addType  加好友方式（默认双向加好友方式）：Add_Type_Single 表示单向加好友, Add_Type_Both 表示双向加好友
+	 * @param forceAdd 是否强制相互添加好友
+	 * @param friends 添加的好友数组
+	 * @param consumer 响应处理回调函数
+	 */
+	public void asyncAddFriend(String userId, String addType, boolean forceAdd, FriendAddItem[] friends, Consumer<FriendAddResponse> consumer) {
+		Map<String, Object> requestBody = new ImmutableMap.Builder<String, Object>()
+				.put("From_Account", this.getImUserByUserId(userId))
+				.put("AddFriendItem", Stream.of(friends).map(friend -> {
+					friend.setAccount(this.getImUserByUserId(friend.getAccount()));
+					return friend;
+				}).collect(Collectors.toList()))
+				.put("AddType", addType)
+				.put("ForceAddFlags", forceAdd ? 1 : 0)
+				.build();
+		this.asyncRequest(TimApiAddress.FRIEND_ADD, requestBody, FriendAddResponse.class, consumer);
+	}
 	
-	public void asyncAddBlackList(String fromAccount, String toAccount) {
-		BlacklistMessage message = new BlacklistMessage();
-		message.setFromAccount(fromAccount);
-		message.setToAccount(Arrays.asList(toAccount));
-		this.asyncRequest(TimApiAddress.BLACK_LIST_ADD.getValue() + joiner.join(getDefaultParams()), message, (response) -> {
-			if (response.isSuccessful()) {
-                try {
-					String content = response.body().string();
-					BlacklistResponse res = getTimTemplate().toBean(content, BlacklistResponse.class);
-					if (res.isSuccess()) {
-						log.debug("添加黑名单成功, response message is: {}", res);
-					} else {
-						log.error("添加黑名单失败, response message is: {}", res);
-					}
-				} catch (IOException e) {
-					e.printStackTrace();
-				}
-            }
-		});
-	}
-
-	public void asyncDeleteBlackList(String fromAccount, String toAccount) {
-		BlacklistMessage message = new BlacklistMessage();
-		message.setFromAccount(fromAccount);
-		message.setToAccount(Arrays.asList(toAccount));
-		this.asyncRequest(TimApiAddress.BLACK_LIST_DELETE.getValue() + joiner.join(getDefaultParams()), message, (response) -> {
-			if (response.isSuccessful()) {
-                try {
-					String content = response.body().string();
-					BlacklistResponse res = getTimTemplate().toBean(content, BlacklistResponse.class);
-					if (res.isSuccess()) {
-						log.debug("移除黑名单成功, response message is: {}", res);
-					} else {
-						log.error("移除黑名单失败, response message is: {}", res);
-					}
-				} catch (IOException e) {
-					e.printStackTrace();
-				}
-            }
-		});
-	}
-
-	public void asyncGetBlackList(String fromAccount, Integer lastSequence, Consumer<BlacklistResponse> consumer) {
-		BlacklistMessage message = new BlacklistMessage();
-		message.setFromAccount(fromAccount);
-		message.setStartIndex(0);
-		message.setMaxLimited(20);
-		message.setLastSequence(lastSequence);
-		this.asyncRequest(TimApiAddress.BLACK_LIST_GET.getValue() + joiner.join(getDefaultParams()), message, (response) -> {
-			if (response.isSuccessful()) {
-                try {
-					String content = response.body().string();
-					BlacklistResponse res = getTimTemplate().toBean(content, BlacklistResponse.class);
-					if (res.isSuccess()) {
-						log.debug("获取黑名单成功, response message is: {}", res);
-					} else {
-						log.error("获取黑名单失败, response message is: {}", res);
-					}
-					consumer.accept(res);
-				} catch (IOException e) {
-					e.printStackTrace();
-				}
-            }
-		});
-	}
-
 }

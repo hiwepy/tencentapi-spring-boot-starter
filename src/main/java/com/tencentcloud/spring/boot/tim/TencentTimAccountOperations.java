@@ -28,13 +28,10 @@ import com.tencentcloud.spring.boot.tim.resp.account.AccountKickResponse;
 import com.tencentcloud.spring.boot.tim.resp.account.AccountStateResponse;
 import com.tencentcloud.spring.boot.tim.resp.account.AccountsImportResponse;
 
-import lombok.extern.slf4j.Slf4j;
-
 /**
  * 1、帐号管理
  * https://cloud.tencent.com/document/product/269/1608
  */
-@Slf4j
 public class TencentTimAccountOperations extends TencentTimOperations {
 
 	public TencentTimAccountOperations(TencentTimTemplate timTemplate) {
@@ -53,13 +50,9 @@ public class TencentTimAccountOperations extends TencentTimOperations {
 		Map<String, Object> requestBody = new ImmutableMap.Builder<String, Object>()
 				.put("Identifier", getImUserByUserId(userId))
 				.put("Nick", nickname)
-				.put("FaceUrl", avatar).build();
-		AccountImportResponse res = request(TimApiAddress.ACCOUNT_IMPORT.getValue() + joiner.join(getDefaultParams()),
-				requestBody, AccountImportResponse.class);
-		if (!res.isSuccess()) {
-			log.error("导入单个帐号失败， ActionStatus : {}, ErrorCode : {}, ErrorInfo : {}", res.getActionStatus(), res.getErrorCode(), res.getErrorInfo());
-		}
-		return res;
+				.put("FaceUrl", avatar)
+				.build();
+		return super.request(TimApiAddress.ACCOUNT_IMPORT, requestBody, AccountImportResponse.class);
 	}
 	
 	/**
@@ -70,13 +63,9 @@ public class TencentTimAccountOperations extends TencentTimOperations {
 	 */
 	public AccountsImportResponse aImport(String... userIds) {
 		Map<String, Object> requestBody = new ImmutableMap.Builder<String, Object>()
-				.put("Accounts", Stream.of(userIds).map(uid -> this.getImUserByUserId(uid)).collect(Collectors.toList())).build();
-		AccountsImportResponse res = request(TimApiAddress.MULTI_ACCOUNT_IMPORT.getValue() + joiner.join(getDefaultParams()),
-				requestBody, AccountsImportResponse.class);
-		if (!res.isSuccess()) {
-			log.error("导入多个帐号失败， ActionStatus : {}, ErrorCode : {}, ErrorInfo : {}", res.getActionStatus(), res.getErrorCode(), res.getErrorInfo());
-		}
-		return res;
+				.put("Accounts", Stream.of(userIds).map(uid -> this.getImUserByUserId(uid)).collect(Collectors.toList()))
+				.build();
+		return super.request(TimApiAddress.MULTI_ACCOUNT_IMPORT, requestBody, AccountsImportResponse.class);
 	}
 	
 	/**
@@ -91,13 +80,9 @@ public class TencentTimAccountOperations extends TencentTimOperations {
 					Map<String, Object> userMap = new HashMap<>();
 					userMap.put("UserID", this.getImUserByUserId(uid));
 					return userMap;
-				}).collect(Collectors.toList())).build();
-		AccountDeleteResponse res = request(TimApiAddress.ACCOUNT_DELETE.getValue() + joiner.join(getDefaultParams()),
-				requestBody, AccountDeleteResponse.class);
-		if (!res.isSuccess()) {
-			log.error("删除帐号失败， ActionStatus : {}, ErrorCode : {}, ErrorInfo : {}", res.getActionStatus(), res.getErrorCode(), res.getErrorInfo());
-		}
-		return res;
+				}).collect(Collectors.toList()))
+				.build();
+		return super.request(TimApiAddress.ACCOUNT_DELETE, requestBody, AccountDeleteResponse.class);
 	}
 	
 	/**
@@ -112,13 +97,9 @@ public class TencentTimAccountOperations extends TencentTimOperations {
 					Map<String, Object> userMap = new HashMap<>();
 					userMap.put("UserID", this.getImUserByUserId(uid));
 					return userMap;
-				}).collect(Collectors.toList())).build();
-		AccountCheckResponse res = request(TimApiAddress.ACCOUNT_CHECK.getValue() + joiner.join(getDefaultParams()),
-				requestBody, AccountCheckResponse.class);
-		if (!res.isSuccess()) {
-			log.error("查询帐号失败， ActionStatus : {}, ErrorCode : {}, ErrorInfo : {}", res.getActionStatus(), res.getErrorCode(), res.getErrorInfo());
-		}
-		return res;
+				}).collect(Collectors.toList()))
+				.build();
+		return super.request(TimApiAddress.ACCOUNT_CHECK, requestBody, AccountCheckResponse.class);
 	}
 	
 	/**
@@ -129,45 +110,26 @@ public class TencentTimAccountOperations extends TencentTimOperations {
 	 */
 	public AccountKickResponse kickout(String userId) {
 		Map<String, Object> requestBody = new ImmutableMap.Builder<String, Object>()
-				.put("Identifier", this.getImUserByUserId(userId)).build();
-		AccountKickResponse res = request(TimApiAddress.ACCOUNT_KICK.getValue() + joiner.join(getDefaultParams()),
-				requestBody, AccountKickResponse.class);
-		if (!res.isSuccess()) {
-			log.error("查询失效帐号登录态失败， ActionStatus : {}, ErrorCode : {}, ErrorInfo : {}", res.getActionStatus(), res.getErrorCode(), res.getErrorInfo());
-		}
-		return res;
+				.put("Identifier", this.getImUserByUserId(userId))
+				.build();
+		return super.request(TimApiAddress.ACCOUNT_KICK, requestBody, AccountKickResponse.class);
 	}
 	
 	/**
-	 * 6.1、查询帐号在线状态
+	 * 6、查询帐号在线状态
 	 * API：https://cloud.tencent.com/document/product/269/2566
-	 * @param userIds 业务用户ID数组
-	 * @return 操作结果
-	 */
-	public AccountStateResponse getState(String... userIds) {
-		return this.getState(userIds, false);
-	}
-	
-	/**
-	 * 6.2、查询帐号在线状态
-	 * API：https://cloud.tencent.com/document/product/269/2566
-	 * @param userIds 业务用户ID数组
 	 * @param needDetail 是否需要详情结果
+	 * @param userIds 业务用户ID数组
 	 * @return 操作结果
 	 */
-	public AccountStateResponse getState(String[] userIds, boolean needDetail) {
+	public AccountStateResponse getState(boolean needDetail, String... userIds) {
 		ImmutableMap.Builder<String, Object> builder = new ImmutableMap.Builder<String, Object>()
 			.put("To_Account", Stream.of(userIds).map(uid -> this.getImUserByUserId(uid)).collect(Collectors.toList()));
 		if(needDetail) {
 			builder.put("IsNeedDetail", 1);
 		}
 		// {"ActionStatus":"OK","ErrorInfo":"","ErrorCode":0,"QueryResult":[{"To_Account":"449","State":"Offline","Status":"Offline"}]}
-		AccountStateResponse res = request(TimApiAddress.ACCOUNT_STATE.getValue() + joiner.join(getDefaultParams()),
-				builder.build(), AccountStateResponse.class);
-		if (!res.isSuccess()) {
-			log.error("查询帐号在线状态失败，ActionStatus : {}, ErrorCode : {}, ErrorInfo : {}", res.getActionStatus(), res.getErrorCode(), res.getErrorInfo());
-		}
-		return res;
+		return super.request(TimApiAddress.ACCOUNT_STATE, builder.build(), AccountStateResponse.class);
 	}
 	
 }

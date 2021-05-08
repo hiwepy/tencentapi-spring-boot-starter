@@ -15,28 +15,26 @@
  */
 package com.tencentcloud.spring.boot.tim;
 
+import java.io.IOException;
 import java.util.Map;
 import java.util.function.Consumer;
 
-import com.google.common.base.Joiner;
+import com.tencentcloud.spring.boot.tim.resp.ApiResponse;
+import com.tencentcloud.spring.boot.utils.CommonHelper;
 
-import okhttp3.Response;
+import lombok.extern.slf4j.Slf4j;
 
 /**
  * Tim 接口集成
  * https://cloud.tencent.com/document/product/269/42440
  */
+@Slf4j
 public abstract class TencentTimOperations {
 
 	public static final String PREFIX = "https://console.tim.qq.com";
 	public static final String APPLICATION_JSON_VALUE = "application/json";
 	public static final String APPLICATION_JSON_UTF8_VALUE = "application/json;charset=UTF-8";
 
-	public static final String DELIMITER = "&";
-	public static final String SEPARATOR = "=";
-	
-	protected final Joiner.MapJoiner joiner = Joiner.on(DELIMITER).withKeyValueSeparator(SEPARATOR);
- 
 	protected TencentTimTemplate timTemplate;
 
 	public TencentTimOperations(TencentTimTemplate timTemplate) {
@@ -78,13 +76,36 @@ public abstract class TencentTimOperations {
 	protected Map<String, String> getDefaultParams() {
 		return getTimTemplate().getDefaultParams();
 	}
-
-	protected <T> T request(String url, Object params, Class<T> cls) {
-		return getTimTemplate().toBean(getTimTemplate().requestInvoke(url, params), cls);
+	
+	protected <T extends ApiResponse> T request(TimApiAddress address, Object params, Class<T> cls) {
+		String url = CommonHelper.getRequestUrl(address, getDefaultParams());
+		T res =  getTimTemplate().requestInvoke(url, params, cls);
+		if (res.isSuccess()) {
+			log.debug("{}-Success, ActionStatus : {}, Body : {}", address.getOpt(), res.getActionStatus());
+		} else {
+			log.error("{}-Failure, ActionStatus : {}, ErrorCode : {}, ErrorInfo : {}", address.getOpt(), res.getActionStatus(), res.getErrorCode(), res.getErrorInfo());
+		}
+		return res;
 	}
 	
-	protected void asyncRequest(String url, Object params, Consumer<Response> consumer) {
-		getTimTemplate().requestAsyncInvoke(url, params, consumer);
+	protected <T extends ApiResponse> void asyncRequest(TimApiAddress address, Object params, Class<T> cls, Consumer<T> consumer) {
+		String url = CommonHelper.getRequestUrl(address, getDefaultParams());
+		getTimTemplate().requestAsyncInvoke(url, params, (response) -> {
+			if (response.isSuccessful()) {
+				try {
+					String body = response.body().string();
+					T res = getTimTemplate().readValue(body, cls);
+					if (res.isSuccess()) {
+						log.debug("{}-Success, ActionStatus : {}, Body : {}", res.getActionStatus(), body);
+					} else {
+						log.error("{}-Failure, ActionStatus : {}, ErrorCode : {}, ErrorInfo : {}", res.getActionStatus(), res.getErrorCode(), res.getErrorInfo());
+					}
+					consumer.accept(res);
+				} catch (IOException e) {
+					log.error(e.getMessage());
+				}
+            }
+		});
 	}
 	
 	public TencentTimTemplate getTimTemplate() {

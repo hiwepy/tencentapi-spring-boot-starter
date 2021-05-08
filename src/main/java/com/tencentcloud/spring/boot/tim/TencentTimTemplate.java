@@ -3,7 +3,9 @@ package com.tencentcloud.spring.boot.tim;
 import java.io.IOException;
 import java.time.Duration;
 import java.util.Map;
+import java.util.Optional;
 import java.util.UUID;
+import java.util.function.BiFunction;
 import java.util.function.Consumer;
 
 import org.apache.commons.lang3.StringUtils;
@@ -14,6 +16,7 @@ import com.google.common.cache.CacheLoader;
 import com.google.common.cache.LoadingCache;
 import com.google.common.collect.Maps;
 import com.tencentcloud.spring.boot.TencentTimProperties;
+import com.tencentcloud.spring.boot.tim.resp.ApiResponse;
 import com.tencentyun.TLSSigAPIv2;
 
 import lombok.extern.slf4j.Slf4j;
@@ -118,12 +121,8 @@ public class TencentTimTemplate {
 		log.info("im参数   {}", pathParams);
 		return pathParams;
 	}
-
-	public <T> T request(String url, Object params, Class<T> cls) {
-		return toBean(requestInvoke(url, params), cls);
-	}
-
-	public <T> T toBean(String json, Class<T> cls) {
+	
+	public <T> T readValue(String json, Class<T> cls) {
 		try {
 			return objectMapper.readValue(json, cls);
 		} catch (IOException e) {
@@ -131,24 +130,58 @@ public class TencentTimTemplate {
 		}
 		return null;
 	}
-
-	public String requestInvoke(String url, Object params) {
+	
+	public <T> T requestInvoke(String url, Object params, Class<T> cls) {
+		Optional<T> optional = this.requestInvoke(url, params, (start, response) -> {
+			if (response.isSuccessful()) {
+				try {
+					String body = response.body().string();
+					log.debug("Request Success: code : {}, body : {} , use time : {} ", response.code(), body , System.currentTimeMillis() - start);
+					return objectMapper.readValue(body, cls);
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
+            }
+			return null;
+		});
+		return optional.isPresent() ? optional.get() : null;
+	}
+	
+	public <T> Optional<T> requestInvoke(String url, Object params, BiFunction<Long, Response, T> function ) {
 		long start = System.currentTimeMillis();
-		String content = null;
 		try {
 			RequestBody requestBody = RequestBody.create(MediaType.parse(APPLICATION_JSON_VALUE),
 					objectMapper.writeValueAsString(params));
 			Request request = new Request.Builder().url(url).post(requestBody).build();
-			Response response = okhttp3Client.newCall(request).execute();
-			if (response.isSuccessful()) {
-                content = response.body().string();
-                log.debug("Request Success: code : {}, body : {} , use time : {} ", response.code(), content , System.currentTimeMillis() - start);
-                return content;
-            }
+			try(Response response = okhttp3Client.newCall(request).execute();) {
+				log.debug("Request Success: code : {}, use time : {} ", response.code(), System.currentTimeMillis() - start);
+				if (response.isSuccessful()) {
+					return Optional.ofNullable(function.apply(start, response));
+	            }
+			}
 		} catch (Exception e) {
 			log.error("Request Failure : {}, use time : {} ", e.getMessage(), System.currentTimeMillis() - start);
 		}
-		return content;
+		return Optional.empty();
+	}
+	
+	public <T extends ApiResponse> void requestAsyncInvoke(String url, Object params, Class<T> cls, Consumer<T> consumer) {
+		this.requestAsyncInvoke(url, params, (response) -> {
+			if (response.isSuccessful()) {
+				try {
+					String body = response.body().string();
+					T res = objectMapper.readValue(body, cls);
+					if (res.isSuccess()) {
+						log.debug("Request Success, ActionStatus : {}, Body : {}", res.getActionStatus(), body);
+					} else {
+						log.error("Request Failure, ActionStatus : {}, ErrorCode : {}, ErrorInfo : {}", res.getActionStatus(), res.getErrorCode(), res.getErrorInfo());
+					}
+					consumer.accept(res);
+				} catch (IOException e) {
+					log.error(e.getMessage());
+				}
+            }
+		});
 	}
 	
 	public void requestAsyncInvoke(String url, Object params, Consumer<Response> consumer) {

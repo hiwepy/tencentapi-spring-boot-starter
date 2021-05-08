@@ -15,7 +15,6 @@
  */
 package com.tencentcloud.spring.boot.tim;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -28,9 +27,6 @@ import com.google.common.collect.ImmutableMap;
 import com.tencentcloud.spring.boot.tim.resp.UserProfilePortraitGetResponse;
 import com.tencentcloud.spring.boot.tim.resp.UserProfilePortraitSetResponse;
 
-import lombok.extern.slf4j.Slf4j;
-
-@Slf4j
 public class TencentTimProfileAsyncOperations extends TencentTimProfileOperations {
 
 	public TencentTimProfileAsyncOperations(TencentTimTemplate timTemplate) {
@@ -43,14 +39,13 @@ public class TencentTimProfileAsyncOperations extends TencentTimProfileOperation
 	 * @param userId 业务用户ID
 	 * @param nickname 用户昵称
 	 * @param avatar 用户头像
+	 * @param consumer 响应处理回调函数
 	 */
-	public void asyncPortraitSet(String userId, String nickname, String avatar) {
-		
+	public void asyncPortraitSet(String userId, String nickname, String avatar, Consumer<UserProfilePortraitSetResponse> consumer) {
 		Map<String, String> profile = new HashMap<>();
 		profile.put("Tag_Profile_IM_Nick", nickname);
 		profile.put("Tag_Profile_IM_Image", avatar);
-		this.asyncPortraitSet(userId, profile);
-		
+		this.asyncPortraitSet(userId, profile, consumer);
 	}
 	
 	/**
@@ -58,9 +53,9 @@ public class TencentTimProfileAsyncOperations extends TencentTimProfileOperation
 	 * API：https://cloud.tencent.com/document/product/269/1640
 	 * @param userId 业务用户ID
 	 * @param profile 用户资料
-	 * @return 操作结果
+	 * @param consumer 响应处理回调函数
 	 */
-	public void asyncPortraitSet(String userId, Map<String, String> profile) {
+	public void asyncPortraitSet(String userId, Map<String, String> profile, Consumer<UserProfilePortraitSetResponse> consumer) {
 		Map<String, Object> requestBody = new ImmutableMap.Builder<String, Object>()
 				.put("From_Account", String.valueOf(userId))
 				.put("ProfileItem", profile.entrySet().stream().map(entry -> {
@@ -70,21 +65,7 @@ public class TencentTimProfileAsyncOperations extends TencentTimProfileOperation
 					return hashMap;
 				}).collect(Collectors.toList()))
 				.build();
-		this.asyncRequest(TimApiAddress.PORTRAIT_SET.getValue() + joiner.join(getDefaultParams()), requestBody, (response) -> {
-			if (response.isSuccessful()) {
-                try {
-					String content = response.body().string();
-					UserProfilePortraitSetResponse res = getTimTemplate().toBean(content, UserProfilePortraitSetResponse.class);
-					if (res.isSuccess()) {
-						log.debug("设置资料成功, response message is: {}", res);
-					} else {
-						log.error("设置资料失败, response message is: {}", res);
-					}
-				} catch (IOException e) {
-					e.printStackTrace();
-				}
-            }
-		});
+		this.asyncRequest(TimApiAddress.PORTRAIT_SET, requestBody, UserProfilePortraitSetResponse.class, consumer);
 	}
 	
 	/**
@@ -121,23 +102,9 @@ public class TencentTimProfileAsyncOperations extends TencentTimProfileOperation
 	public void asyncPortraitGet(String[] userIds, List<String> tagList, Consumer<UserProfilePortraitGetResponse> consumer ) {
 		Map<String, Object> requestBody = new ImmutableMap.Builder<String, Object>()
 				.put("To_Account", Stream.of(userIds).map(uid -> this.getImUserByUserId(uid)).collect(Collectors.toList()))
-				.put("TagList", tagList).build();
-		this.asyncRequest(TimApiAddress.PORTRAIT_GET.getValue() + joiner.join(getDefaultParams()), requestBody, (response) -> {
-			if (response.isSuccessful()) {
-                try {
-					String content = response.body().string();
-					UserProfilePortraitGetResponse res = getTimTemplate().toBean(content, UserProfilePortraitGetResponse.class);
-					if (res.isSuccess()) {
-						log.debug("获取信息成功, response message is: {}", res);
-						consumer.accept(res);
-					} else {
-						log.error("获取信息失败, response message is: {}", res);
-					}
-				} catch (IOException e) {
-					e.printStackTrace();
-				}
-            }
-		});
+				.put("TagList", tagList)
+				.build();
+		this.asyncRequest(TimApiAddress.PORTRAIT_GET, requestBody, UserProfilePortraitGetResponse.class, consumer);
 	}
 	
 }
