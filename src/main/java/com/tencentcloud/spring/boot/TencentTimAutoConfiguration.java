@@ -10,6 +10,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 import com.tencentcloud.spring.boot.tim.TencentTimTemplate;
+import com.tencentcloud.spring.boot.tim.TimUserIdProvider;
 import com.tencentyun.TLSSigAPIv2;
 
 import okhttp3.ConnectionPool;
@@ -21,11 +22,14 @@ import okhttp3.OkHttpClient;
 @EnableConfigurationProperties({ TencentTimProperties.class, TencentOkHttp3Properties.class })
 public class TencentTimAutoConfiguration {
 	
+	
+	
 	@Bean
 	public TencentTimTemplate tencentTimTemplate(
 			TencentTimProperties timProperties,
 			TencentOkHttp3Properties okHttp3Properties,
-			ObjectProvider<OkHttpClient> okhttp3ClientProvider) {
+			ObjectProvider<OkHttpClient> okhttp3ClientProvider,
+			ObjectProvider<TimUserIdProvider> timUserIdProvider) {
 		
 		OkHttpClient okhttp3Client = okhttp3ClientProvider.getIfAvailable(() -> { 
 			
@@ -44,8 +48,10 @@ public class TencentTimAutoConfiguration {
 	        return builder.build();
 	        
 		});
-
-		return new TencentTimTemplate(timProperties, okhttp3Client);
+		
+		return new TencentTimTemplate(timProperties, okhttp3Client, timUserIdProvider.getIfAvailable(() -> {
+			return new TimUserIdProvider() {};
+		}));
 	}
 
 }

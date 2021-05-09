@@ -4,6 +4,10 @@ import lombok.Data;
 
 @Data
 public class CustomMsgData {
+	
 	private Integer type;
+	
 	private MsgData data;
+	
 }
+

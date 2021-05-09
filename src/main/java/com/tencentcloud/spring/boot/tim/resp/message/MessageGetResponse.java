@@ -4,7 +4,6 @@ import java.util.List;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.tencentcloud.spring.boot.tim.req.message.MessageItem;
 import com.tencentcloud.spring.boot.tim.resp.TimActionResponse;
 
 import lombok.Data;

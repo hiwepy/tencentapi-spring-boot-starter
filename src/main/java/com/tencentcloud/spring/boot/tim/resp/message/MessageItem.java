@@ -13,12 +13,13 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  */
-package com.tencentcloud.spring.boot.tim.req.message;
+package com.tencentcloud.spring.boot.tim.resp.message;
 
 import java.util.List;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.tencentcloud.spring.boot.tim.req.message.MsgBody;
 
 import lombok.Data;
 

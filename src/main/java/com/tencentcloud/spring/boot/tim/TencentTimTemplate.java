@@ -8,8 +8,6 @@ import java.util.UUID;
 import java.util.function.BiFunction;
 import java.util.function.Consumer;
 
-import org.apache.commons.lang3.StringUtils;
-
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.common.cache.CacheBuilder;
 import com.google.common.cache.CacheLoader;
@@ -49,6 +47,7 @@ public class TencentTimTemplate {
 	private TencentTimProperties timProperties;
 	private TLSSigAPIv2 tlsSigAPIv2;
 	private OkHttpClient okhttp3Client;
+	private TimUserIdProvider timUserIdProvider;
 
 	private final TencentTimAccountAsyncOperations accountOps = new TencentTimAccountAsyncOperations(this);
 	private final TencentTimAllMemberPushAsyncOperations pushOps = new TencentTimAllMemberPushAsyncOperations(this);
@@ -59,16 +58,17 @@ public class TencentTimTemplate {
 	private final TencentTimSnsAsyncOperations snsOps = new TencentTimSnsAsyncOperations(this);
 	private LoadingCache<String, String> tlsSigCache;
 	
-	public TencentTimTemplate(TencentTimProperties timProperties, OkHttpClient okhttp3Client) {
+	public TencentTimTemplate(TencentTimProperties timProperties, OkHttpClient okhttp3Client, TimUserIdProvider timUserIdProvider) {
 		this(timProperties, new TLSSigAPIv2(timProperties.getSdkappid(), timProperties.getPrivateKey()),
-				okhttp3Client);
+				okhttp3Client, timUserIdProvider);
 	}
 
 	public TencentTimTemplate(TencentTimProperties timProperties, TLSSigAPIv2 tlsSigAPIv2,
-			OkHttpClient okhttp3Client) {
+			OkHttpClient okhttp3Client, TimUserIdProvider timUserIdProvider) {
 		this.timProperties = timProperties;
 		this.tlsSigAPIv2 = tlsSigAPIv2;
 		this.okhttp3Client = okhttp3Client;
+		this.timUserIdProvider = timUserIdProvider;
 		this.tlsSigCache = CacheBuilder.newBuilder()
 						.expireAfterWrite(Duration.ofSeconds(Math.max(timProperties.getExpire() - 60, 60)))
 						.build(new CacheLoader<String, String>() {
@@ -133,7 +133,6 @@ public class TencentTimTemplate {
 		pathParams.put(SDKAPPID, timProperties.getSdkappid().toString());
 		pathParams.put(RANDOM, UUID.randomUUID().toString().replace("-", "").toLowerCase());
 		pathParams.put(CONTENTTYPE, CONTENTTYPE_JSON);
-		log.info("im参数   {}", pathParams);
 		return pathParams;
 	}
 	
@@ -165,6 +164,8 @@ public class TencentTimTemplate {
 	public <T> Optional<T> requestInvoke(String url, Object params, BiFunction<Long, Response, T> function ) {
 		long start = System.currentTimeMillis();
 		try {
+			log.info("Request URL : {}", url);
+			log.info("Request Params : {}", params);
 			RequestBody requestBody = RequestBody.create(MediaType.parse(APPLICATION_JSON_VALUE),
 					objectMapper.writeValueAsString(params));
 			Request request = new Request.Builder().url(url).post(requestBody).build();
@@ -228,15 +229,13 @@ public class TencentTimTemplate {
 			log.error("请求异常", e);
 		}
 	}
-
-	public String getUserIdByImUser(String imUser) {
-		if (!StringUtils.isNumeric(imUser)) {
-		}
-		return imUser;
+	
+	public String getUserIdByImUser(String account) {
+		return timUserIdProvider.getUserIdByImUser(timProperties.getSdkappid(), account);
 	}
 
 	public String getImUserByUserId(String userId) {
-		return String.valueOf(userId);
+		return timUserIdProvider.getImUserByUserId(timProperties.getSdkappid(), userId);
 	}
 
 }

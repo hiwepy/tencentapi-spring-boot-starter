@@ -25,5 +25,11 @@ public class UserProfilePortraitGetResponse extends TimActionResponse  {
 	 */
 	@JsonProperty("Fail_Account")
 	private List<String> failAccounts;
+
+	/**
+	 * 返回处理失败的用户列表，仅当存在失败用户时才返回该字段
+	 */
+	@JsonProperty("CurrentStandardSequence")
+	private Integer currentStandardSequence;
 	
 }
