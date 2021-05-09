@@ -20,8 +20,9 @@ import java.util.function.Consumer;
 
 import com.google.common.collect.ImmutableMap;
 import com.tencentcloud.spring.boot.tim.resp.ApiResponse;
+import com.tencentcloud.spring.boot.tim.resp.NoSpeakingResponse;
 
-public class TencentTimNospeakingAsyncOperations extends TencentTimSnsOperations {
+public class TencentTimNospeakingAsyncOperations extends TencentTimNospeakingOperations {
 
 	public TencentTimNospeakingAsyncOperations(TencentTimTemplate timTemplate) {
 		super(timTemplate);
@@ -35,13 +36,27 @@ public class TencentTimNospeakingAsyncOperations extends TencentTimSnsOperations
 	 * @param groupmsgNospeakingTime 群组消息禁言时长，单位为秒，非负整数。等于0代表没有被设置禁言；等于最大值4294967295（十六进制 0xFFFFFFFF）代表被设置永久禁言；其它代表该帐号禁言时长，如果等于3600表示该帐号被禁言一小时
 	 * @param consumer 响应处理回调函数
 	 */
-	public void asyncSetNoSpeaking(String userId, Integer c2CmsgNospeakingTime, Integer groupmsgNospeakingTime, Consumer<ApiResponse> consumer) {
+	public void asyncSetNoSpeaking(String userId, Integer c2CmsgNospeakingTime, Integer groupmsgNospeakingTime, 
+			Consumer<ApiResponse> consumer) {
 		Map<String, Object> requestBody = new ImmutableMap.Builder<String, Object>()
 				.put("Set_Account", this.getImUserByUserId(userId))
 				.put("C2CmsgNospeakingTime", c2CmsgNospeakingTime)
 				.put("GroupmsgNospeakingTime", groupmsgNospeakingTime)
 				.build();
 		this.asyncRequest(TimApiAddress.SET_NO_SPEAKING, requestBody, ApiResponse.class, consumer);
+	}
+	
+	/**
+	 * 2、查询全局禁言
+	 * API：https://cloud.tencent.com/document/product/269/4229
+	 * @param userId 查询禁言信息的帐号的业务用户ID
+	 * @param consumer 响应处理回调函数
+	 */
+	public void asyncGetNoSpeaking(String userId, Consumer<NoSpeakingResponse> consumer) {
+		Map<String, Object> requestBody = new ImmutableMap.Builder<String, Object>()
+				.put("Get_Account", this.getImUserByUserId(userId))
+				.build();
+		this.asyncRequest(TimApiAddress.GET_NO_SPEAKING, requestBody, NoSpeakingResponse.class, consumer);
 	}
 
 }

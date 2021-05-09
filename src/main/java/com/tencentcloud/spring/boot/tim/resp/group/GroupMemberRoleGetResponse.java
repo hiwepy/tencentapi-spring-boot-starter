@@ -13,44 +13,43 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  */
-package com.tencentcloud.spring.boot.tim.req.sns;
+package com.tencentcloud.spring.boot.tim.resp.group;
 
 import java.util.List;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.tencentcloud.spring.boot.tim.resp.ApiResponse;
 
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 
-@JsonInclude(JsonInclude.Include.NON_NULL)
 @Data
-public class FriendUpdateItem {
+@EqualsAndHashCode(callSuper=false)
+@JsonInclude( JsonInclude.Include.NON_NULL)
+public class GroupMemberRoleGetResponse extends ApiResponse {
 
 	/**
-	 * 好友的 UserID
-	 */
-	@JsonProperty("To_Account")
-	private String account;
-	/**
-	 * 需要更新的关系链数据对象数组
-	 */
-	@JsonProperty("SnsItem")
-	private List<SnsItem> customItem;
-		
+	 * 拉取到的成员角色，包括：Owner(群主)，Admin(群管理员)，Member(普通群成员），NotMember(非群成员)
+	 */ 
+	@JsonProperty("UserIdList")
+	private List<GroupMemberRole> userIdList;
+	
 	@JsonInclude( JsonInclude.Include.NON_NULL)
 	@Data
-	public class SnsItem {
+	public class GroupMemberRole {
 	
-		/**
-		 * 需要更新的关系链字段的字段名，目前只支持好友备注、好友分组、关系链自定义字段的更新操作，关系链字段的详细信息可参见 好友表
-		 */
-		@JsonProperty("Tag")
-		private String tag;
-		/**
-		 * 需要更新的关系链字段的值，关系链字段的值类型信息可参见 好友表
-		 */
-		@JsonProperty("Value")
-		private Object value;
-	}
+	    /**
+	     * 成员ID
+	     */
+	    @JsonProperty("Member_Account")
+	    private String account;
 
+	    /**
+	     * 成员角色：Owner/Admin/Member/NotMember
+	     */
+	    @JsonProperty("Role")
+	    private String role;
+	}
+	
 }

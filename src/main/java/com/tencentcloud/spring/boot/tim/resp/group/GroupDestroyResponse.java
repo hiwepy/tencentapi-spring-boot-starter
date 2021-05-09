@@ -13,26 +13,17 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  */
-package com.tencentcloud.spring.boot.tim.req.sns;
+package com.tencentcloud.spring.boot.tim.resp.group;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
-import com.fasterxml.jackson.annotation.JsonProperty;
+import com.tencentcloud.spring.boot.tim.resp.ApiResponse;
 
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 
-@JsonInclude( JsonInclude.Include.NON_NULL)
 @Data
-public class CustomItem {
-
-	/**
-	 * 自定义好友字段的名称，使用前请通过即时通信 IM 控制台 >【应用配置】>【功能配置】申请自定义好友字段
-	 */
-	@JsonProperty("Tag")
-	private String tag;
-	/**
-	 * 自定义好友字段的值
-	 */
-	@JsonProperty("Value")
-	private String value;
+@EqualsAndHashCode(callSuper=false)
+@JsonInclude( JsonInclude.Include.NON_NULL)
+public class GroupDestroyResponse extends ApiResponse {
 	
 }

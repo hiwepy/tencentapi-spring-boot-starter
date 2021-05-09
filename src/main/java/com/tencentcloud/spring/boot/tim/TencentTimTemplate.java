@@ -51,6 +51,9 @@ public class TencentTimTemplate {
 	private OkHttpClient okhttp3Client;
 
 	private final TencentTimAccountAsyncOperations accountOps = new TencentTimAccountAsyncOperations(this);
+	private final TencentTimAllMemberPushAsyncOperations pushOps = new TencentTimAllMemberPushAsyncOperations(this);
+	private final TencentTimGroupAsyncOperations groupOps = new TencentTimGroupAsyncOperations(this);
+	private final TencentTimNospeakingAsyncOperations noSpeakingOps = new TencentTimNospeakingAsyncOperations(this);
 	private final TencentTimOpenimAsyncOperations imOps = new TencentTimOpenimAsyncOperations(this);
 	private final TencentTimProfileAsyncOperations profileOps = new TencentTimProfileAsyncOperations(this);
 	private final TencentTimSnsAsyncOperations snsOps = new TencentTimSnsAsyncOperations(this);
@@ -83,6 +86,18 @@ public class TencentTimTemplate {
 		return accountOps;
 	}
 
+	public TencentTimAllMemberPushAsyncOperations getPushOps() {
+		return pushOps;
+	}
+	
+	public TencentTimGroupAsyncOperations getGroupOps() {
+		return groupOps;
+	}
+	
+	public TencentTimNospeakingAsyncOperations getNoSpeakingOps() {
+		return noSpeakingOps;
+	}
+	
 	public TencentTimOpenimAsyncOperations opsForOpenim() {
 		return imOps;
 	}

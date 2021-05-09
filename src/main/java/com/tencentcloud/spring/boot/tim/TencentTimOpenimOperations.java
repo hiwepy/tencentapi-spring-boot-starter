@@ -176,7 +176,7 @@ public class TencentTimOpenimOperations extends TencentTimOperations {
      * e、该接口不会检查发送者和接收者的好友关系（包括黑名单），同时不会检查接收者是否被禁言。
      * API：https://cloud.tencent.com/document/product/269/1612
 	 * @param userIds 业务用户ID
-	 * @param msgBody 消息体
+	 * @param msgBody 消息体，详细可参阅 消息格式描述
 	 * @return 操作结果
 	 */
 	public TimActionResponse sendMsg(List<String> userIds, MsgBody... msgBody) {

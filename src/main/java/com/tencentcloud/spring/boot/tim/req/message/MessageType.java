@@ -19,4 +19,9 @@ public enum MessageType {
     public String getValue(){
         return this.value;
     }
+    
+	public String getDesc() {
+		return desc;
+	}
+	
 }

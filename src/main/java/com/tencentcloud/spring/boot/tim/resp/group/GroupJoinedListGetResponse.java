@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2018, vindell (https://github.com/vindell).
+ * Copyright (c) 2018, hiwepy (https://github.com/hiwepy).
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not
  * use this file except in compliance with the License. You may obtain a copy of
@@ -13,25 +13,33 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  */
-package com.tencentcloud.spring.boot.tim.req.sns;
+package com.tencentcloud.spring.boot.tim.resp.group;
+
+import java.util.List;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.tencentcloud.spring.boot.tim.req.group.GroupMember;
+import com.tencentcloud.spring.boot.tim.resp.ApiResponse;
 
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 
-@JsonInclude( JsonInclude.Include.NON_NULL)
 @Data
-public class SnsItem {
-
+@EqualsAndHashCode(callSuper=false)
+@JsonInclude( JsonInclude.Include.NON_NULL)
+public class GroupJoinedListGetResponse extends ApiResponse {
+	
 	/**
-	 * 需要更新的关系链字段的字段名，目前只支持好友备注、好友分组、关系链自定义字段的更新操作，关系链字段的详细信息可参见 好友表
+	 * 本群组的群成员总数
 	 */
-	@JsonProperty("Tag")
-	private String tag;
+	@JsonProperty("MemberNum")
+	private Integer memberNum;
+	
 	/**
-	 * 需要更新的关系链字段的值，关系链字段的值类型信息可参见 好友表
-	 */
-	@JsonProperty("Value")
-	private Object value;
+	 * 群成员列表 
+	 */ 
+	@JsonProperty("MemberList")
+	private List<GroupMember> members;
+	
 }

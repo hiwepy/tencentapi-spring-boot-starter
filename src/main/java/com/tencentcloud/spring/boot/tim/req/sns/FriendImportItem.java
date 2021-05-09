@@ -66,5 +66,22 @@ public class FriendImportItem {
 	 */
 	@JsonProperty("CustomItem")
 	private List<CustomItem> customItem;
+	
+	@JsonInclude( JsonInclude.Include.NON_NULL)
+	@Data
+	public class CustomItem {
+	
+		/**
+		 * 自定义好友字段的名称，使用前请通过即时通信 IM 控制台 >【应用配置】>【功能配置】申请自定义好友字段
+		 */
+		@JsonProperty("Tag")
+		private String tag;
+		/**
+		 * 自定义好友字段的值
+		 */
+		@JsonProperty("Value")
+		private String value;
+		
+	}
 
 }

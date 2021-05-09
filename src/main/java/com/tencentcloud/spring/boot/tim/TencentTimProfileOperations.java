@@ -60,7 +60,7 @@ public class TencentTimProfileOperations extends TencentTimOperations {
 	 */
 	public UserProfilePortraitSetResponse portraitSet(String userId, Map<String, String> profile) {
 		Map<String, Object> requestBody = new ImmutableMap.Builder<String, Object>()
-				.put("From_Account", String.valueOf(userId))
+				.put("From_Account", this.getImUserByUserId(userId))
 				.put("ProfileItem", profile.entrySet().stream().map(entry -> {
 					HashMap<String, String> hashMap = new HashMap<>();
 					hashMap.put("Tag", entry.getKey());

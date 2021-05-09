@@ -11,49 +11,43 @@ import lombok.Data;
 
 @JsonInclude( JsonInclude.Include.NON_NULL)
 @Data
-public class GroupMember {
+public class GroupMemberModify {
 
     /**
-     * 成员（必填）
+     * 要操作的群组（必填）
+     */
+    @JsonProperty("GroupId")
+    private String groupId;
+    
+    /**
+     * 要操作的群成员（必填）
      */
     @JsonProperty("Member_Account")
-    private String memberAccount;
+    private String account;
 
     /**
-     * 赋予该成员的身份，目前备选项只有Admin（选填）
+     * 成员身份，Admin/Member 分别为设置/取消管理员
      */
     @JsonProperty("Role")
     private String role;
-
-    /**
-     * 入群时间（UTC 时间）
-     */
-    @JsonProperty("JoinTime")
-    private Long joinTime;
-    
-    /**
-	 * 消息的序列值
-	 */
-	@JsonProperty("MsgSeq")
-	private Long msgSeq;
 	
     /**
 	 * 消息屏蔽选项
 	 */
 	@JsonProperty("MsgFlag")
 	private String msgFlag;
-	
-    /**
-	 * 最后发言时间（UTC 时间）
-	 */
-	@JsonProperty("LastSendMsgTime")
-	private Long lastSendMsgTime;
 
     /**
-	 * 禁言截止时间（UTC 时间）
+	 * 群名片（最大不超过50个字节）
 	 */
-	@JsonProperty("ShutUpUntil")
-	private Long shutUpUntil;
+	@JsonProperty("NameCard")
+	private String nameCard;
+	
+    /**
+	 * 需禁言时间，单位为秒，0表示取消禁言
+	 */
+	@JsonProperty("ShutUpTime")
+	private Long shutUpTime;
 
     /**
      * 群成员维度的自定义字段，默认情况是没有的，可以通过 即时通信 IM 控制台 进行配置，详情请参阅 自定义字段

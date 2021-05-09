@@ -3,10 +3,13 @@ package com.tencentcloud.spring.boot.tim.req.group;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
+import lombok.Data;
+
 /**
  * 群组信息
  */
 @JsonInclude( JsonInclude.Include.NON_NULL)
+@Data
 public class GroupsQuery {
 
     /**

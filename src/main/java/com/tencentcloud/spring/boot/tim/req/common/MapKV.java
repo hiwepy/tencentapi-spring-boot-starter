@@ -2,9 +2,12 @@ package com.tencentcloud.spring.boot.tim.req.common;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
+import lombok.Data;
+
 /**
  * 公用K V
  */
+@Data
 public class MapKV {
 
     @JsonProperty("Key")
@@ -13,19 +16,4 @@ public class MapKV {
     @JsonProperty("Value")
     private  String value;
 
-    public String getKey() {
-        return key;
-    }
-
-    public void setKey(String key) {
-        this.key = key;
-    }
-
-    public String getValue() {
-        return value;
-    }
-
-    public void setValue(String value) {
-        this.value = value;
-    }
 }
