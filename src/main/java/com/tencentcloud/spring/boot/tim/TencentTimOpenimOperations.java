@@ -25,8 +25,8 @@ import com.google.common.collect.ImmutableMap;
 import com.tencentcloud.spring.boot.tim.req.message.BatchMessage;
 import com.tencentcloud.spring.boot.tim.req.message.Message;
 import com.tencentcloud.spring.boot.tim.req.message.MsgBody;
-import com.tencentcloud.spring.boot.tim.resp.MessageQueryResponse;
 import com.tencentcloud.spring.boot.tim.resp.TimActionResponse;
+import com.tencentcloud.spring.boot.tim.resp.message.MessageGetResponse;
 
 /**
  * 2、单聊信息
@@ -342,7 +342,7 @@ public class TencentTimOpenimOperations extends TencentTimOperations {
 	 * @param maxTime 请求的消息时间范围的最大值
 	 * @return 操作结果
 	 */
-	public MessageQueryResponse getMsgs(String fromUid, String userId, int maxCnt, int minTime, int maxTime) {
+	public MessageGetResponse getMsgs(String fromUid, String userId, int maxCnt, int minTime, int maxTime) {
 		Map<String, Object> requestBody = new ImmutableMap.Builder<String, Object>()
 				.put("From_Account", getImUserByUserId(fromUid))
 				.put("To_Account", getImUserByUserId(userId))
@@ -350,7 +350,7 @@ public class TencentTimOpenimOperations extends TencentTimOperations {
 				.put("MinTime", minTime)
 				.put("MaxTime", maxTime)
 				.build();
-		return super.request(TimApiAddress.ADMIN_GET_ROAMMSG, requestBody, MessageQueryResponse.class);
+		return super.request(TimApiAddress.ADMIN_GET_ROAMMSG, requestBody, MessageGetResponse.class);
 	}
 	
 	/**
@@ -364,7 +364,7 @@ public class TencentTimOpenimOperations extends TencentTimOperations {
 	 * @param lastMsgKey 上一次拉取到的最后一条消息的 MsgKey，续拉时需要填该字段，填写方法见上方 
 	 * @return 操作结果
 	 */
-	public MessageQueryResponse getMsgs(String fromUid, String userId, int maxCnt, int minTime, int maxTime, String lastMsgKey) {
+	public MessageGetResponse getMsgs(String fromUid, String userId, int maxCnt, int minTime, int maxTime, String lastMsgKey) {
 		Map<String, Object> requestBody = new ImmutableMap.Builder<String, Object>()
 				.put("From_Account", getImUserByUserId(fromUid))
 				.put("To_Account", getImUserByUserId(userId))
@@ -373,7 +373,7 @@ public class TencentTimOpenimOperations extends TencentTimOperations {
 				.put("MaxTime", maxTime)
 				.put("LastMsgKey", lastMsgKey)
 				.build();
-		return super.request(TimApiAddress.ADMIN_GET_ROAMMSG, requestBody, MessageQueryResponse.class);
+		return super.request(TimApiAddress.ADMIN_GET_ROAMMSG, requestBody, MessageGetResponse.class);
 	}
 	
 	/**

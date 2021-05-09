@@ -24,8 +24,8 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import com.google.common.collect.ImmutableMap;
-import com.tencentcloud.spring.boot.tim.resp.UserProfilePortraitGetResponse;
-import com.tencentcloud.spring.boot.tim.resp.UserProfilePortraitSetResponse;
+import com.tencentcloud.spring.boot.tim.resp.profile.UserProfilePortraitGetResponse;
+import com.tencentcloud.spring.boot.tim.resp.profile.UserProfilePortraitSetResponse;
 
 public class TencentTimProfileAsyncOperations extends TencentTimProfileOperations {
 

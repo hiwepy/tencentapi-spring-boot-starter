@@ -3,8 +3,8 @@ package com.tencentcloud.spring.boot.tim;
 import java.util.Map;
 
 import com.google.common.collect.ImmutableMap;
-import com.tencentcloud.spring.boot.tim.resp.ApiResponse;
-import com.tencentcloud.spring.boot.tim.resp.NoSpeakingResponse;
+import com.tencentcloud.spring.boot.tim.resp.TimActionResponse;
+import com.tencentcloud.spring.boot.tim.resp.nospeaking.NoSpeakingResponse;
 
 /**
  * 全局禁言管理
@@ -24,13 +24,13 @@ public class TencentTimNospeakingOperations extends TencentTimOperations {
 	 * @param groupmsgNospeakingTime 群组消息禁言时长，单位为秒，非负整数。等于0代表没有被设置禁言；等于最大值4294967295（十六进制 0xFFFFFFFF）代表被设置永久禁言；其它代表该帐号禁言时长，如果等于3600表示该帐号被禁言一小时
 	 * @return 操作结果
 	 */
-	public ApiResponse setNoSpeaking(String userId, Integer c2CmsgNospeakingTime, Integer groupmsgNospeakingTime) {
+	public TimActionResponse setNoSpeaking(String userId, Integer c2CmsgNospeakingTime, Integer groupmsgNospeakingTime) {
 		Map<String, Object> requestBody = new ImmutableMap.Builder<String, Object>()
 				.put("Set_Account", this.getImUserByUserId(userId))
 				.put("C2CmsgNospeakingTime", c2CmsgNospeakingTime)
 				.put("GroupmsgNospeakingTime", groupmsgNospeakingTime)
 				.build();
-		return super.request(TimApiAddress.SET_NO_SPEAKING, requestBody, ApiResponse.class);
+		return super.request(TimApiAddress.SET_NO_SPEAKING, requestBody, TimActionResponse.class);
 	}
 	
 	/**

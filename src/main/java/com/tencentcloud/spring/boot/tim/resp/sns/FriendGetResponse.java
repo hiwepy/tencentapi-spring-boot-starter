@@ -19,7 +19,7 @@ import java.util.List;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.tencentcloud.spring.boot.tim.resp.ApiResponse;
+import com.tencentcloud.spring.boot.tim.resp.TimActionResponse;
 
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -27,7 +27,7 @@ import lombok.EqualsAndHashCode;
 @Data
 @EqualsAndHashCode(callSuper=false)
 @JsonInclude( JsonInclude.Include.NON_NULL)
-public class FriendGetResponse extends ApiResponse {
+public class FriendGetResponse extends TimActionResponse {
 
 	/**
 	 * 好友对象数组，每一个好友对象都包含一个 To_Account 字段和一个 ValueItem 数组

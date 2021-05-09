@@ -1,4 +1,4 @@
-package com.tencentcloud.spring.boot.tim.resp;
+package com.tencentcloud.spring.boot.tim.resp.push;
 
 import java.util.List;
 

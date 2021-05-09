@@ -19,7 +19,7 @@ import java.io.IOException;
 import java.util.Map;
 import java.util.function.Consumer;
 
-import com.tencentcloud.spring.boot.tim.resp.ApiResponse;
+import com.tencentcloud.spring.boot.tim.resp.TimActionResponse;
 import com.tencentcloud.spring.boot.utils.CommonHelper;
 
 import lombok.extern.slf4j.Slf4j;
@@ -77,7 +77,7 @@ public abstract class TencentTimOperations {
 		return getTimTemplate().getDefaultParams();
 	}
 	
-	protected <T extends ApiResponse> T request(TimApiAddress address, Object params, Class<T> cls) {
+	protected <T extends TimActionResponse> T request(TimApiAddress address, Object params, Class<T> cls) {
 		String url = CommonHelper.getRequestUrl(address, getDefaultParams());
 		T res =  getTimTemplate().requestInvoke(url, params, cls);
 		if (res.isSuccess()) {
@@ -88,7 +88,7 @@ public abstract class TencentTimOperations {
 		return res;
 	}
 	
-	protected <T extends ApiResponse> void asyncRequest(TimApiAddress address, Object params, Class<T> cls, Consumer<T> consumer) {
+	protected <T extends TimActionResponse> void asyncRequest(TimApiAddress address, Object params, Class<T> cls, Consumer<T> consumer) {
 		String url = CommonHelper.getRequestUrl(address, getDefaultParams());
 		getTimTemplate().requestAsyncInvoke(url, params, (response) -> {
 			if (response.isSuccessful()) {

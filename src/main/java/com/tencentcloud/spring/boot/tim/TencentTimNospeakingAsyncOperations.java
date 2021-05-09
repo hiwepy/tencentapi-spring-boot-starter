@@ -19,8 +19,8 @@ import java.util.Map;
 import java.util.function.Consumer;
 
 import com.google.common.collect.ImmutableMap;
-import com.tencentcloud.spring.boot.tim.resp.ApiResponse;
-import com.tencentcloud.spring.boot.tim.resp.NoSpeakingResponse;
+import com.tencentcloud.spring.boot.tim.resp.TimActionResponse;
+import com.tencentcloud.spring.boot.tim.resp.nospeaking.NoSpeakingResponse;
 
 public class TencentTimNospeakingAsyncOperations extends TencentTimNospeakingOperations {
 
@@ -37,13 +37,13 @@ public class TencentTimNospeakingAsyncOperations extends TencentTimNospeakingOpe
 	 * @param consumer 响应处理回调函数
 	 */
 	public void asyncSetNoSpeaking(String userId, Integer c2CmsgNospeakingTime, Integer groupmsgNospeakingTime, 
-			Consumer<ApiResponse> consumer) {
+			Consumer<TimActionResponse> consumer) {
 		Map<String, Object> requestBody = new ImmutableMap.Builder<String, Object>()
 				.put("Set_Account", this.getImUserByUserId(userId))
 				.put("C2CmsgNospeakingTime", c2CmsgNospeakingTime)
 				.put("GroupmsgNospeakingTime", groupmsgNospeakingTime)
 				.build();
-		this.asyncRequest(TimApiAddress.SET_NO_SPEAKING, requestBody, ApiResponse.class, consumer);
+		this.asyncRequest(TimApiAddress.SET_NO_SPEAKING, requestBody, TimActionResponse.class, consumer);
 	}
 	
 	/**

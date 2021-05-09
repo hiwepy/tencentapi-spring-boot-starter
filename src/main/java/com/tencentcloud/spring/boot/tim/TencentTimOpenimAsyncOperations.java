@@ -26,8 +26,8 @@ import com.google.common.collect.ImmutableMap;
 import com.tencentcloud.spring.boot.tim.req.message.BatchMessage;
 import com.tencentcloud.spring.boot.tim.req.message.Message;
 import com.tencentcloud.spring.boot.tim.req.message.MsgBody;
-import com.tencentcloud.spring.boot.tim.resp.MessageQueryResponse;
 import com.tencentcloud.spring.boot.tim.resp.TimActionResponse;
+import com.tencentcloud.spring.boot.tim.resp.message.MessageGetResponse;
 
 public class TencentTimOpenimAsyncOperations extends TencentTimOpenimOperations {
 
@@ -342,7 +342,7 @@ public class TencentTimOpenimAsyncOperations extends TencentTimOpenimOperations 
 	 * @param maxTime 请求的消息时间范围的最大值
 	 * @param consumer 响应处理回调函数
 	 */
-	public void asyncGetMsgs(String fromUid, String userId, int maxCnt, int minTime, int maxTime, Consumer<MessageQueryResponse> consumer) {
+	public void asyncGetMsgs(String fromUid, String userId, int maxCnt, int minTime, int maxTime, Consumer<MessageGetResponse> consumer) {
 		Map<String, Object> requestBody = new ImmutableMap.Builder<String, Object>()
 				.put("From_Account", getImUserByUserId(fromUid))
 				.put("To_Account", getImUserByUserId(userId))
@@ -350,7 +350,7 @@ public class TencentTimOpenimAsyncOperations extends TencentTimOpenimOperations 
 				.put("MinTime", minTime)
 				.put("MaxTime", maxTime)
 				.build();
-		this.asyncRequest(TimApiAddress.ADMIN_GET_ROAMMSG, requestBody, MessageQueryResponse.class, consumer);
+		this.asyncRequest(TimApiAddress.ADMIN_GET_ROAMMSG, requestBody, MessageGetResponse.class, consumer);
 	}
 	
 	/**
@@ -364,7 +364,7 @@ public class TencentTimOpenimAsyncOperations extends TencentTimOpenimOperations 
 	 * @param lastMsgKey 上一次拉取到的最后一条消息的 MsgKey，续拉时需要填该字段，填写方法见上方 
 	 * @param consumer 响应处理回调函数
 	 */
-	public void asyncGetMsgs(String fromUid, String userId, int maxCnt, int minTime, int maxTime, String lastMsgKey, Consumer<MessageQueryResponse> consumer) {
+	public void asyncGetMsgs(String fromUid, String userId, int maxCnt, int minTime, int maxTime, String lastMsgKey, Consumer<MessageGetResponse> consumer) {
 		Map<String, Object> requestBody = new ImmutableMap.Builder<String, Object>()
 				.put("From_Account", getImUserByUserId(fromUid))
 				.put("To_Account", getImUserByUserId(userId))
@@ -373,7 +373,7 @@ public class TencentTimOpenimAsyncOperations extends TencentTimOpenimOperations 
 				.put("MaxTime", maxTime)
 				.put("LastMsgKey", lastMsgKey)
 				.build();
-		this.asyncRequest(TimApiAddress.ADMIN_GET_ROAMMSG, requestBody, MessageQueryResponse.class, consumer);
+		this.asyncRequest(TimApiAddress.ADMIN_GET_ROAMMSG, requestBody, MessageGetResponse.class, consumer);
 	}
 	
 	/**

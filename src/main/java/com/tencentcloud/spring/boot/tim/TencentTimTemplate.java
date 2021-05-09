@@ -16,7 +16,7 @@ import com.google.common.cache.CacheLoader;
 import com.google.common.cache.LoadingCache;
 import com.google.common.collect.Maps;
 import com.tencentcloud.spring.boot.TencentTimProperties;
-import com.tencentcloud.spring.boot.tim.resp.ApiResponse;
+import com.tencentcloud.spring.boot.tim.resp.TimActionResponse;
 import com.tencentyun.TLSSigAPIv2;
 
 import lombok.extern.slf4j.Slf4j;
@@ -180,7 +180,7 @@ public class TencentTimTemplate {
 		return Optional.empty();
 	}
 	
-	public <T extends ApiResponse> void requestAsyncInvoke(String url, Object params, Class<T> cls, Consumer<T> consumer) {
+	public <T extends TimActionResponse> void requestAsyncInvoke(String url, Object params, Class<T> cls, Consumer<T> consumer) {
 		this.requestAsyncInvoke(url, params, (response) -> {
 			if (response.isSuccessful()) {
 				try {

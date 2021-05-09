@@ -17,7 +17,7 @@ package com.tencentcloud.spring.boot.tim.resp.group;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.tencentcloud.spring.boot.tim.resp.ApiResponse;
+import com.tencentcloud.spring.boot.tim.resp.TimActionResponse;
 
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -25,7 +25,7 @@ import lombok.EqualsAndHashCode;
 @Data
 @EqualsAndHashCode(callSuper=false)
 @JsonInclude( JsonInclude.Include.NON_NULL)
-public class GroupMemberOnlineNumGetResponse extends ApiResponse {
+public class GroupMemberOnlineNumGetResponse extends TimActionResponse {
 
 	/**
 	 * 操作的群 ID

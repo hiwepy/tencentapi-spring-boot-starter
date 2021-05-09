@@ -17,7 +17,7 @@ package com.tencentcloud.spring.boot.tim.resp.group;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.tencentcloud.spring.boot.tim.resp.ApiResponse;
+import com.tencentcloud.spring.boot.tim.resp.TimActionResponse;
 
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -25,7 +25,7 @@ import lombok.EqualsAndHashCode;
 @Data
 @EqualsAndHashCode(callSuper=false)
 @JsonInclude( JsonInclude.Include.NON_NULL)
-public class GroupCreateResponse extends ApiResponse {
+public class GroupCreateResponse extends TimActionResponse {
 
 	/**
 	 * 创建成功之后的群 ID，由即时通信 IM 后台分配

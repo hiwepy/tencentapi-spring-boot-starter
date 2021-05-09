@@ -13,25 +13,17 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  */
-package com.tencentcloud.spring.boot.tim.resp;
-
-import java.util.List;
+package com.tencentcloud.spring.boot.tim.resp.profile;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
-import com.fasterxml.jackson.annotation.JsonProperty;
-import com.tencentcloud.spring.boot.tim.resp.ops.AppInfoResult;
+import com.tencentcloud.spring.boot.tim.resp.TimActionResponse;
 
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
 @Data
-@EqualsAndHashCode(callSuper = false)
-@JsonInclude(JsonInclude.Include.NON_NULL)
-public class AppInfoResponse extends ApiResponse {
+@EqualsAndHashCode(callSuper=false)
+@JsonInclude( JsonInclude.Include.NON_NULL)
+public class UserProfilePortraitSetResponse extends TimActionResponse {
 
-	/**
-	 * 请求最近30天的运营数据
-	 */
-	@JsonProperty("Result")
-	private List<AppInfoResult> result;
 }

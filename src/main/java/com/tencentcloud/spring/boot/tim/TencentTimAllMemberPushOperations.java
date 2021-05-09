@@ -10,13 +10,13 @@ import com.google.common.collect.Maps;
 import com.tencentcloud.spring.boot.tim.req.message.MsgBody;
 import com.tencentcloud.spring.boot.tim.req.message.OfflinePushInfo;
 import com.tencentcloud.spring.boot.tim.req.push.Condition;
-import com.tencentcloud.spring.boot.tim.resp.AllMemberPushResponse;
-import com.tencentcloud.spring.boot.tim.resp.ApiResponse;
-import com.tencentcloud.spring.boot.tim.resp.AppAttrNameResponse;
-import com.tencentcloud.spring.boot.tim.resp.UserAttrsResponse;
-import com.tencentcloud.spring.boot.tim.resp.UserTagsResponse;
+import com.tencentcloud.spring.boot.tim.resp.TimActionResponse;
+import com.tencentcloud.spring.boot.tim.resp.push.AllMemberPushResponse;
+import com.tencentcloud.spring.boot.tim.resp.push.AppAttrNameResponse;
 import com.tencentcloud.spring.boot.tim.resp.push.UserAttrs;
+import com.tencentcloud.spring.boot.tim.resp.push.UserAttrsResponse;
 import com.tencentcloud.spring.boot.tim.resp.push.UserTags;
+import com.tencentcloud.spring.boot.tim.resp.push.UserTagsResponse;
 
 /**
  * 3、全员推送
@@ -97,7 +97,7 @@ public class TencentTimAllMemberPushOperations extends TencentTimOperations {
 	 * @param attrNames 属性名数组，单个属性最长不超过50字节。应用最多可以有10个推送属性（编号从0到9），用户自定义每个属性的含义
 	 * @return 操作结果
 	 */
-	public ApiResponse setAppAttrNames(String ... attrNames) {
+	public TimActionResponse setAppAttrNames(String ... attrNames) {
 		Map<String, String> attrNameMap = Maps.newHashMap();
 		for (int i = 0; i < attrNames.length; i++) {
 			attrNameMap.put(String.valueOf(i), attrNames[i]);
@@ -105,7 +105,7 @@ public class TencentTimAllMemberPushOperations extends TencentTimOperations {
 		Map<String, Object> requestBody = new ImmutableMap.Builder<String, Object>()
 				.put("AttrNames", attrNameMap)
 				.build();
-		return super.request(TimApiAddress.IM_SET_ATTR_NAME, requestBody, ApiResponse.class);
+		return super.request(TimApiAddress.IM_SET_ATTR_NAME, requestBody, TimActionResponse.class);
 	}
 	
 	/**
@@ -123,11 +123,11 @@ public class TencentTimAllMemberPushOperations extends TencentTimOperations {
 	 * @param userAttrs 属性名数组，单个属性最长不超过50字节。应用最多可以有10个推送属性（编号从0到9），用户自定义每个属性的含义
 	 * @return 操作结果
 	 */
-	public ApiResponse setUserAttrs(UserAttrs ... userAttrs) {
+	public TimActionResponse setUserAttrs(UserAttrs ... userAttrs) {
 		Map<String, Object> requestBody = new ImmutableMap.Builder<String, Object>()
 				.put("UserAttrs", userAttrs)
 				.build();
-		return super.request(TimApiAddress.IM_SET_ATTR, requestBody, ApiResponse.class);
+		return super.request(TimApiAddress.IM_SET_ATTR, requestBody, TimActionResponse.class);
 	}
 	
 	/**
@@ -149,11 +149,11 @@ public class TencentTimAllMemberPushOperations extends TencentTimOperations {
 	 * @param userAttrs 属性名数组，单个属性最长不超过50字节。应用最多可以有10个推送属性（编号从0到9），用户自定义每个属性的含义
 	 * @return 操作结果
 	 */
-	public ApiResponse removeUserAttrs(UserAttrs ... userAttrs) {
+	public TimActionResponse removeUserAttrs(UserAttrs ... userAttrs) {
 		Map<String, Object> requestBody = new ImmutableMap.Builder<String, Object>()
 				.put("UserAttrs", userAttrs)
 				.build();
-		return super.request(TimApiAddress.IM_REMOVE_ATTR, requestBody, ApiResponse.class);
+		return super.request(TimApiAddress.IM_REMOVE_ATTR, requestBody, TimActionResponse.class);
 	}
 	
 	/**
@@ -165,11 +165,11 @@ public class TencentTimAllMemberPushOperations extends TencentTimOperations {
 	 * @param userTags 用户标签数组
 	 * @return 操作结果
 	 */
-	public ApiResponse addUserTags(UserTags ... userTags) {
+	public TimActionResponse addUserTags(UserTags ... userTags) {
 		Map<String, Object> requestBody = new ImmutableMap.Builder<String, Object>()
 				.put("UserTags", userTags)
 				.build();
-		return super.request(TimApiAddress.IM_ADD_TAG, requestBody, ApiResponse.class);
+		return super.request(TimApiAddress.IM_ADD_TAG, requestBody, TimActionResponse.class);
 	}
 	
 	/**
@@ -191,11 +191,11 @@ public class TencentTimAllMemberPushOperations extends TencentTimOperations {
 	 * @param userTags 用户标签数组
 	 * @return 操作结果
 	 */
-	public ApiResponse removeUserTags(UserTags ... userTags) {
+	public TimActionResponse removeUserTags(UserTags ... userTags) {
 		Map<String, Object> requestBody = new ImmutableMap.Builder<String, Object>()
 				.put("UserTags", userTags)
 				.build();
-		return super.request(TimApiAddress.IM_REMOVE_TAG, requestBody, ApiResponse.class);
+		return super.request(TimApiAddress.IM_REMOVE_TAG, requestBody, TimActionResponse.class);
 	}
 
 	/**
@@ -204,11 +204,11 @@ public class TencentTimAllMemberPushOperations extends TencentTimOperations {
 	 * @param userIds 用户ID数组
 	 * @return 操作结果
 	 */
-	public ApiResponse removeUserTags(String ... userIds) {
+	public TimActionResponse removeUserTags(String ... userIds) {
 		Map<String, Object> requestBody = new ImmutableMap.Builder<String, Object>()
 				.put("To_Account", Stream.of(userIds).map(uid -> this.getImUserByUserId(uid)).collect(Collectors.toList()))
 				.build();
-		return super.request(TimApiAddress.IM_REMOVE_ALL_TAGS, requestBody, ApiResponse.class);
+		return super.request(TimApiAddress.IM_REMOVE_ALL_TAGS, requestBody, TimActionResponse.class);
 	}
 	
 }

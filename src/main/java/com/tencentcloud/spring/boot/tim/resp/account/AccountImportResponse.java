@@ -16,7 +16,7 @@
 package com.tencentcloud.spring.boot.tim.resp.account;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
-import com.tencentcloud.spring.boot.tim.resp.ApiResponse;
+import com.tencentcloud.spring.boot.tim.resp.TimActionResponse;
 
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -24,6 +24,6 @@ import lombok.EqualsAndHashCode;
 @Data
 @EqualsAndHashCode(callSuper=false)
 @JsonInclude( JsonInclude.Include.NON_NULL)
-public class AccountImportResponse extends ApiResponse {
+public class AccountImportResponse extends TimActionResponse {
 
 }

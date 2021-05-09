@@ -1,4 +1,4 @@
-package com.tencentcloud.spring.boot.tim.resp;
+package com.tencentcloud.spring.boot.tim.resp.profile;
 
 import java.util.List;
 
@@ -9,7 +9,7 @@ import lombok.Data;
 
 @Data
 @JsonInclude(JsonInclude.Include.NON_NULL)
-public class UserProfilePortraitGetProfileItem {
+public class UserProfileItem {
 
 	/**
 	 * 返回的用户的 UserID
@@ -34,5 +34,23 @@ public class UserProfilePortraitGetProfileItem {
 	 */
 	@JsonProperty("ResultInfo")
 	private String resultInfo;
+	
+	@Data
+	@JsonInclude(JsonInclude.Include.NON_NULL)
+	public class ProfileItem {
+		
+		/**
+		 * 返回的资料对象的名称：
+		 */
+		@JsonProperty("Tag")
+		private String tag;
+		/**
+		 * 拉取的资料对象的值：
+		 */
+		@JsonProperty("Value")
+		private Object value;
+		
+	}
+
  
 }

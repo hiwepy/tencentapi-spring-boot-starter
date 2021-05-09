@@ -7,8 +7,8 @@ import org.springframework.util.CollectionUtils;
 
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Maps;
-import com.tencentcloud.spring.boot.tim.resp.AppInfoResponse;
-import com.tencentcloud.spring.boot.tim.resp.AppIpResponse;
+import com.tencentcloud.spring.boot.tim.resp.ops.AppInfoResponse;
+import com.tencentcloud.spring.boot.tim.resp.ops.AppIpResponse;
 
 /**
  *  运营管理

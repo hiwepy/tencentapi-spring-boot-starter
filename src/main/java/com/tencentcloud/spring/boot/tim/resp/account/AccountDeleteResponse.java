@@ -18,9 +18,9 @@ package com.tencentcloud.spring.boot.tim.resp.account;
 import java.util.List;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.tencentcloud.spring.boot.tim.resp.ApiResponse;
+import com.tencentcloud.spring.boot.tim.resp.TimActionResponse;
 
-public class AccountDeleteResponse extends ApiResponse {
+public class AccountDeleteResponse extends TimActionResponse {
 
 	/**
 	 * 单个帐号的结果对象数组

@@ -1,10 +1,11 @@
-package com.tencentcloud.spring.boot.tim.resp;
+package com.tencentcloud.spring.boot.tim.resp.message;
 
 import java.util.List;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.tencentcloud.spring.boot.tim.req.message.MessageItem;
+import com.tencentcloud.spring.boot.tim.resp.TimActionResponse;
 
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -12,7 +13,7 @@ import lombok.EqualsAndHashCode;
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @Data
 @EqualsAndHashCode(callSuper = false)
-public class MessageQueryResponse extends TimActionResponse {
+public class MessageGetResponse extends TimActionResponse {
 	
 	/**
 	 * 是否全部拉取，0表示未全部拉取，需要续拉，1表示已全部拉取
