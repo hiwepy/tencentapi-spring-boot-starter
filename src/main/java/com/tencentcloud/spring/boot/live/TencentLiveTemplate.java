@@ -45,15 +45,9 @@ public class TencentLiveTemplate {
 	 * 一周秒数
 	 */
 	public static final Integer ONE_WEEK_SECOND = 7 * 24 * 60 * 60;
-	private static final char[] DIGITS_LOWER = { '0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'a', 'b', 'c', 'd',
-			'e', 'f' };
+	//private static final char[] DIGITS_LOWER = { '0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'a', 'b', 'c', 'd', 'e', 'f' };
 
 	private static final String CANV_NAME = "canv";
-	private static final String RTMP_PREFIX = "rtmp://";
-	private static final String HTTP_PREFIX = "http://";
-	private static final String FLV_SUFFIX = ".flv";
-	private static final String HLS_SUFFIX = ".m3u8";
-	private static final String PARAMETER_CONNECTOR = "?";
 	private static final String DELIMITER = "_";
 
 	private static final Float DEFAULT_PARAM = 0F;
@@ -68,179 +62,177 @@ public class TencentLiveTemplate {
 		this.liveProperties = liveProperties;
 	}
 
-	
 	/**
-	 * 生成推流地址
-	 * 
-	 * @param userId
-	 * @return
+	 * 根据用户ID生成推流地址
+	 * @param userId 用户ID
+	 * @return 流地址信息
 	 */
-	public StreamResult generateStreamUrlByUserId(String userId) {
-		StringBuilder streamName = new StringBuilder();
-		streamName.append(userId).append(DELIMITER).append(System.currentTimeMillis());
-		return generateStreamUrlByStreamName(streamName.toString());
+	public StreamResult createStream(String userId) {
+		return createStreamByStreamName(this.getStreamNameByUserId(userId));
 	}
 
-	public StreamResult generateStreamUrlByStreamName(String streamName) {
-		
+	/**
+	 * 根据流名称生成推流地址
+	 * @param streamName 流名称
+	 * @return 流地址信息
+	 */
+	public StreamResult createStreamByStreamName(String streamName) {
 		String secretUrl = CommonHelper.getSecretUrl(liveProperties.getTencentStreamUrlKey(), streamName, System.currentTimeMillis() / 1000 + ONE_WEEK_SECOND);
-		
-		StreamResult streamUrl = new StreamResult();
-		streamUrl.getRtmpUrl().append(CommonHelper.getRtmpUrl(liveProperties.getPushDomain(), liveProperties.getAppName(), streamName, secretUrl));
-		streamUrl.getFlvUrl().append(CommonHelper.getFlvUrl(liveProperties.getPushDomain(), liveProperties.getAppName(), streamName, secretUrl));
-		streamUrl.getHlsUrl().append(CommonHelper.getHlsUrl(liveProperties.getPushDomain(), liveProperties.getAppName(), streamName, secretUrl));
-		streamUrl.setStreamName(streamName);
-		return streamUrl;
+		return StreamResult.builder().streamName(streamName)
+				.rtmpUrl(CommonHelper.getRtmpUrl(liveProperties.getPushDomain(), liveProperties.getAppName(), streamName, secretUrl))
+				.flvUrl(CommonHelper.getFlvUrl(liveProperties.getPushDomain(), liveProperties.getAppName(), streamName, secretUrl))
+				.hlsUrl(CommonHelper.getHlsUrl(liveProperties.getPushDomain(), liveProperties.getAppName(), streamName, secretUrl))
+				.build();
 	}
-
+	
 	public MixStreamResult createMixStream(String homeStreamName, String customStreamName, int retryTimes) {
-		MixStreamResult result = new MixStreamResult();
+		MixStreamResult result = null;
 		boolean isSuccess;
 		do {
 			try {
-				result = this.createMixStream(homeStreamName, customStreamName);
+				
+				CreateCommonMixStreamRequest req = new CreateCommonMixStreamRequest();
+
+				String mixStreamSessionId = CommonHelper.getMixStreamSessionId(homeStreamName);
+				
+				req.setMixStreamSessionId(mixStreamSessionId);
+				// 输出设置
+				CommonMixOutputParams OutputParams = new CommonMixOutputParams();
+				String outputStreamName = System.currentTimeMillis() + DELIMITER + srandom.nextInt(10000);
+				OutputParams.setOutputStreamName(outputStreamName);
+				OutputParams.setOutputStreamType(1L);
+				req.setOutputParams(OutputParams);
+
+				CommonMixInputParam[] InputStreamList = new CommonMixInputParam[3];
+				// 画布设置
+				CommonMixInputParam inputStream = new CommonMixInputParam();
+				inputStream.setInputStreamName(CANV_NAME);
+				CommonMixLayoutParams LayoutParams = new CommonMixLayoutParams();
+				LayoutParams.setImageLayer(1L);
+				LayoutParams.setInputType(3L);
+				LayoutParams.setImageWidth(2 * WIDTH);
+				LayoutParams.setImageHeight(HEIGHT);
+				inputStream.setLayoutParams(LayoutParams);
+				InputStreamList[0] = inputStream;
+
+				// 主场画面设置
+				CommonMixInputParam inputStream1 = new CommonMixInputParam();
+				inputStream1.setInputStreamName(homeStreamName);
+				CommonMixLayoutParams LayoutParams1 = new CommonMixLayoutParams();
+				LayoutParams1.setImageLayer(2L);
+				LayoutParams1.setImageWidth(WIDTH);
+				LayoutParams1.setImageHeight(HEIGHT);
+				LayoutParams1.setLocationX(DEFAULT_PARAM);
+				LayoutParams1.setLocationY(DEFAULT_PARAM);
+				inputStream1.setLayoutParams(LayoutParams1);
+
+				CommonMixCropParams cropParams1 = new CommonMixCropParams();
+				cropParams1.setCropWidth(WIDTH);
+				cropParams1.setCropHeight(HEIGHT);
+				inputStream1.setCropParams(cropParams1);
+				InputStreamList[1] = inputStream1;
+
+				// 客场画面设置
+				CommonMixInputParam inputStream2 = new CommonMixInputParam();
+				inputStream2.setInputStreamName(customStreamName);
+				CommonMixLayoutParams LayoutParams2 = new CommonMixLayoutParams();
+				LayoutParams2.setImageLayer(3L);
+				LayoutParams2.setImageWidth(WIDTH);
+				LayoutParams2.setImageHeight(HEIGHT);
+				LayoutParams2.setLocationX(WIDTH);
+				LayoutParams2.setLocationY(DEFAULT_PARAM);
+				inputStream2.setLayoutParams(LayoutParams2);
+				CommonMixCropParams cropParams2 = new CommonMixCropParams();
+				cropParams2.setCropWidth(WIDTH);
+				cropParams2.setCropHeight(HEIGHT);
+				inputStream2.setCropParams(cropParams2);
+				InputStreamList[2] = inputStream2;
+
+				req.setInputStreamList(InputStreamList);
+
+				// 通过client对象调用想要访问的接口，需要传入请求对象
+				CreateCommonMixStreamResponse commonMixStreamResponse = liveClient.CreateCommonMixStream(req);
+				
+				// 输出json格式的字符串回包
+				log.info("混流成功  {} {}", mixStreamSessionId, DescribeZonesRequest.toJsonString(commonMixStreamResponse));
+
+				result = MixStreamResult.builder()
+						.sessionId(mixStreamSessionId.toString())
+						.streamName(outputStreamName).build();
 			} catch (TencentCloudSDKException e) {
 				log.error("{}混流异常", homeStreamName, e);
 			}
-			isSuccess = org.apache.commons.lang3.StringUtils.isBlank(result.getSessionId()) && ++retryTimes < 2;
+			
+			isSuccess = StringUtils.hasText(result.getSessionId()) && ++retryTimes < 2;
 		} while (isSuccess);
 
-		StreamResult streamUrl = this.generateStreamUrlByStreamName(result.getStreamName());
-		result.setHlsUrl(streamUrl.getHlsUrl());
-		result.setRtmpUrl(streamUrl.getRtmpUrl());
-		result.setFlvUrl(streamUrl.getFlvUrl());
+		StreamResult stream = this.createStreamByStreamName(result.getStreamName());
+		result.setHlsUrl(stream.getHlsUrl());
+		result.setRtmpUrl(stream.getRtmpUrl());
+		result.setFlvUrl(stream.getFlvUrl());
 
 		return result;
 	}
 	
-	public void cancelMixStream(String mixStreamSessionId, int retryTimes) {
-		boolean isSuccess = Boolean.FALSE;
-		do {
-			try {
-				this.cancelMixStream(mixStreamSessionId);
-				isSuccess = Boolean.TRUE;
-			} catch (TencentCloudSDKException e) {
-				log.error("{}取消混流异常", mixStreamSessionId, e);
-			}
-			isSuccess = !isSuccess && ++retryTimes < 2;
-		} while (isSuccess);
-	}
-
-	/**
-	 * 创建混流
-	 * 
-	 * @param homeStreamName   主场流名称
-	 * @param customStreamName 客场流名称
-	 * @return 混流的 session id
-	 * @throws TencentCloudSDKException
-	 */
-	private MixStreamResult createMixStream(String homeStreamName, String customStreamName) throws TencentCloudSDKException {
-		
-		MixStreamResult result = new MixStreamResult();
-		
-		CreateCommonMixStreamRequest req = new CreateCommonMixStreamRequest();
-
-		StringBuilder mixStreamSessionId = new StringBuilder(homeStreamName);
-		mixStreamSessionId.append("_").append(System.currentTimeMillis());
-		result.setSessionId(mixStreamSessionId.toString());
-		req.setMixStreamSessionId(mixStreamSessionId.toString());
-		// 输出设置
-		CommonMixOutputParams OutputParams = new CommonMixOutputParams();
-		String outputStreamName = System.currentTimeMillis() + DELIMITER + srandom.nextInt(10000);
-		result.setStreamName(outputStreamName);
-		OutputParams.setOutputStreamName(outputStreamName);
-		OutputParams.setOutputStreamType(1L);
-		req.setOutputParams(OutputParams);
-
-		CommonMixInputParam[] InputStreamList = new CommonMixInputParam[3];
-		// 画布设置
-		CommonMixInputParam inputStream = new CommonMixInputParam();
-		inputStream.setInputStreamName(CANV_NAME);
-		CommonMixLayoutParams LayoutParams = new CommonMixLayoutParams();
-		LayoutParams.setImageLayer(1L);
-		LayoutParams.setInputType(3L);
-		LayoutParams.setImageWidth(2 * WIDTH);
-		LayoutParams.setImageHeight(HEIGHT);
-		inputStream.setLayoutParams(LayoutParams);
-		InputStreamList[0] = inputStream;
-
-		// 主场画面设置
-		CommonMixInputParam inputStream1 = new CommonMixInputParam();
-		inputStream1.setInputStreamName(homeStreamName);
-		CommonMixLayoutParams LayoutParams1 = new CommonMixLayoutParams();
-		LayoutParams1.setImageLayer(2L);
-		LayoutParams1.setImageWidth(WIDTH);
-		LayoutParams1.setImageHeight(HEIGHT);
-		LayoutParams1.setLocationX(DEFAULT_PARAM);
-		LayoutParams1.setLocationY(DEFAULT_PARAM);
-		inputStream1.setLayoutParams(LayoutParams1);
-
-		CommonMixCropParams cropParams1 = new CommonMixCropParams();
-		cropParams1.setCropWidth(WIDTH);
-		cropParams1.setCropHeight(HEIGHT);
-		inputStream1.setCropParams(cropParams1);
-		InputStreamList[1] = inputStream1;
-
-		// 客场画面设置
-		CommonMixInputParam inputStream2 = new CommonMixInputParam();
-		inputStream2.setInputStreamName(customStreamName);
-		CommonMixLayoutParams LayoutParams2 = new CommonMixLayoutParams();
-		LayoutParams2.setImageLayer(3L);
-		LayoutParams2.setImageWidth(WIDTH);
-		LayoutParams2.setImageHeight(HEIGHT);
-		LayoutParams2.setLocationX(WIDTH);
-		LayoutParams2.setLocationY(DEFAULT_PARAM);
-		inputStream2.setLayoutParams(LayoutParams2);
-		CommonMixCropParams cropParams2 = new CommonMixCropParams();
-		cropParams2.setCropWidth(WIDTH);
-		cropParams2.setCropHeight(HEIGHT);
-		inputStream2.setCropParams(cropParams2);
-		InputStreamList[2] = inputStream2;
-
-		req.setInputStreamList(InputStreamList);
-
-		// 通过client对象调用想要访问的接口，需要传入请求对象
-		CreateCommonMixStreamResponse createCommonMixStreamResponse = liveClient.CreateCommonMixStream(req);
-		
-		// 输出json格式的字符串回包
-		log.info("混流成功  {} {}", mixStreamSessionId, DescribeZonesRequest.toJsonString(createCommonMixStreamResponse));
-
-		return result;
-	}
-
 	/**
 	 * 取消混流
-	 * 
-	 * @param mixStreamSeesionId 混流session id
-	 * @throws TencentCloudSDKException
+	 * @param mixStreamSessionId 混流session id
+	 * @param  retryTimes 重试次数
+	 * @return 是否取消混流成功
 	 */
-	public void cancelMixStream(String mixStreamSeesionId) throws TencentCloudSDKException {
-
-		if (!StringUtils.hasText(mixStreamSeesionId)) {
-			return;
-		}
-		
-		CancelCommonMixStreamRequest req = new CancelCommonMixStreamRequest();
-		req.setMixStreamSessionId(mixStreamSeesionId);
-
-		// 通过client对象调用想要访问的接口，需要传入请求对象
-		CancelCommonMixStreamResponse cancelCommonMixStreamResponse = liveClient.CancelCommonMixStream(req);
-
-		// 输出json格式的字符串回包
-		System.out.println(DescribeZonesRequest.toJsonString(cancelCommonMixStreamResponse));
+	public boolean cancelMixStream(String mixStreamSessionId, int retryTimes) {
+		boolean isSuccess = Boolean.FALSE;
+		do {
+			isSuccess = this.cancelMixStream(mixStreamSessionId);
+			isSuccess = !isSuccess && ++retryTimes < liveProperties.getRetryTimes();
+		} while (isSuccess);
+		return isSuccess;
 	}
-
+	
+	/**
+	 * 取消混流
+	 * @param mixStreamSessionId 混流session id
+	 * @return 是否取消混流成功
+	 */
+	public boolean cancelMixStream(String mixStreamSessionId) {
+		if (StringUtils.hasText(mixStreamSessionId)) {
+			try {
+				CancelCommonMixStreamRequest req = new CancelCommonMixStreamRequest();
+				req.setMixStreamSessionId(mixStreamSessionId);
+				// 通过client对象调用想要访问的接口，需要传入请求对象
+				CancelCommonMixStreamResponse commonMixStreamResponse = liveClient.CancelCommonMixStream(req);
+				// 输出json格式的字符串回包
+				log.info(DescribeZonesRequest.toJsonString(commonMixStreamResponse));
+				return Boolean.TRUE;
+			} catch (TencentCloudSDKException e) {
+				log.error("{}取消混流异常", mixStreamSessionId, e);
+				return Boolean.FALSE;
+			}
+		}
+		return Boolean.FALSE;
+	}
+	
 	/**
 	 * 反向解析流名称获取userId
 	 * @param streamName
-	 * @return
+	 * @return userId
 	 */
-	public static Long getUserIdByStreamName(String streamName) {
+	public String getUserIdByStreamName(String streamName) {
 		String[] split = streamName.split(DELIMITER);
 		if (split.length != 2) {
-			
+			throw new IllegalArgumentException ("反向解析流名称获取userId异常！");
 		}
-		return Long.parseLong(split[0]);
+		return split[0];
+	}
+	
+	/**
+	 * 根据userId生成流名称
+	 * @param userId
+	 * @return 流名称
+	 */
+	public String getStreamNameByUserId(String userId) {
+		StringBuilder streamName = new StringBuilder(userId).append(DELIMITER).append(System.currentTimeMillis());
+		return streamName.toString();
 	}
 
 }

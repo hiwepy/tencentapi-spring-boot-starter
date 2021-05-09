@@ -15,23 +15,25 @@
  */
 package com.tencentcloud.spring.boot.live.resp;
 
+import lombok.Builder;
 import lombok.Data;
 
 @Data
+@Builder
 public class StreamResult {
 	
 	private String streamName;
     /**
      * 格式rtmp://domain/AppName/StreamName?txSecret=
      */
-    private StringBuilder rtmpUrl = new StringBuilder();
+    private String rtmpUrl;
     /**
      * 格式http://domain/AppName/StreamName.flv?txSecret=
      */
-    private StringBuilder flvUrl = new StringBuilder();
+    private String flvUrl;
     /**
      * 格式http://domain/AppName/StreamName.m3u8
      */
-    private StringBuilder hlsUrl = new StringBuilder();
+    private String hlsUrl;
     
 }

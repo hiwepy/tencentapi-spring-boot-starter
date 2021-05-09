@@ -23,14 +23,14 @@ import com.tencentcloudapi.common.profile.Language;
 
 import lombok.Data;
 
-@ConfigurationProperties(TencentLiveProperties.PREFIX)
+@ConfigurationProperties(TencentTrtcProperties.PREFIX)
 @Data
-public class TencentLiveProperties {
+public class TencentTrtcProperties {
 
-	public static final String PREFIX = "tencent.live";
+	public static final String PREFIX = "tencent.trtc";
 
 	/**
-	 * Enable Tencent Live .
+	 * Enable Tencent Trtc .
 	 */
 	private boolean enabled = false;
 	
@@ -42,8 +42,8 @@ public class TencentLiveProperties {
 	 * 官网获取的 Secret Key（腾讯应用的SK）
 	 */
   	private String secretKey;
-  	
-  	private String region;
+
+	private String region;
 	
     private HttpProfile httpProfile = new HttpProfile();
 
@@ -61,13 +61,5 @@ public class TencentLiveProperties {
     private Language language = Language.ZH_CN;
     
     private boolean debug;
-    
-  	private String pushDomain;
-    private String playDomain;
-    private String appName;
-    private String tencentStreamUrlKey;
-    
-    private Integer retryTimes = 2;
-    
 	
 }

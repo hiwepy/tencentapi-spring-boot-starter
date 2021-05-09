@@ -16,7 +16,6 @@
 package com.tencentcloud.spring.boot.utils;
 
 import java.io.UnsupportedEncodingException;
-import java.security.SecureRandom;
 import java.util.Map;
 import java.util.Objects;
 
@@ -30,27 +29,26 @@ import com.tencentcloud.spring.boot.tim.TimApiAddress;
  */
 public final class CommonHelper {
 
-	private static SecureRandom srandom = new SecureRandom();
 	/**
 	 * 一周秒数
 	 */
 	public static final Integer ONE_WEEK_SECOND = 7 * 24 * 60 * 60;
 
-	private static final String CANV_NAME = "canv";
 	private static final String RTMP_PREFIX = "rtmp://";
 	private static final String HTTP_PREFIX = "http://";
 	private static final String FLV_SUFFIX = ".flv";
 	private static final String HLS_SUFFIX = ".m3u8";
 	private static final String PARAMETER_CONNECTOR = "?";
-	private static final String DELIMITER1 = "_";
-
-	private static final Float DEFAULT_PARAM = 0F;
-	private static final Float WIDTH = 368F;
-	private static final Float HEIGHT = 640F;
 
 	public static final String DELIMITER = "&";
 	public static final String SEPARATOR = "=";
 	public static final Joiner.MapJoiner joiner = Joiner.on(DELIMITER).withKeyValueSeparator(SEPARATOR);
+	
+	public static String getMixStreamSessionId(final String homeStreamName) {
+		StringBuilder mixStreamSessionId = new StringBuilder(homeStreamName);
+		mixStreamSessionId.append("_").append(System.currentTimeMillis());
+		return mixStreamSessionId.toString();
+	}
 	
 	/**
 	 * 格式rtmp://domain/AppName/StreamName?txSecret=
