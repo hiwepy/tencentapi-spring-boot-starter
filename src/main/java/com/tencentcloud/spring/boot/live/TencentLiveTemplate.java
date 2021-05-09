@@ -15,9 +15,6 @@
  */
 package com.tencentcloud.spring.boot.live;
 
-import java.io.UnsupportedEncodingException;
-import java.security.MessageDigest;
-import java.security.NoSuchAlgorithmException;
 import java.security.SecureRandom;
 
 import org.springframework.util.StringUtils;
@@ -25,6 +22,7 @@ import org.springframework.util.StringUtils;
 import com.tencentcloud.spring.boot.TencentLiveProperties;
 import com.tencentcloud.spring.boot.live.resp.MixStreamResult;
 import com.tencentcloud.spring.boot.live.resp.StreamResult;
+import com.tencentcloud.spring.boot.utils.CommonHelper;
 import com.tencentcloudapi.common.exception.TencentCloudSDKException;
 import com.tencentcloudapi.cvm.v20170312.models.DescribeZonesRequest;
 import com.tencentcloudapi.live.v20180801.LiveClient;
@@ -70,35 +68,7 @@ public class TencentLiveTemplate {
 		this.liveProperties = liveProperties;
 	}
 
-	/*
-	 * KEY+ streamName + txTime
-	 */
-	private String getSafeUrl(String key, String streamName, long txTime) {
-		String input = new StringBuilder().append(key).append(streamName).append(Long.toHexString(txTime).toUpperCase())
-				.toString();
-		String txSecret = null;
-		try {
-			MessageDigest messageDigest = MessageDigest.getInstance("MD5");
-			txSecret = byteArrayToHexString(messageDigest.digest(input.getBytes("UTF-8")));
-		} catch (NoSuchAlgorithmException e) {
-			e.printStackTrace();
-		} catch (UnsupportedEncodingException e) {
-			e.printStackTrace();
-		}
-		return txSecret == null ? ""
-				: new StringBuilder().append("txSecret=").append(txSecret).append("&").append("txTime=")
-						.append(Long.toHexString(txTime).toUpperCase()).toString();
-	}
-
-	private String byteArrayToHexString(byte[] data) {
-		char[] out = new char[data.length << 1];
-		for (int i = 0, j = 0; i < data.length; i++) {
-			out[j++] = DIGITS_LOWER[(0xF0 & data[i]) >>> 4];
-			out[j++] = DIGITS_LOWER[0x0F & data[i]];
-		}
-		return new String(out);
-	}
-
+	
 	/**
 	 * 生成推流地址
 	 * 
@@ -112,19 +82,13 @@ public class TencentLiveTemplate {
 	}
 
 	public StreamResult generateStreamUrlByStreamName(String streamName) {
-		StringBuilder pushUrl = new StringBuilder();
-		pushUrl.append(liveProperties.getPushDomain()).append(liveProperties.getAppName());
-		StringBuilder playUrl = new StringBuilder();
-		playUrl.append(liveProperties.getPlayDomain()).append(liveProperties.getAppName());
-		String safeUrl = getSafeUrl(liveProperties.getTencentStreamUrlKey(), streamName,
-				System.currentTimeMillis() / 1000 + ONE_WEEK_SECOND);
+		
+		String secretUrl = CommonHelper.getSecretUrl(liveProperties.getTencentStreamUrlKey(), streamName, System.currentTimeMillis() / 1000 + ONE_WEEK_SECOND);
+		
 		StreamResult streamUrl = new StreamResult();
-		streamUrl.getRtmpUrl().append(RTMP_PREFIX).append(pushUrl).append(streamName).append(PARAMETER_CONNECTOR)
-				.append(safeUrl);
-		streamUrl.getFlvUrl().append(HTTP_PREFIX).append(playUrl).append(streamName).append(FLV_SUFFIX)
-				.append(PARAMETER_CONNECTOR).append(safeUrl);
-		streamUrl.getHlsUrl().append(HTTP_PREFIX).append(playUrl).append(streamName).append(HLS_SUFFIX)
-				.append(PARAMETER_CONNECTOR).append(safeUrl);
+		streamUrl.getRtmpUrl().append(CommonHelper.getRtmpUrl(liveProperties.getPushDomain(), liveProperties.getAppName(), streamName, secretUrl));
+		streamUrl.getFlvUrl().append(CommonHelper.getFlvUrl(liveProperties.getPushDomain(), liveProperties.getAppName(), streamName, secretUrl));
+		streamUrl.getHlsUrl().append(CommonHelper.getHlsUrl(liveProperties.getPushDomain(), liveProperties.getAppName(), streamName, secretUrl));
 		streamUrl.setStreamName(streamName);
 		return streamUrl;
 	}
