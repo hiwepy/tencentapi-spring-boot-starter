@@ -28,6 +28,9 @@ import com.tencentcloud.spring.boot.tim.req.message.OfflinePushInfo;
 import com.tencentcloud.spring.boot.tim.req.push.Condition;
 import com.tencentcloud.spring.boot.tim.resp.AllMemberPushResponse;
 import com.tencentcloud.spring.boot.tim.resp.ApiResponse;
+import com.tencentcloud.spring.boot.tim.resp.AppAttrNameResponse;
+import com.tencentcloud.spring.boot.tim.resp.UserAttrsResponse;
+import com.tencentcloud.spring.boot.tim.resp.UserTagsResponse;
 import com.tencentcloud.spring.boot.tim.resp.push.UserAttrs;
 import com.tencentcloud.spring.boot.tim.resp.push.UserTags;
 
@@ -119,7 +122,16 @@ public class TencentTimAllMemberPushAsyncOperations extends TencentTimAllMemberP
 	}
 	
 	/**
-	 * 3、设置用户属性
+	 * 3、获取应用属性名称
+	 * API：https://cloud.tencent.com/document/product/269/45936
+	 * @param consumer 响应处理回调函数
+	 */
+	public void asyncGetAppAttrNames(Consumer<AppAttrNameResponse> consumer) {
+		this.asyncRequest(TimApiAddress.IM_GET_ATTR_NAME, Maps.newHashMap(), AppAttrNameResponse.class, consumer);
+	}
+	
+	/**
+	 * 4、设置用户属性
 	 * API：https://cloud.tencent.com/document/product/269/45938
 	 * @param userAttrs 属性名数组，单个属性最长不超过50字节。应用最多可以有10个推送属性（编号从0到9），用户自定义每个属性的含义
 	 * @param consumer 响应处理回调函数
@@ -132,8 +144,22 @@ public class TencentTimAllMemberPushAsyncOperations extends TencentTimAllMemberP
 	}
 	
 	/**
-	 * 4、删除用户属性
+	 * 5、获取用户属性
+	 * API：https://cloud.tencent.com/document/product/269/45937
+	 * @param userIds 用户ID数组
+	 * @param consumer 响应处理回调函数
+	 */
+	public void asyncGetUserAttrs(String[] userIds, Consumer<UserAttrsResponse> consumer) {
+		Map<String, Object> requestBody = new ImmutableMap.Builder<String, Object>()
+				.put("To_Account", Stream.of(userIds).map(uid -> this.getImUserByUserId(uid)).collect(Collectors.toList()))
+				.build();
+		this.asyncRequest(TimApiAddress.IM_GET_ATTR, requestBody, UserAttrsResponse.class, consumer);
+	}
+	
+	/**
+	 * 6、删除用户属性
 	 * API：https://cloud.tencent.com/document/product/269/45939
+	 * @param userAttrs 属性名数组，单个属性最长不超过50字节。应用最多可以有10个推送属性（编号从0到9），用户自定义每个属性的含义
 	 * @param consumer 响应处理回调函数
 	 */
 	public void asyncRemoveUserAttrs(UserAttrs[] userAttrs, Consumer<ApiResponse> consumer) {
@@ -144,7 +170,7 @@ public class TencentTimAllMemberPushAsyncOperations extends TencentTimAllMemberP
 	}
 	
 	/**
-	 * 5、添加用户标签
+	 * 7、添加用户标签
 	 * API：https://cloud.tencent.com/document/product/269/45941
 	 * a、每次请求最多只能给100个用户添加标签，请求体中单个用户添加标签数最多为10个。
 	 * b、单个用户可设置最大标签数为100个，若用户当前标签超过100，则添加新标签之前请先删除旧标签。
@@ -158,9 +184,23 @@ public class TencentTimAllMemberPushAsyncOperations extends TencentTimAllMemberP
 				.build();
 		this.asyncRequest(TimApiAddress.IM_ADD_TAG, requestBody, ApiResponse.class, consumer);
 	}
-	 
+
 	/**
-	 * 6、删除用户标签
+	 * 8、获取用户标签
+	 * API：https://cloud.tencent.com/document/product/269/45940
+	 * @param userIds 用户ID数组
+	 * @param consumer 响应处理回调函数
+	 */
+	public void asyncGetUserTags(String[] userIds, Consumer<UserTagsResponse> consumer) {
+		Map<String, Object> requestBody = new ImmutableMap.Builder<String, Object>()
+				.put("To_Account", Stream.of(userIds).map(uid -> this.getImUserByUserId(uid)).collect(Collectors.toList()))
+				.build();
+		this.asyncRequest(TimApiAddress.IM_GET_TAG, requestBody, UserTagsResponse.class, consumer);
+	}
+	
+	
+	/**
+	 * 9、删除用户标签
 	 * API：https://cloud.tencent.com/document/product/269/45942
 	 * @param userTags 用户标签数组
 	 * @param consumer 响应处理回调函数
@@ -173,7 +213,7 @@ public class TencentTimAllMemberPushAsyncOperations extends TencentTimAllMemberP
 	}
 
 	/**
-	 * 7、删除用户所有标签
+	 * 10、删除用户所有标签
 	 * API：https://cloud.tencent.com/document/product/269/45943
 	 * @param userIds 用户ID数组
 	 * @param consumer 响应处理回调函数

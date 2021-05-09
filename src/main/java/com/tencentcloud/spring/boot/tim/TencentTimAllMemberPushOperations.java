@@ -36,8 +36,8 @@ public class TencentTimAllMemberPushOperations extends TencentTimOperations {
 	 * @param msgBody  消息内容，具体格式请参考 MsgBody 消息内容说明（一条消息可包括多种消息元素，所以 MsgBody 为 Array 类型）
 	 * @return 操作结果
 	 */
-	public AllMemberPushResponse imPush(String userId, String msgRandom, MsgBody... msgBody) {
-		return this.imPush(userId, msgRandom, null, null, null, msgBody);
+	public AllMemberPushResponse push(String userId, String msgRandom, MsgBody... msgBody) {
+		return this.push(userId, msgRandom, null, null, null, msgBody);
 	}
 	
 	/**
@@ -49,8 +49,8 @@ public class TencentTimAllMemberPushOperations extends TencentTimOperations {
 	 * @param msgBody  消息内容，具体格式请参考 MsgBody 消息内容说明（一条消息可包括多种消息元素，所以 MsgBody 为 Array 类型）
 	 * @return 操作结果
 	 */
-	public AllMemberPushResponse imPush(String userId, String msgRandom, Integer msgLifeTime, MsgBody... msgBody) {
-		return this.imPush(userId, msgRandom, msgLifeTime, null, null, msgBody);
+	public AllMemberPushResponse push(String userId, String msgRandom, Integer msgLifeTime, MsgBody... msgBody) {
+		return this.push(userId, msgRandom, msgLifeTime, null, null, msgBody);
 	}
 	
 	/**
@@ -63,8 +63,8 @@ public class TencentTimAllMemberPushOperations extends TencentTimOperations {
 	 * @param msgBody  消息内容，具体格式请参考 MsgBody 消息内容说明（一条消息可包括多种消息元素，所以 MsgBody 为 Array 类型）
 	 * @return 操作结果
 	 */
-	public AllMemberPushResponse imPush(String userId, String msgRandom, Integer msgLifeTime, OfflinePushInfo offlinePushInfo, MsgBody... msgBody) {
-		return this.imPush(userId, msgRandom, msgLifeTime, null, offlinePushInfo, msgBody);
+	public AllMemberPushResponse push(String userId, String msgRandom, Integer msgLifeTime, OfflinePushInfo offlinePushInfo, MsgBody... msgBody) {
+		return this.push(userId, msgRandom, msgLifeTime, null, offlinePushInfo, msgBody);
 	}
 	
 	
@@ -79,7 +79,7 @@ public class TencentTimAllMemberPushOperations extends TencentTimOperations {
 	 * @param msgBody  消息内容，具体格式请参考 MsgBody 消息内容说明（一条消息可包括多种消息元素，所以 MsgBody 为 Array 类型）
 	 * @return 操作结果
 	 */
-	public AllMemberPushResponse imPush(String userId, String msgRandom, Integer msgLifeTime, Condition condition, OfflinePushInfo offlinePushInfo, MsgBody... msgBody) {
+	public AllMemberPushResponse push(String userId, String msgRandom, Integer msgLifeTime, Condition condition, OfflinePushInfo offlinePushInfo, MsgBody... msgBody) {
 		Map<String, Object> requestBody = new ImmutableMap.Builder<String, Object>()
 				.put("From_Account", this.getImUserByUserId(userId))
 				.put("MsgRandom", msgRandom)
@@ -133,6 +133,7 @@ public class TencentTimAllMemberPushOperations extends TencentTimOperations {
 	/**
 	 * 5、获取用户属性
 	 * API：https://cloud.tencent.com/document/product/269/45937
+	 * @param userIds 用户ID数组
 	 * @return 操作结果
 	 */
 	public UserAttrsResponse getUserAttrs(String ... userIds) {
@@ -145,6 +146,7 @@ public class TencentTimAllMemberPushOperations extends TencentTimOperations {
 	/**
 	 * 6、删除用户属性
 	 * API：https://cloud.tencent.com/document/product/269/45939
+	 * @param userAttrs 属性名数组，单个属性最长不超过50字节。应用最多可以有10个推送属性（编号从0到9），用户自定义每个属性的含义
 	 * @return 操作结果
 	 */
 	public ApiResponse removeUserAttrs(UserAttrs ... userAttrs) {
@@ -173,6 +175,7 @@ public class TencentTimAllMemberPushOperations extends TencentTimOperations {
 	/**
 	 * 8、获取用户标签
 	 * API：https://cloud.tencent.com/document/product/269/45940
+	 * @param userIds 用户ID数组
 	 * @return 操作结果
 	 */
 	public UserTagsResponse getUserTags(String ... userIds) {
@@ -185,6 +188,7 @@ public class TencentTimAllMemberPushOperations extends TencentTimOperations {
 	/**
 	 * 9、删除用户标签
 	 * API：https://cloud.tencent.com/document/product/269/45942
+	 * @param userTags 用户标签数组
 	 * @return 操作结果
 	 */
 	public ApiResponse removeUserTags(UserTags ... userTags) {
@@ -197,6 +201,7 @@ public class TencentTimAllMemberPushOperations extends TencentTimOperations {
 	/**
 	 * 10、删除用户所有标签
 	 * API：https://cloud.tencent.com/document/product/269/45943
+	 * @param userIds 用户ID数组
 	 * @return 操作结果
 	 */
 	public ApiResponse removeUserTags(String ... userIds) {

@@ -23,8 +23,10 @@ import java.util.stream.Stream;
 
 import com.google.common.collect.ImmutableMap;
 import com.tencentcloud.spring.boot.tim.resp.TimActionResponse;
+import com.tencentcloud.spring.boot.tim.resp.account.AccountCheckResponse;
 import com.tencentcloud.spring.boot.tim.resp.account.AccountDeleteResponse;
 import com.tencentcloud.spring.boot.tim.resp.account.AccountImportResponse;
+import com.tencentcloud.spring.boot.tim.resp.account.AccountStateResponse;
 import com.tencentcloud.spring.boot.tim.resp.account.AccountsImportResponse;
 
 public class TencentTimAccountAsyncOperations extends TencentTimAccountOperations {
@@ -79,6 +81,23 @@ public class TencentTimAccountAsyncOperations extends TencentTimAccountOperation
 	}
 	
 	/**
+	 * 4、查询帐号
+	 * API：https://cloud.tencent.com/document/product/269/38417
+	 * @param userIds 业务用户ID数组
+	 * @param consumer 响应处理回调函数
+	 */
+	public void asyncCheck(String[] userIds, Consumer<AccountCheckResponse> consumer) {
+		Map<String, Object> requestBody = new ImmutableMap.Builder<String, Object>()
+				.put("CheckItem", Stream.of(userIds).map(uid -> {
+					Map<String, Object> userMap = new HashMap<>();
+					userMap.put("UserID", this.getImUserByUserId(uid));
+					return userMap;
+				}).collect(Collectors.toList()))
+				.build();
+		this.asyncRequest(TimApiAddress.ACCOUNT_CHECK, requestBody, AccountCheckResponse.class, consumer);
+	}
+	
+	/**
 	 * 5、失效帐号登录态（踢出）
 	 * API：https://cloud.tencent.com/document/product/269/3853
 	 * @param userId 业务用户ID
@@ -89,6 +108,23 @@ public class TencentTimAccountAsyncOperations extends TencentTimAccountOperation
 				.put("Identifier", this.getImUserByUserId(userId))
 				.build();
 		this.asyncRequest(TimApiAddress.ACCOUNT_KICK, requestBody, TimActionResponse.class, consumer);
+	}
+
+	/**
+	 * 6、查询帐号在线状态
+	 * API：https://cloud.tencent.com/document/product/269/2566
+	 * @param needDetail 是否需要详情结果
+	 * @param userIds 业务用户ID数组
+	 * @param consumer 响应处理回调函数
+	 */
+	public void asyncGetState(boolean needDetail, String[] userIds, Consumer<AccountStateResponse> consumer) {
+		ImmutableMap.Builder<String, Object> builder = new ImmutableMap.Builder<String, Object>()
+			.put("To_Account", Stream.of(userIds).map(uid -> this.getImUserByUserId(uid)).collect(Collectors.toList()));
+		if(needDetail) {
+			builder.put("IsNeedDetail", 1);
+		}
+		// {"ActionStatus":"OK","ErrorInfo":"","ErrorCode":0,"QueryResult":[{"To_Account":"449","State":"Offline","Status":"Offline"}]}
+		this.asyncRequest(TimApiAddress.ACCOUNT_STATE, builder.build(), AccountStateResponse.class, consumer);
 	}
 	
 }
