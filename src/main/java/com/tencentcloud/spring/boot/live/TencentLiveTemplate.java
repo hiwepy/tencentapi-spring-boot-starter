@@ -37,6 +37,12 @@ import com.tencentcloudapi.live.v20180801.models.CreateCommonMixStreamResponse;
 
 import lombok.extern.slf4j.Slf4j;
 
+/**
+ * Live: 腾讯云直播
+ * https://cloud.tencent.com/document/product/267/41299
+ * https://cloud.tencent.com/document/product/267/32744
+ * @author 		： <a href="https://github.com/hiwepy">hiwepy</a>
+ */
 @Slf4j
 public class TencentLiveTemplate {
 	
@@ -74,6 +80,7 @@ public class TencentLiveTemplate {
 	/**
 	 * 根据流名称生成推流地址
 	 * @param streamName 流名称
+	 * https://cloud.tencent.com/document/product/267/43392
 	 * @return 流地址信息
 	 */
 	public StreamResult createStreamByStreamName(String streamName) {
@@ -85,6 +92,15 @@ public class TencentLiveTemplate {
 				.build();
 	}
 	
+	
+	/**
+	 * 2、创建通用混流
+	 * API:https://cloud.tencent.com/document/product/267/43404
+	 * @param homeStreamName
+	 * @param customStreamName
+	 * @param retryTimes
+	 * @return
+	 */
 	public MixStreamResult createMixStream(String homeStreamName, String customStreamName, int retryTimes) {
 		MixStreamResult result = null;
 		boolean isSuccess;
@@ -93,6 +109,8 @@ public class TencentLiveTemplate {
 				
 				CreateCommonMixStreamRequest req = new CreateCommonMixStreamRequest();
 
+				// 混流会话（申请混流开始到取消混流结束）标识 ID。 该值与CreateCommonMixStream中的MixStreamSessionId保持一致。
+				
 				String mixStreamSessionId = CommonHelper.getMixStreamSessionId(homeStreamName);
 				
 				req.setMixStreamSessionId(mixStreamSessionId);
@@ -175,7 +193,8 @@ public class TencentLiveTemplate {
 	}
 	
 	/**
-	 * 取消混流
+	 * 3、取消通用混流
+	 * API:https://cloud.tencent.com/document/product/267/43405
 	 * @param mixStreamSessionId 混流session id
 	 * @param  retryTimes 重试次数
 	 * @return 是否取消混流成功
