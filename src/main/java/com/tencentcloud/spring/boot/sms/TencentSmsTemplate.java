@@ -25,11 +25,11 @@ import com.tencentcloudapi.sms.v20190711.models.SendSmsResponse;
 
 public class TencentSmsTemplate {
 
-	private SmsClient client;
+	private SmsClient smsClient;
 	private TencentSmsProperties smsProperties;
 	
-	public TencentSmsTemplate(SmsClient client, TencentSmsProperties smsProperties) {
-		this.client = client;
+	public TencentSmsTemplate(SmsClient smsClient, TencentSmsProperties smsProperties) {
+		this.smsClient = smsClient;
 		this.smsProperties = smsProperties;
 	}
 
@@ -89,7 +89,7 @@ public class TencentSmsTemplate {
 		 * 通过 client 对象调用 SendSms 方法发起请求。注意请求方法名与请求对象是对应的 返回的 res 是一个 SendSmsResponse
 		 * 类的实例，与请求对象对应
 		 */
-		return client.SendSms(req);
+		return smsClient.SendSms(req);
 	}
 
 }
