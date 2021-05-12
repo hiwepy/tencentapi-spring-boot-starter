@@ -19,7 +19,7 @@ import okhttp3.OkHttpClient;
 @Configuration
 @ConditionalOnClass(TLSSigAPIv2.class)
 @ConditionalOnProperty(prefix = TencentTimProperties.PREFIX, value = "enabled", havingValue = "true")
-@EnableConfigurationProperties({ TencentTimProperties.class, TencentOkHttp3Properties.class })
+@EnableConfigurationProperties({ TencentCloudProperties.class, TencentTimProperties.class, TencentOkHttp3Properties.class })
 public class TencentTimAutoConfiguration {
 	
 	

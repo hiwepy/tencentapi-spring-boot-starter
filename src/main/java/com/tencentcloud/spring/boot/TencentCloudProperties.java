@@ -17,22 +17,13 @@ package com.tencentcloud.spring.boot;
 
 import org.springframework.boot.context.properties.ConfigurationProperties;
 
-import com.tencentcloudapi.common.profile.ClientProfile;
-import com.tencentcloudapi.common.profile.HttpProfile;
-import com.tencentcloudapi.common.profile.Language;
-
 import lombok.Data;
 
-@ConfigurationProperties(TencentTrtcProperties.PREFIX)
+@ConfigurationProperties(TencentCloudProperties.PREFIX)
 @Data
-public class TencentTrtcProperties {
+public class TencentCloudProperties {
 
-	public static final String PREFIX = "tencent.cloud.trtc";
-
-	/**
-	 * Enable Tencent Trtc .
-	 */
-	private boolean enabled = false;
+	public static final String PREFIX = "tencent.cloud";
 	
 	/**
 	 * 官网获取的 API ID（腾讯云应用的AK）
@@ -42,22 +33,7 @@ public class TencentTrtcProperties {
 	 * 官网获取的 Secret Key（腾讯应用的SK）
 	 */
   	private String secretKey;
-
-	private String region;
-	
-    private HttpProfile httpProfile = new HttpProfile();
-
-    private String signMethod = ClientProfile.SIGN_TC3_256;
     
-    /**
-     * If payload is NOT involved in signing process, true means will ignore payload, default is
-     * false.
-     */
-    private boolean unsignedPayload;
-
-    /**
-     * valid choices: zh-CN, en-US
-     */
-    private Language language = Language.ZH_CN;
+    private boolean debug;
 	
 }

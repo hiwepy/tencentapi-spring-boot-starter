@@ -27,7 +27,7 @@ import lombok.Data;
 @Data
 public class TencentLiveProperties {
 
-	public static final String PREFIX = "tencent.live";
+	public static final String PREFIX = "tencent.cloud.live";
 
 	/**
 	 * Enable Tencent Live .
@@ -59,8 +59,6 @@ public class TencentLiveProperties {
      * valid choices: zh-CN, en-US
      */
     private Language language = Language.ZH_CN;
-    
-    private boolean debug;
     
   	private String pushDomain;
     private String playDomain;

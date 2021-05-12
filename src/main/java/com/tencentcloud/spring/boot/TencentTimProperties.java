@@ -24,7 +24,7 @@ import lombok.Data;
 public class TencentTimProperties {
 
 	public static final String ADMINISTRATOR = "administrator";
-	public static final String PREFIX = "tencent.tim";
+	public static final String PREFIX = "tencent.cloud.tim";
 	// 单位秒
 	private static final long EXPIRE = 86400 * 30;
 	/**

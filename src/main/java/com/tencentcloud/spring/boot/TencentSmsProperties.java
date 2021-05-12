@@ -17,13 +17,17 @@ package com.tencentcloud.spring.boot;
 
 import org.springframework.boot.context.properties.ConfigurationProperties;
 
+import com.tencentcloudapi.common.profile.ClientProfile;
+import com.tencentcloudapi.common.profile.HttpProfile;
+import com.tencentcloudapi.common.profile.Language;
+
 import lombok.Data;
 
 @ConfigurationProperties(TencentSmsProperties.PREFIX)
 @Data
 public class TencentSmsProperties {
 
-	public static final String PREFIX = "tencent.sms";
+	public static final String PREFIX = "tencent.cloud.sms";
 
 	/**
 	 * Enable Tencent Sms .
@@ -44,8 +48,6 @@ public class TencentSmsProperties {
 	 * 添加应用后生成的实际SdkAppid，示例如1400006666。
 	 */
 	private String sdkappid;
-
-	private String region;
 
 	/**
 	 * 短信签名内容，使用 UTF-8 编码，必须填写已审核通过的签名，签名信息可登录
@@ -70,5 +72,23 @@ public class TencentSmsProperties {
 	 * https://cloud.tencent.com/document/product/382/38778
 	 */
 	private String session;
+	
+
+  	private String region;
+	
+    private HttpProfile httpProfile = new HttpProfile();
+
+    private String signMethod = ClientProfile.SIGN_TC3_256;
+    
+    /**
+     * If payload is NOT involved in signing process, true means will ignore payload, default is
+     * false.
+     */
+    private boolean unsignedPayload;
+
+    /**
+     * valid choices: zh-CN, en-US
+     */
+    private Language language = Language.ZH_CN;
 	
 }
