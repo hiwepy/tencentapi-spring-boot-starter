@@ -84,7 +84,7 @@ public class TencentLiveTemplate {
 	 * @return 流地址信息
 	 */
 	public StreamResult createStreamByStreamName(String streamName) {
-		String secretUrl = CommonHelper.getSecretUrl(liveProperties.getTencentStreamUrlKey(), streamName, System.currentTimeMillis() / 1000 + ONE_WEEK_SECOND);
+		String secretUrl = CommonHelper.getSafeUrl(liveProperties.getTencentStreamUrlKey(), streamName, System.currentTimeMillis() / 1000 + ONE_WEEK_SECOND);
 		return StreamResult.builder().streamName(streamName)
 				.rtmpUrl(CommonHelper.getRtmpUrl(liveProperties.getPushDomain(), liveProperties.getAppName(), streamName, secretUrl))
 				.flvUrl(CommonHelper.getFlvUrl(liveProperties.getPushDomain(), liveProperties.getAppName(), streamName, secretUrl))

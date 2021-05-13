@@ -16,10 +16,10 @@
 package com.tencentcloud.spring.boot.utils;
 
 import java.io.UnsupportedEncodingException;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.util.Map;
 import java.util.Objects;
-
-import org.springframework.util.DigestUtils;
 
 import com.google.common.base.Joiner;
 import com.tencentcloud.spring.boot.tim.TimApiAddress;
@@ -34,6 +34,8 @@ public final class CommonHelper {
 	 */
 	public static final Integer ONE_WEEK_SECOND = 7 * 24 * 60 * 60;
 
+	private static final char[] DIGITS_LOWER = {'0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'a', 'b', 'c', 'd', 'e', 'f'};
+	
 	private static final String RTMP_PREFIX = "rtmp://";
 	private static final String HTTP_PREFIX = "http://";
 	private static final String FLV_SUFFIX = ".flv";
@@ -77,21 +79,47 @@ public final class CommonHelper {
 		return hlsUrl.toString();
 	}
 
-	/*
-	 * KEY+ streamName + txTime
-	 */
-	public static String getSecretUrl(String key, String streamName, long txTime) {
-		String input = new StringBuilder().append(key).append(streamName).append(Long.toHexString(txTime).toUpperCase()).toString();
-		String txSecret = null;
-		try {
-			txSecret = DigestUtils.md5DigestAsHex(input.getBytes("UTF-8"));
-		} catch (UnsupportedEncodingException e) {
-			e.printStackTrace();
-		}
-		return txSecret == null ? ""
-				: new StringBuilder().append("txSecret=").append(txSecret).append("&").append("txTime=")
-						.append(Long.toHexString(txTime).toUpperCase()).toString();
-	}
+	 /*
+     * KEY+ streamName + txTime
+     */
+	public static String getSafeUrl(String key, String streamName, long txTime) {
+		
+           String input = new StringBuilder().
+                             append(key).
+                             append(streamName).
+                             append(Long.toHexString(txTime).toUpperCase()).toString();
+
+           String txSecret = null;
+           try {
+                 MessageDigest messageDigest = MessageDigest.getInstance("MD5");
+                 txSecret  = byteArrayToHexString(
+                             messageDigest.digest(input.getBytes("UTF-8")));
+           } catch (NoSuchAlgorithmException e) {
+                 e.printStackTrace();
+           } catch (UnsupportedEncodingException e) {
+                 e.printStackTrace();
+           }
+
+           return txSecret == null ? "" :
+                             new StringBuilder().
+                             append("txSecret=").
+                             append(txSecret).
+                             append("&").
+                             append("txTime=").
+                             append(Long.toHexString(txTime).toUpperCase()).
+                             toString();
+     }
+
+     private static String byteArrayToHexString(byte[] data) {
+           char[] out = new char[data.length << 1];
+
+           for (int i = 0, j = 0; i < data.length; i++) {
+                 out[j++] = DIGITS_LOWER[(0xF0 & data[i]) >>> 4];
+                 out[j++] = DIGITS_LOWER[0x0F & data[i]];
+           }
+           return new String(out);
+     }
+	
 	
 	public static String getRequestUrl(final TimApiAddress address, final Map<String, String> data) {
 		if (Objects.nonNull(data) && !data.isEmpty()) {
