@@ -3,10 +3,10 @@ package com.tencentcloud.spring.boot.tim;
 import java.io.IOException;
 import java.time.Duration;
 import java.util.Map;
-import java.util.Optional;
 import java.util.UUID;
-import java.util.function.BiFunction;
 import java.util.function.Consumer;
+
+import org.springframework.beans.BeanUtils;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.common.cache.CacheBuilder;
@@ -140,94 +140,93 @@ public class TencentTimTemplate {
 		try {
 			return objectMapper.readValue(json, cls);
 		} catch (IOException e) {
-			e.printStackTrace();
+			log.error(e.getMessage());
+			return BeanUtils.instantiateClass(cls);
 		}
-		return null;
 	}
 	
-	public <T> T requestInvoke(String url, Object params, Class<T> cls) {
-		Optional<T> optional = this.requestInvoke(url, params, (start, response) -> {
-			if (response.isSuccessful()) {
-				try {
-					String body = response.body().string();
-					log.debug("Request Success: code : {}, body : {} , use time : {} ", response.code(), body , System.currentTimeMillis() - start);
-					return objectMapper.readValue(body, cls);
-				} catch (IOException e) {
-					e.printStackTrace();
-				}
-            }
-			return null;
-		});
-		return optional.isPresent() ? optional.get() : null;
-	}
-	
-	public <T> Optional<T> requestInvoke(String url, Object params, BiFunction<Long, Response, T> function ) {
+	public <T extends TimActionResponse> T requestInvoke(String url, Object params, Class<T> cls) {
 		long start = System.currentTimeMillis();
+		T res = null;
 		try {
+			
 			log.info("Request URL : {}", url);
 			log.info("Request Params : {}", params);
+			
 			RequestBody requestBody = RequestBody.create(MediaType.parse(APPLICATION_JSON_VALUE),
 					objectMapper.writeValueAsString(params));
+			
 			Request request = new Request.Builder().url(url).post(requestBody).build();
+			
 			try(Response response = okhttp3Client.newCall(request).execute();) {
-				log.debug("Request Success: code : {}, use time : {} ", response.code(), System.currentTimeMillis() - start);
 				if (response.isSuccessful()) {
-					return Optional.ofNullable(function.apply(start, response));
-	            }
+					String body = response.body().string();
+					log.debug("Request Success: code : {}, body : {} , use time : {} ", response.code(), body , System.currentTimeMillis() - start);
+					res = objectMapper.readValue(body, cls);
+	            } else {
+	            	log.error("Request Failure : code : {}, message : {}, use time : {} ", response.code(), response.message(), System.currentTimeMillis() - start);
+	            	res = BeanUtils.instantiateClass(cls);
+				}
 			}
 		} catch (Exception e) {
-			log.error("Request Failure : {}, use time : {} ", e.getMessage(), System.currentTimeMillis() - start);
+			log.error("Request Error : {}, use time : {} ", e.getMessage(), System.currentTimeMillis() - start);
+			res = BeanUtils.instantiateClass(cls);
 		}
-		return Optional.empty();
+		return res;
 	}
 	
 	public <T extends TimActionResponse> void requestAsyncInvoke(String url, Object params, Class<T> cls, Consumer<T> consumer) {
-		this.requestAsyncInvoke(url, params, (response) -> {
-			if (response.isSuccessful()) {
-				try {
-					String body = response.body().string();
-					T res = objectMapper.readValue(body, cls);
-					if (res.isSuccess()) {
-						log.debug("Request Success, ActionStatus : {}, Body : {}", res.getActionStatus(), body);
-					} else {
-						log.error("Request Failure, ActionStatus : {}, ErrorCode : {}, ErrorInfo : {}", res.getActionStatus(), res.getErrorCode(), res.getErrorInfo());
-					}
-					consumer.accept(res);
-				} catch (IOException e) {
-					log.error(e.getMessage());
-				}
-            }
-		});
-	}
-	
-	public void requestAsyncInvoke(String url, Object params, Consumer<Response> consumer) {
+		
 		long start = System.currentTimeMillis();
+		
 		try {
+			
+			log.info("Async Request URL : {}", url);
+			log.info("Async Request Params : {}", params);
 			
 			RequestBody requestBody = RequestBody.create(MediaType.parse(APPLICATION_JSON_VALUE),
 					objectMapper.writeValueAsString(params));
 			Request request = new Request.Builder().url(url).post(requestBody).build();
 			okhttp3Client.newCall(request).enqueue(new Callback() {
 				
-                @Override
-                public void onFailure(Call call, IOException e) {
-                	log.error("Request Failure : {}, use time : {} ", e.getMessage(), System.currentTimeMillis() - start);
-                }
-                
-                @Override
-                public void onResponse(Call call, Response response) {
-                    try {
-                    	log.debug("Request Success: code : {}, , use time : {} ", response.code(), System.currentTimeMillis() - start);
-                    	consumer.accept(response); 
+	            @Override
+	            public void onFailure(Call call, IOException e) {
+	            	log.error("Request Failure : {}, use time : {} ", e.getMessage(), System.currentTimeMillis() - start);
+	            }
+	            
+	            @Override
+	            public void onResponse(Call call, Response response) {
+	                try {
+	                	if (response.isSuccessful()) {
+	        				try {
+	        					String body = response.body().string();
+	        					log.debug("Request Success: code : {}, body : {} , use time : {} ", response.code(), body , System.currentTimeMillis() - start);
+	        					T res = objectMapper.readValue(body, cls);
+	        					if (res.isSuccess()) {
+	        						log.debug("Action Success, Status : {}, Body : {}", res.getActionStatus(), body);
+	        					} else {
+	        						log.error("Action Failure, Status : {}, ErrorCode : {}, ErrorInfo : {}", res.getActionStatus(), res.getErrorCode(), res.getErrorInfo());
+	        					}
+	        					consumer.accept(res);
+	        				} catch (IOException e) {
+	        					log.error(e.getMessage());
+	        				}
+	                    } else {
+	                    	log.error("Request Failure : code : {}, message : {}, use time : {} ", response.code(), response.message(), System.currentTimeMillis() - start);
+	        			}
 					} finally {
 						response.close();
 					}
-                }
-                
-            });
+	            }
+	            
+	        });
 		} catch (Exception e) {
-			log.error("请求异常", e);
+			log.error("Request Error : {}, use time : {} ", e.getMessage(), System.currentTimeMillis() - start);
 		}
+	}
+	
+	public void requestAsyncInvoke(String url, Object params, Consumer<Response> consumer) {
+		
 	}
 	
 	public String getUserIdByImUser(String account) {
