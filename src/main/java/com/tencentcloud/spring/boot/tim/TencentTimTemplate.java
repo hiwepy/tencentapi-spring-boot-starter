@@ -86,15 +86,15 @@ public class TencentTimTemplate {
 		return accountOps;
 	}
 
-	public TencentTimAllMemberPushAsyncOperations getPushOps() {
+	public TencentTimAllMemberPushAsyncOperations opsForPush() {
 		return pushOps;
 	}
 	
-	public TencentTimGroupAsyncOperations getGroupOps() {
+	public TencentTimGroupAsyncOperations opsForGroup() {
 		return groupOps;
 	}
 	
-	public TencentTimNospeakingAsyncOperations getNoSpeakingOps() {
+	public TencentTimNospeakingAsyncOperations opsForNoSpeaking() {
 		return noSpeakingOps;
 	}
 	
