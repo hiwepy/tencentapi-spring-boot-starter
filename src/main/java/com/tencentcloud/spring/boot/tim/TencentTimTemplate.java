@@ -175,7 +175,7 @@ public class TencentTimTemplate {
 		return res;
 	}
 	
-	public <T extends TimActionResponse> void requestAsyncInvoke(String url, Object params, Class<T> cls, Consumer<T> consumer) {
+	public void requestAsyncInvoke(String url, Object params, Consumer<Response> consumer) {
 		
 		long start = System.currentTimeMillis();
 		
@@ -191,7 +191,7 @@ public class TencentTimTemplate {
 				
 	            @Override
 	            public void onFailure(Call call, IOException e) {
-	            	log.error("Request Failure : {}, use time : {} ", e.getMessage(), System.currentTimeMillis() - start);
+	            	log.error("Async Request Failure : {}, use time : {} ", e.getMessage(), System.currentTimeMillis() - start);
 	            }
 	            
 	            @Override
@@ -200,19 +200,13 @@ public class TencentTimTemplate {
 	                	if (response.isSuccessful()) {
 	        				try {
 	        					String body = response.body().string();
-	        					log.debug("Request Success: code : {}, body : {} , use time : {} ", response.code(), body , System.currentTimeMillis() - start);
-	        					T res = objectMapper.readValue(body, cls);
-	        					if (res.isSuccess()) {
-	        						log.debug("Action Success, Status : {}, Body : {}", res.getActionStatus(), body);
-	        					} else {
-	        						log.error("Action Failure, Status : {}, ErrorCode : {}, ErrorInfo : {}", res.getActionStatus(), res.getErrorCode(), res.getErrorInfo());
-	        					}
-	        					consumer.accept(res);
+	        					log.debug("Async Request Success: code : {}, body : {} , use time : {} ", response.code(), body , System.currentTimeMillis() - start);
+	        					consumer.accept(response);
 	        				} catch (IOException e) {
 	        					log.error(e.getMessage());
 	        				}
 	                    } else {
-	                    	log.error("Request Failure : code : {}, message : {}, use time : {} ", response.code(), response.message(), System.currentTimeMillis() - start);
+	                    	log.error("Async Request Failure : code : {}, message : {}, use time : {} ", response.code(), response.message(), System.currentTimeMillis() - start);
 	        			}
 					} finally {
 						response.close();
@@ -221,12 +215,8 @@ public class TencentTimTemplate {
 	            
 	        });
 		} catch (Exception e) {
-			log.error("Request Error : {}, use time : {} ", e.getMessage(), System.currentTimeMillis() - start);
+			log.error("Async Request Error : {}, use time : {} ", e.getMessage(), System.currentTimeMillis() - start);
 		}
-	}
-	
-	public void requestAsyncInvoke(String url, Object params, Consumer<Response> consumer) {
-		
 	}
 	
 	public String getUserIdByImUser(String account) {
