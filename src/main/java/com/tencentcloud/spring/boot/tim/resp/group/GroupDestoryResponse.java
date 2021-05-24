@@ -24,6 +24,6 @@ import lombok.EqualsAndHashCode;
 @Data
 @EqualsAndHashCode(callSuper=false)
 @JsonInclude( JsonInclude.Include.NON_NULL)
-public class GroupDestroyResponse extends TimActionResponse {
+public class GroupDestoryResponse extends TimActionResponse {
 	
 }

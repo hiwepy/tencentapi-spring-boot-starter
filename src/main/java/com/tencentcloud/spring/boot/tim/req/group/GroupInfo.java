@@ -39,7 +39,7 @@ public class GroupInfo {
      * 群名称，最长30字节，使用 UTF-8 编码，1个汉字占3个字节
      */
     @JsonProperty("Name")
-    private String groupName;
+    private String name;
 
     /**
      * 群简介，最长240字节，使用 UTF-8 编码，1个汉字占3个字节

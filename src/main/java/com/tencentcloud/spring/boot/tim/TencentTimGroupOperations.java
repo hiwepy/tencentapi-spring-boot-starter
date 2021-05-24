@@ -24,7 +24,7 @@ import com.tencentcloud.spring.boot.tim.req.message.OfflinePushInfo;
 import com.tencentcloud.spring.boot.tim.resp.group.AppGroupGetResponse;
 import com.tencentcloud.spring.boot.tim.resp.group.GroupChangeOwnerResponse;
 import com.tencentcloud.spring.boot.tim.resp.group.GroupCreateResponse;
-import com.tencentcloud.spring.boot.tim.resp.group.GroupDestroyResponse;
+import com.tencentcloud.spring.boot.tim.resp.group.GroupDestoryResponse;
 import com.tencentcloud.spring.boot.tim.resp.group.GroupInfoGetResponse;
 import com.tencentcloud.spring.boot.tim.resp.group.GroupJoinedListGetResponse;
 import com.tencentcloud.spring.boot.tim.resp.group.GroupMemberAccount;
@@ -448,11 +448,11 @@ public class TencentTimGroupOperations extends TencentTimOperations {
 	 * @param groupId 群组ID（必填）
 	 * @return 操作结果
 	 */
-	public GroupDestroyResponse destroyGroup(String groupId) {
+	public GroupDestoryResponse destoryGroup(String groupId) {
 		Map<String, Object> requestBody = new ImmutableMap.Builder<String, Object>()
 				.put("GroupId", groupId)
 				.build();
-		return super.request(TimApiAddress.DESTROY_GROUP, requestBody, GroupDestroyResponse.class);
+		return super.request(TimApiAddress.DESTROY_GROUP, requestBody, GroupDestoryResponse.class);
 	}
 	
 	/**
