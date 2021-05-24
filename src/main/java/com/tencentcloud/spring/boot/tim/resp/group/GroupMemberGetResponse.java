@@ -40,6 +40,6 @@ public class GroupMemberGetResponse extends TimActionResponse {
 	 * 群成员列表 
 	 */ 
 	@JsonProperty("MemberList")
-	private List<GroupMember> members;
+	private List<GroupMember> memberList;
 	
 }

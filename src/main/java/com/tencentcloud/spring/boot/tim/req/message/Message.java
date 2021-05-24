@@ -40,12 +40,6 @@ public class Message {
 	private String toAccount;
 
 	/**
-	 * 社团编号
-	 */
-	@JsonProperty("GroupId")
-	private String groupId;
-
-	/**
 	 * 消息离线保存时长（秒数），最长为 7 天（604800s）。 若消息只发在线用户，不想保存离线，则该字段填 0。若不填，则默认保存 7 天
 	 */
 	@JsonProperty("MsgLifeTime")

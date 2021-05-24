@@ -7,8 +7,10 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.tencentcloud.spring.boot.tim.req.message.MsgBody;
 import com.tencentcloud.spring.boot.tim.req.message.OfflinePushInfo;
 
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 /**
  * 推送消息实体
@@ -16,6 +18,8 @@ import lombok.Data;
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @Data
 @Builder
+@NoArgsConstructor
+@AllArgsConstructor
 public class GroupMessage {
 	
 	/**
