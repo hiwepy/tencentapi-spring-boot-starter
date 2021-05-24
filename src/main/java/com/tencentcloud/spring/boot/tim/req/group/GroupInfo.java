@@ -6,13 +6,19 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.tencentcloud.spring.boot.tim.req.common.MapKV;
 
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 /**
  * 群组信息
  */
 @JsonInclude( JsonInclude.Include.NON_NULL)
 @Data
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
 public class GroupInfo {
 
     /**
