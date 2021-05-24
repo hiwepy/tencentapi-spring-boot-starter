@@ -19,6 +19,7 @@ import com.tencentcloud.spring.boot.tim.req.group.GroupMessage;
 import com.tencentcloud.spring.boot.tim.req.group.GroupMessageImport;
 import com.tencentcloud.spring.boot.tim.req.group.GroupModify;
 import com.tencentcloud.spring.boot.tim.req.group.GroupResponseFilter;
+import com.tencentcloud.spring.boot.tim.req.group.GroupType;
 import com.tencentcloud.spring.boot.tim.req.message.MsgBody;
 import com.tencentcloud.spring.boot.tim.req.message.OfflinePushInfo;
 import com.tencentcloud.spring.boot.tim.resp.group.AppGroupGetResponse;
@@ -61,6 +62,17 @@ public class TencentTimGroupOperations extends TencentTimOperations {
 	 * @param limit 本次获取的群组 ID 数量的上限，不得超过 10000。如果不填，默认为最大值 10000
 	 * @return 操作结果
 	 */
+	public AppGroupGetResponse getAppGroupList() {
+		Map<String, Object> requestBody = ImmutableMap.of();
+		return super.request(TimApiAddress.GET_APPID_GROUP_LIST, requestBody, AppGroupGetResponse.class);
+	}
+	
+	/**
+	 * 1、获取 App 中的所有群组
+	 * API：https://cloud.tencent.com/document/product/269/1614
+	 * @param limit 本次获取的群组 ID 数量的上限，不得超过 10000。如果不填，默认为最大值 10000
+	 * @return 操作结果
+	 */
 	public AppGroupGetResponse getAppGroupList(Integer limit) {
 		Map<String, Object> requestBody = new ImmutableMap.Builder<String, Object>()
 				.put("Limit", limit)
@@ -92,11 +104,11 @@ public class TencentTimGroupOperations extends TencentTimOperations {
 	 * 群组形态包括 Public（公开群），Private（私密群），ChatRoom（聊天室），AVChatRoom（音视频聊天室）和 BChatRoom（在线成员广播大群）
 	 * @return 操作结果
 	 */
-	public AppGroupGetResponse getAppGroupList(Integer limit, Integer next, String groupType) {
+	public AppGroupGetResponse getAppGroupList(Integer limit, Integer next, GroupType groupType) {
 		Map<String, Object> requestBody = new ImmutableMap.Builder<String, Object>()
 				.put("Limit", limit)
 				.put("Next", next)
-				.put("GroupType", groupType)
+				.put("GroupType", groupType.getValue())
 				.build();
 		return super.request(TimApiAddress.GET_APPID_GROUP_LIST, requestBody, AppGroupGetResponse.class);
 	}
@@ -415,6 +427,11 @@ public class TencentTimGroupOperations extends TencentTimOperations {
 		return super.request(TimApiAddress.GET_GROUP_MEMBER_INFO, member, GroupMemberModifyResponse.class);
 	}
 	
+	public GroupMemberGetResponse getGroupMembers(String groupId) {
+		Map<String, Object> requestBody = ImmutableMap.of("GroupId", groupId);
+		return super.request(TimApiAddress.GET_GROUP_MEMBER_INFO, requestBody, GroupMemberGetResponse.class);
+	}
+	
 	/**
 	 * 21、获取群成员详细资料
 	 * API：https://cloud.tencent.com/document/product/269/1617
@@ -423,7 +440,7 @@ public class TencentTimGroupOperations extends TencentTimOperations {
 	 * @param offset 从第几个成员开始获取，如果不填则默认为0，表示从第一个成员开始获取   
 	 * @return 操作结果
 	 */
-	public GroupMemberGetResponse getGroupMember(String groupId, Integer limit, Integer offset) {
+	public GroupMemberGetResponse getGroupMembers(String groupId, Integer limit, Integer offset) {
 		Map<String, Object> requestBody = new ImmutableMap.Builder<String, Object>()
 				.put("GroupId", groupId)
 				.put("Limit", limit)
@@ -438,7 +455,7 @@ public class TencentTimGroupOperations extends TencentTimOperations {
 	 * @param query 筛选条件
 	 * @return 操作结果
 	 */
-	public GroupMemberGetResponse getGroupMember(GroupMemberQuery query) {
+	public GroupMemberGetResponse getGroupMembers(GroupMemberQuery query) {
 		return super.request(TimApiAddress.GET_GROUP_MEMBER_INFO, query, GroupMemberGetResponse.class);
 	}
 	
@@ -449,9 +466,7 @@ public class TencentTimGroupOperations extends TencentTimOperations {
 	 * @return 操作结果
 	 */
 	public GroupDestoryResponse destoryGroup(String groupId) {
-		Map<String, Object> requestBody = new ImmutableMap.Builder<String, Object>()
-				.put("GroupId", groupId)
-				.build();
+		Map<String, Object> requestBody = ImmutableMap.of("GroupId", groupId);
 		return super.request(TimApiAddress.DESTROY_GROUP, requestBody, GroupDestoryResponse.class);
 	}
 	
@@ -590,9 +605,7 @@ public class TencentTimGroupOperations extends TencentTimOperations {
 	 * @return 操作结果
 	 */
 	public GroupMemberShuttedUinResponse getGroupShuttedUin(String groupId) {
-		Map<String, Object> requestBody = new ImmutableMap.Builder<String, Object>()
-				.put("GroupId", groupId)
-				.build();
+		Map<String, Object> requestBody = ImmutableMap.of("GroupId", groupId);
 		return super.request(TimApiAddress.GET_GROUP_SHUTTED_UIN, requestBody, GroupMemberShuttedUinResponse.class);
 	}
 	
@@ -931,9 +944,7 @@ public class TencentTimGroupOperations extends TencentTimOperations {
 	 * @return 操作结果
 	 */ 
 	public GroupMemberOnlineNumGetResponse getGroupMemberOnlineNum(String groupId) {
-		Map<String, Object> requestBody = new ImmutableMap.Builder<String, Object>()
-				.put("GroupId", groupId)
-				.build();
+		Map<String, Object> requestBody = ImmutableMap.of("GroupId", groupId);
 		return super.request(TimApiAddress.GET_ONLINE_MEMBER_NUM, requestBody, GroupMemberOnlineNumGetResponse.class);
 	}
 }
