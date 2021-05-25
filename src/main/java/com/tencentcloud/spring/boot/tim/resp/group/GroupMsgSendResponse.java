@@ -16,6 +16,7 @@
 package com.tencentcloud.spring.boot.tim.resp.group;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.tencentcloud.spring.boot.tim.resp.TimActionResponse;
 
 import lombok.Data;
@@ -25,5 +26,17 @@ import lombok.EqualsAndHashCode;
 @EqualsAndHashCode(callSuper=false)
 @JsonInclude( JsonInclude.Include.NON_NULL)
 public class GroupMsgSendResponse extends TimActionResponse {
+
+    /**
+	 * 消息发送的时间戳，对应后台 server 时间
+	 */
+	@JsonProperty("MsgTime")
+	private Long msgTime;
+
+    /**
+	 * 消息序列号，唯一标示一条消息
+	 */
+	@JsonProperty("MsgSeq")
+	private Long msgSeq;
 
 }

@@ -17,7 +17,6 @@ package com.tencentcloud.spring.boot.tim;
 
 import java.io.IOException;
 import java.util.Map;
-import java.util.Objects;
 import java.util.function.Consumer;
 
 import org.springframework.beans.BeanUtils;
@@ -83,7 +82,7 @@ public abstract class TencentTimOperations {
 	protected <T extends TimActionResponse> T request(TimApiAddress address, Object params, Class<T> cls) {
 		String url = CommonHelper.getRequestUrl(address, getDefaultParams());
 		T res =  getTimTemplate().requestInvoke(url, params, cls);
-		if (Objects.nonNull(res) && res.isSuccess()) {
+		if (res.isSuccess()) {
 			log.debug("{}-Success, ActionStatus : {}, Body : {}", address.getOpt(), res.getActionStatus());
 		} else {
 			log.error("{}-Failure, ActionStatus : {}, ErrorCode : {}, ErrorInfo : {}", address.getOpt(), res.getActionStatus(), res.getErrorCode(), res.getErrorInfo());
@@ -98,7 +97,7 @@ public abstract class TencentTimOperations {
 				try {
 					String body = response.body().string();
 					T res = getTimTemplate().readValue(body, cls);
-					if (Objects.nonNull(res) && res.isSuccess()) {
+					if (res.isSuccess()) {
 						log.debug("{}-Success, ActionStatus : {}, Body : {}", res.getActionStatus(), body);
 					} else {
 						log.error("{}-Failure, ActionStatus : {}, ErrorCode : {}, ErrorInfo : {}", res.getActionStatus(), res.getErrorCode(), res.getErrorInfo());
