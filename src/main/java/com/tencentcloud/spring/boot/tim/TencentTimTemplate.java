@@ -150,9 +150,6 @@ public class TencentTimTemplate {
 		T res = null;
 		try {
 			
-			log.info("Request URL : {}", url);
-			log.info("Request Params : {}", params);
-			
 			RequestBody requestBody = RequestBody.create(MediaType.parse(APPLICATION_JSON_VALUE),
 					objectMapper.writeValueAsString(params));
 			
@@ -161,15 +158,15 @@ public class TencentTimTemplate {
 			try(Response response = okhttp3Client.newCall(request).execute();) {
 				if (response.isSuccessful()) {
 					String body = response.body().string();
-					log.debug("Request Success: code : {}, body : {} , use time : {} ", response.code(), body , System.currentTimeMillis() - start);
+					log.debug("Request Success : url : {}, params : {}, code : {}, body : {} , use time : {} ", url, params, response.code(), body , System.currentTimeMillis() - start);
 					res = objectMapper.readValue(body, cls);
 	            } else {
-	            	log.error("Request Failure : code : {}, message : {}, use time : {} ", response.code(), response.message(), System.currentTimeMillis() - start);
+	            	log.error("Request Failure : url : {}, params : {}, code : {}, message : {}, use time : {} ", url, params, response.code(), response.message(), System.currentTimeMillis() - start);
 	            	res = BeanUtils.instantiateClass(cls);
 				}
 			}
 		} catch (Exception e) {
-			log.error("Request Error : {}, use time : {} ", e.getMessage(), System.currentTimeMillis() - start);
+			log.error("Request Error : url : {}, params : {}, use time : {} ,  {}", url, params, e.getMessage(), System.currentTimeMillis() - start);
 			res = BeanUtils.instantiateClass(cls);
 		}
 		return res;
@@ -181,9 +178,6 @@ public class TencentTimTemplate {
 		
 		try {
 			
-			log.info("Async Request URL : {}", url);
-			log.info("Async Request Params : {}", params);
-			
 			RequestBody requestBody = RequestBody.create(MediaType.parse(APPLICATION_JSON_VALUE),
 					objectMapper.writeValueAsString(params));
 			Request request = new Request.Builder().url(url).post(requestBody).build();
@@ -191,22 +185,22 @@ public class TencentTimTemplate {
 				
 	            @Override
 	            public void onFailure(Call call, IOException e) {
-	            	log.error("Async Request Failure : {}, use time : {} ", e.getMessage(), System.currentTimeMillis() - start);
+	            	log.error("Async Request Failure : url : {}, params : {}, message : {}, use time : {} ", url, params, e.getMessage(), System.currentTimeMillis() - start);
 	            }
 	            
 	            @Override
 	            public void onResponse(Call call, Response response) {
                 	if (response.isSuccessful()) {
-    					log.debug("Async Request Success: code : {}, message : {} , use time : {} ", response.code(), response.message(), System.currentTimeMillis() - start);
+    					log.debug("Async Request Success : url : {}, params : {}, code : {}, message : {} , use time : {} ", url, params, response.code(), response.message(), System.currentTimeMillis() - start);
     					consumer.accept(response);
                     } else {
-                    	log.error("Async Request Failure : code : {}, message : {}, use time : {} ", response.code(), response.message(), System.currentTimeMillis() - start);
+                    	log.error("Async Request Failure : url : {}, params : {}, code : {}, message : {}, use time : {} ", url, params, response.code(), response.message(), System.currentTimeMillis() - start);
         			}
 	            }
 	            
 	        });
 		} catch (Exception e) {
-			log.error("Async Request Error : {}, use time : {} ", e.getMessage(), System.currentTimeMillis() - start);
+			log.error("Async Request Error : url : {}, params : {}, message : {} , use time : {} ", url, params, e.getMessage(), System.currentTimeMillis() - start);
 		}
 	}
 	
