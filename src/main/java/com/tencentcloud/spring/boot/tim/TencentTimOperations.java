@@ -20,6 +20,8 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.function.Consumer;
 
+import org.springframework.beans.BeanUtils;
+
 import com.tencentcloud.spring.boot.tim.resp.TimActionResponse;
 import com.tencentcloud.spring.boot.utils.CommonHelper;
 
@@ -103,8 +105,13 @@ public abstract class TencentTimOperations {
 					}
 					consumer.accept(res);
 				} catch (IOException e) {
-					log.error(e.getMessage());
+					log.error("Response Parse Error : {}", e.getMessage());
+					T res = BeanUtils.instantiateClass(cls);
+					consumer.accept(res);
 				}
+            } else {
+            	T res = BeanUtils.instantiateClass(cls);
+				consumer.accept(res);
             }
 		});
 	}
