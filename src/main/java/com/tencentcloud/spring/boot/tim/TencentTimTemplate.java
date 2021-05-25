@@ -197,13 +197,8 @@ public class TencentTimTemplate {
 	            @Override
 	            public void onResponse(Call call, Response response) {
                 	if (response.isSuccessful()) {
-        				try {
-        					String body = response.body().string();
-        					log.debug("Async Request Success: code : {}, body : {} , use time : {} ", response.code(), body , System.currentTimeMillis() - start);
-        					consumer.accept(response);
-        				} catch (IOException e) {
-        					log.error(e.getMessage());
-        				}
+    					log.debug("Async Request Success: code : {}, message : {} , use time : {} ", response.code(), response.message(), System.currentTimeMillis() - start);
+    					consumer.accept(response);
                     } else {
                     	log.error("Async Request Failure : code : {}, message : {}, use time : {} ", response.code(), response.message(), System.currentTimeMillis() - start);
         			}
