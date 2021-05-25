@@ -83,9 +83,9 @@ public abstract class TencentTimOperations {
 		String url = CommonHelper.getRequestUrl(address, getDefaultParams());
 		T res =  getTimTemplate().requestInvoke(url, params, cls);
 		if (res.isSuccess()) {
-			log.debug("{}-Success, ActionStatus : {}, Body : {}", address.getOpt(), res.getActionStatus());
+			log.debug("{}-Success, url : {}, params : {}, ActionStatus : {}, Body : {}", url, params, address.getOpt(), res.getActionStatus());
 		} else {
-			log.error("{}-Failure, ActionStatus : {}, ErrorCode : {}, ErrorInfo : {}", address.getOpt(), res.getActionStatus(), res.getErrorCode(), res.getErrorInfo());
+			log.error("{}-Failure, url : {}, params : {}, ActionStatus : {}, ErrorCode : {}, ErrorInfo : {}", url, params, address.getOpt(), res.getActionStatus(), res.getErrorCode(), res.getErrorInfo());
 		}
 		return res;
 	}
@@ -98,9 +98,9 @@ public abstract class TencentTimOperations {
 					String body = response.body().string();
 					T res = getTimTemplate().readValue(body, cls);
 					if (res.isSuccess()) {
-						log.debug("{}-Success, ActionStatus : {}, Body : {}", res.getActionStatus(), body);
+						log.debug("{}-Success, url : {}, params : {}, ActionStatus : {}, Body : {}", url, params, res.getActionStatus(), body);
 					} else {
-						log.error("{}-Failure, ActionStatus : {}, ErrorCode : {}, ErrorInfo : {}", res.getActionStatus(), res.getErrorCode(), res.getErrorInfo());
+						log.error("{}-Failure, url : {}, params : {}, ActionStatus : {}, ErrorCode : {}, ErrorInfo : {}", url, params, res.getActionStatus(), res.getErrorCode(), res.getErrorInfo());
 					}
 					consumer.accept(res);
 				} catch (IOException e) {
