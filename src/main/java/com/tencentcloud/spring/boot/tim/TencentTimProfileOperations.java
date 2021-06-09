@@ -23,6 +23,7 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import com.google.common.collect.ImmutableMap;
+import com.tencentcloud.spring.boot.tim.req.common.GenderType;
 import com.tencentcloud.spring.boot.tim.resp.profile.UserProfilePortraitGetResponse;
 import com.tencentcloud.spring.boot.tim.resp.profile.UserProfilePortraitSetResponse;
 
@@ -45,9 +46,81 @@ public class TencentTimProfileOperations extends TencentTimOperations {
 	 * @return 操作结果
 	 */
 	public UserProfilePortraitSetResponse portraitSet(String userId, String nickname, String avatar) {
-		Map<String, String> profile = new HashMap<>();
+		return this.portraitSet(userId, nickname, GenderType.GENDER_TYPE_UNKNOWN, avatar);
+	}
+	
+	public UserProfilePortraitSetResponse portraitSet(String userId, String nickname, GenderType gender, String avatar) {
+		Map<String, Object> profile = new HashMap<>();
 		profile.put("Tag_Profile_IM_Nick", nickname);
+		profile.put("Tag_Profile_IM_Gender", gender.getValue());
 		profile.put("Tag_Profile_IM_Image", avatar);
+		profile.put("Tag_Profile_IM_Level", 0);
+		return this.portraitSet(userId, profile);
+	}
+	
+	public UserProfilePortraitSetResponse setNickname(String userId, String nickname) {
+		Map<String, Object> profile = new HashMap<>();
+		profile.put("Tag_Profile_IM_Nick", nickname);
+		return this.portraitSet(userId, profile);
+	}
+	
+	public UserProfilePortraitSetResponse setGender(String userId, GenderType gender) {
+		Map<String, Object> profile = new HashMap<>();
+		profile.put("Tag_Profile_IM_Gender", gender.getValue());
+		return this.portraitSet(userId, profile);
+	}
+
+	public UserProfilePortraitSetResponse setAvatar(String userId, String avatar) {
+		Map<String, Object> profile = new HashMap<>();
+		profile.put("Tag_Profile_IM_Image", avatar);
+		return this.portraitSet(userId, profile);
+	}
+
+	public UserProfilePortraitSetResponse setBirthDay(String userId, String birthDay) {
+		Map<String, Object> profile = new HashMap<>();
+		profile.put("Tag_Profile_IM_BirthDay", birthDay);
+		return this.portraitSet(userId, profile);
+	}
+	
+	public UserProfilePortraitSetResponse setLocation(String userId, String location) {
+		Map<String, Object> profile = new HashMap<>();
+		profile.put("Tag_Profile_IM_Location", location);
+		return this.portraitSet(userId, profile);
+	}
+	
+	public UserProfilePortraitSetResponse setSelfSignature(String userId, String selfSignature) {
+		Map<String, Object> profile = new HashMap<>();
+		profile.put("Tag_Profile_IM_SelfSignature", selfSignature);
+		return this.portraitSet(userId, profile);
+	}
+	
+	public UserProfilePortraitSetResponse setLanguage(String userId, String language) {
+		Map<String, Object> profile = new HashMap<>();
+		profile.put("Tag_Profile_IM_Language", language);
+		return this.portraitSet(userId, profile);
+	}
+	
+	public UserProfilePortraitSetResponse setMsgSettings(String userId, String msgSettings) {
+		Map<String, Object> profile = new HashMap<>();
+		profile.put("Tag_Profile_IM_MsgSettings", msgSettings);
+		return this.portraitSet(userId, profile);
+	}
+	
+	public UserProfilePortraitSetResponse setAdminForbidType(String userId, String adminForbidType) {
+		Map<String, Object> profile = new HashMap<>();
+		profile.put("Tag_Profile_IM_AdminForbidType", adminForbidType);
+		return this.portraitSet(userId, profile);
+	}
+	
+	public UserProfilePortraitSetResponse setLevel(String userId, String level) {
+		Map<String, Object> profile = new HashMap<>();
+		profile.put("Tag_Profile_IM_Level", level);
+		return this.portraitSet(userId, profile);
+	}
+	
+	public UserProfilePortraitSetResponse setRole(String userId, String role) {
+		Map<String, Object> profile = new HashMap<>();
+		profile.put("Tag_Profile_IM_Role", role);
 		return this.portraitSet(userId, profile);
 	}
 
@@ -58,11 +131,11 @@ public class TencentTimProfileOperations extends TencentTimOperations {
 	 * @param profile 用户资料
 	 * @return 操作结果
 	 */
-	public UserProfilePortraitSetResponse portraitSet(String userId, Map<String, String> profile) {
+	public UserProfilePortraitSetResponse portraitSet(String userId, Map<String, Object> profile) {
 		Map<String, Object> requestBody = new ImmutableMap.Builder<String, Object>()
 				.put("From_Account", this.getImUserByUserId(userId))
 				.put("ProfileItem", profile.entrySet().stream().map(entry -> {
-					HashMap<String, String> hashMap = new HashMap<>();
+					HashMap<String, Object> hashMap = new HashMap<>();
 					hashMap.put("Tag", entry.getKey());
 					hashMap.put("Value", entry.getValue());
 					return hashMap;
