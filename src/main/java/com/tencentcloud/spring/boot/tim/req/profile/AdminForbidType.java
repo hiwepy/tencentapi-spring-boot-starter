@@ -24,4 +24,9 @@ public enum AdminForbidType {
 		return desc;
 	}
 	
+	@Override
+	public String toString() {
+		return this.getValue();
+	}
+	
 }

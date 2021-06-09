@@ -22,4 +22,9 @@ public enum GenderType {
 		return desc;
 	}
 	
+	@Override
+	public String toString() {
+		return this.getValue();
+	}
+	
 }

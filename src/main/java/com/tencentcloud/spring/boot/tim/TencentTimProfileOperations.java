@@ -23,6 +23,8 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import com.google.common.collect.ImmutableMap;
+import com.tencentcloud.spring.boot.tim.req.profile.AdminForbidType;
+import com.tencentcloud.spring.boot.tim.req.profile.AllowType;
 import com.tencentcloud.spring.boot.tim.req.profile.GenderType;
 import com.tencentcloud.spring.boot.tim.req.profile.TagProfile;
 import com.tencentcloud.spring.boot.tim.resp.profile.UserProfilePortraitGetResponse;
@@ -89,6 +91,10 @@ public class TencentTimProfileOperations extends TencentTimOperations {
 		return this.portraitSet(userId, ImmutableMap.of(TagProfile.Tag_Profile_IM_Image.getValue(), avatar));
 	}
 
+	public UserProfilePortraitSetResponse setImAllowType(String userId, AllowType allowType) {
+		return this.portraitSet(userId, ImmutableMap.of(TagProfile.Tag_Profile_IM_AllowType.getValue(), allowType.getValue()));
+	}
+	
 	public UserProfilePortraitSetResponse setBirthDay(String userId, String birthDay) {
 		return this.portraitSet(userId, ImmutableMap.of(TagProfile.Tag_Profile_IM_BirthDay.getValue(), birthDay));
 	}
@@ -109,8 +115,8 @@ public class TencentTimProfileOperations extends TencentTimOperations {
 		return this.portraitSet(userId, ImmutableMap.of(TagProfile.Tag_Profile_IM_MsgSettings.getValue(), msgSettings));
 	}
 	
-	public UserProfilePortraitSetResponse setAdminForbidType(String userId, String adminForbidType) {
-		return this.portraitSet(userId, ImmutableMap.of(TagProfile.Tag_Profile_IM_AdminForbidType.getValue(), adminForbidType));
+	public UserProfilePortraitSetResponse setAdminForbidType(String userId, AdminForbidType adminForbidType) {
+		return this.portraitSet(userId, ImmutableMap.of(TagProfile.Tag_Profile_IM_AdminForbidType.getValue(), adminForbidType.getValue()));
 	}
 	
 	public UserProfilePortraitSetResponse setLevel(String userId, String level) {

@@ -25,4 +25,9 @@ public enum AllowType {
 		return desc;
 	}
 	
+	@Override
+	public String toString() {
+		return this.getValue();
+	}
+	
 }
