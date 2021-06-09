@@ -47,22 +47,33 @@ public class TencentTimProfileOperations extends TencentTimOperations {
 	 * @return 操作结果
 	 */
 	public UserProfilePortraitSetResponse portraitSet(String userId, String nickname, String avatar) {
+		return this.portraitSet(userId, nickname, null, avatar, null, null, null);
+	}
+	
+	public UserProfilePortraitSetResponse portraitSet(String userId, String nickname, GenderType gender, String avatar, String birthDay, String signature) {
+		return this.portraitSet(userId, nickname, gender, avatar, birthDay, signature, null);
+	}
+	
+	public UserProfilePortraitSetResponse portraitSet(String userId, String nickname, GenderType gender, String avatar, String birthDay, String signature, String level) {
 		Map<String, Object> profile = new HashMap<>();
 		if(Objects.nonNull(nickname)) {
 			profile.put(TagProfile.Tag_Profile_IM_Nick.getValue(), nickname);
 		}
+		if(Objects.nonNull(gender)) {
+			profile.put(TagProfile.Tag_Profile_IM_Gender.getValue(), nickname);
+		}
 		if(Objects.nonNull(avatar)) {
 			profile.put(TagProfile.Tag_Profile_IM_Image.getValue(), avatar);
 		}
-		return this.portraitSet(userId, profile);
-	}
-	
-	public UserProfilePortraitSetResponse portraitSet(String userId, String nickname, GenderType gender, String avatar) {
-		Map<String, Object> profile = new HashMap<>();
-		profile.put(TagProfile.Tag_Profile_IM_Nick.getValue(), nickname);
-		profile.put(TagProfile.Tag_Profile_IM_Gender.getValue(), gender.getValue());
-		profile.put(TagProfile.Tag_Profile_IM_Image.getValue(), avatar);
-		profile.put(TagProfile.Tag_Profile_IM_Level.getValue(), 0);
+		if(Objects.nonNull(birthDay)) {
+			profile.put(TagProfile.Tag_Profile_IM_BirthDay.getValue(), birthDay);
+		}
+		if(Objects.nonNull(signature)) {
+			profile.put(TagProfile.Tag_Profile_IM_SelfSignature.getValue(), signature);
+		}
+		if(Objects.nonNull(level)) {
+			profile.put(TagProfile.Tag_Profile_IM_Level.getValue(), level);
+		}
 		return this.portraitSet(userId, profile);
 	}
 	
