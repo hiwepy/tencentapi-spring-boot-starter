@@ -62,7 +62,7 @@ public class TencentTimProfileOperations extends TencentTimOperations {
 			profile.put(TagProfile.Tag_Profile_IM_Nick.getValue(), nickname);
 		}
 		if(Objects.nonNull(gender)) {
-			profile.put(TagProfile.Tag_Profile_IM_Gender.getValue(), nickname);
+			profile.put(TagProfile.Tag_Profile_IM_Gender.getValue(), gender.getValue());
 		}
 		if(Objects.nonNull(avatar)) {
 			profile.put(TagProfile.Tag_Profile_IM_Image.getValue(), avatar);
