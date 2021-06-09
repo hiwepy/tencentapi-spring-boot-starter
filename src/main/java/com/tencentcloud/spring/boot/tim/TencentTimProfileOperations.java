@@ -15,15 +15,16 @@
  */
 package com.tencentcloud.spring.boot.tim;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import com.google.common.collect.ImmutableMap;
-import com.tencentcloud.spring.boot.tim.req.common.GenderType;
+import com.tencentcloud.spring.boot.tim.req.profile.GenderType;
+import com.tencentcloud.spring.boot.tim.req.profile.TagProfile;
 import com.tencentcloud.spring.boot.tim.resp.profile.UserProfilePortraitGetResponse;
 import com.tencentcloud.spring.boot.tim.resp.profile.UserProfilePortraitSetResponse;
 
@@ -46,82 +47,67 @@ public class TencentTimProfileOperations extends TencentTimOperations {
 	 * @return 操作结果
 	 */
 	public UserProfilePortraitSetResponse portraitSet(String userId, String nickname, String avatar) {
-		return this.portraitSet(userId, nickname, GenderType.GENDER_TYPE_UNKNOWN, avatar);
+		Map<String, Object> profile = new HashMap<>();
+		if(Objects.nonNull(nickname)) {
+			profile.put(TagProfile.Tag_Profile_IM_Nick.getValue(), nickname);
+		}
+		if(Objects.nonNull(avatar)) {
+			profile.put(TagProfile.Tag_Profile_IM_Image.getValue(), avatar);
+		}
+		return this.portraitSet(userId, profile);
 	}
 	
 	public UserProfilePortraitSetResponse portraitSet(String userId, String nickname, GenderType gender, String avatar) {
 		Map<String, Object> profile = new HashMap<>();
-		profile.put("Tag_Profile_IM_Nick", nickname);
-		profile.put("Tag_Profile_IM_Gender", gender.getValue());
-		profile.put("Tag_Profile_IM_Image", avatar);
-		profile.put("Tag_Profile_IM_Level", 0);
+		profile.put(TagProfile.Tag_Profile_IM_Nick.getValue(), nickname);
+		profile.put(TagProfile.Tag_Profile_IM_Gender.getValue(), gender.getValue());
+		profile.put(TagProfile.Tag_Profile_IM_Image.getValue(), avatar);
+		profile.put(TagProfile.Tag_Profile_IM_Level.getValue(), 0);
 		return this.portraitSet(userId, profile);
 	}
 	
 	public UserProfilePortraitSetResponse setNickname(String userId, String nickname) {
-		Map<String, Object> profile = new HashMap<>();
-		profile.put("Tag_Profile_IM_Nick", nickname);
-		return this.portraitSet(userId, profile);
+		return this.portraitSet(userId, ImmutableMap.of(TagProfile.Tag_Profile_IM_Nick.getValue(), nickname));
 	}
 	
 	public UserProfilePortraitSetResponse setGender(String userId, GenderType gender) {
-		Map<String, Object> profile = new HashMap<>();
-		profile.put("Tag_Profile_IM_Gender", gender.getValue());
-		return this.portraitSet(userId, profile);
+		return this.portraitSet(userId, ImmutableMap.of(TagProfile.Tag_Profile_IM_Gender.getValue(), gender.getValue()));
 	}
 
 	public UserProfilePortraitSetResponse setAvatar(String userId, String avatar) {
-		Map<String, Object> profile = new HashMap<>();
-		profile.put("Tag_Profile_IM_Image", avatar);
-		return this.portraitSet(userId, profile);
+		return this.portraitSet(userId, ImmutableMap.of(TagProfile.Tag_Profile_IM_Image.getValue(), avatar));
 	}
 
 	public UserProfilePortraitSetResponse setBirthDay(String userId, String birthDay) {
-		Map<String, Object> profile = new HashMap<>();
-		profile.put("Tag_Profile_IM_BirthDay", birthDay);
-		return this.portraitSet(userId, profile);
+		return this.portraitSet(userId, ImmutableMap.of(TagProfile.Tag_Profile_IM_BirthDay.getValue(), birthDay));
 	}
 	
 	public UserProfilePortraitSetResponse setLocation(String userId, String location) {
-		Map<String, Object> profile = new HashMap<>();
-		profile.put("Tag_Profile_IM_Location", location);
-		return this.portraitSet(userId, profile);
+		return this.portraitSet(userId, ImmutableMap.of(TagProfile.Tag_Profile_IM_Location.getValue(), location));
 	}
 	
 	public UserProfilePortraitSetResponse setSelfSignature(String userId, String selfSignature) {
-		Map<String, Object> profile = new HashMap<>();
-		profile.put("Tag_Profile_IM_SelfSignature", selfSignature);
-		return this.portraitSet(userId, profile);
+		return this.portraitSet(userId, ImmutableMap.of(TagProfile.Tag_Profile_IM_SelfSignature.getValue(), selfSignature));
 	}
 	
 	public UserProfilePortraitSetResponse setLanguage(String userId, String language) {
-		Map<String, Object> profile = new HashMap<>();
-		profile.put("Tag_Profile_IM_Language", language);
-		return this.portraitSet(userId, profile);
+		return this.portraitSet(userId, ImmutableMap.of(TagProfile.Tag_Profile_IM_Language.getValue(), language));
 	}
 	
 	public UserProfilePortraitSetResponse setMsgSettings(String userId, String msgSettings) {
-		Map<String, Object> profile = new HashMap<>();
-		profile.put("Tag_Profile_IM_MsgSettings", msgSettings);
-		return this.portraitSet(userId, profile);
+		return this.portraitSet(userId, ImmutableMap.of(TagProfile.Tag_Profile_IM_MsgSettings.getValue(), msgSettings));
 	}
 	
 	public UserProfilePortraitSetResponse setAdminForbidType(String userId, String adminForbidType) {
-		Map<String, Object> profile = new HashMap<>();
-		profile.put("Tag_Profile_IM_AdminForbidType", adminForbidType);
-		return this.portraitSet(userId, profile);
+		return this.portraitSet(userId, ImmutableMap.of(TagProfile.Tag_Profile_IM_AdminForbidType.getValue(), adminForbidType));
 	}
 	
 	public UserProfilePortraitSetResponse setLevel(String userId, String level) {
-		Map<String, Object> profile = new HashMap<>();
-		profile.put("Tag_Profile_IM_Level", level);
-		return this.portraitSet(userId, profile);
+		return this.portraitSet(userId, ImmutableMap.of(TagProfile.Tag_Profile_IM_Level.getValue(), level));
 	}
 	
 	public UserProfilePortraitSetResponse setRole(String userId, String role) {
-		Map<String, Object> profile = new HashMap<>();
-		profile.put("Tag_Profile_IM_Role", role);
-		return this.portraitSet(userId, profile);
+		return this.portraitSet(userId, ImmutableMap.of(TagProfile.Tag_Profile_IM_Role.getValue(), role));
 	}
 
 	/**
@@ -151,19 +137,7 @@ public class TencentTimProfileOperations extends TencentTimOperations {
 	 * @return 操作结果
 	 */
 	public UserProfilePortraitGetResponse portraitGet(String... userIds) {
-		List<String> tagList = new ArrayList<String>();
-		tagList.add("Tag_Profile_IM_Nick");
-		tagList.add("Tag_Profile_IM_Gender");
-		tagList.add("Tag_Profile_IM_BirthDay");
-		tagList.add("Tag_Profile_IM_Location");
-		tagList.add("Tag_Profile_IM_SelfSignature");
-		tagList.add("Tag_Profile_IM_AllowType");
-		tagList.add("Tag_Profile_IM_Language");
-		tagList.add("Tag_Profile_IM_MsgSettings");
-		tagList.add("Tag_Profile_IM_AdminForbidType");
-		tagList.add("Tag_Profile_IM_Level");
-		tagList.add("Tag_Profile_IM_Role");
-		return this.portraitGet(tagList, userIds);
+		return this.portraitGet(TagProfile.asTagList(), userIds);
 	}
 	
 	/**

@@ -1,4 +1,4 @@
-package com.tencentcloud.spring.boot.tim.req.common;
+package com.tencentcloud.spring.boot.tim.req.profile;
 
 public enum GenderType {
 
