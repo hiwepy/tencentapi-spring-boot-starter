@@ -27,15 +27,29 @@ public class TencentTimProperties {
 	public static final String PREFIX = "tencent.cloud.tim";
 	// 单位秒
 	private static final long EXPIRE = 86400 * 30;
+	
 	/**
 	 * Enable Tencent Tim.
 	 */
 	private boolean enabled = false;
 
 	private String domain;
+	
+	/**
+	 * 帐号管理员
+	 */
 	private String identifier = ADMINISTRATOR;
+	
+	/**
+	 * SDKAppID
+	 */
 	private Long sdkappid;
+	
+	/**
+	 * 密钥
+	 */
 	private String privateKey;
+	
 	/**
 	 * 签名过期时间，单位秒
 	 */
@@ -48,7 +62,5 @@ public class TencentTimProperties {
 	 * 若不设置该字段，则默认保存7天
 	 */
 	private long msgLifeTime = 604800;
-	
-	
 
 }
