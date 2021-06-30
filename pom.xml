@@ -44,15 +44,6 @@
 		</developer>
 	</developers>
 
-	<repositories>
-		<repository>
-			<id>oracleReleases</id>
-			<name>Oracle Released Java Packages</name>
-			<url>http://download.oracle.com/maven</url>
-			<layout>default</layout>
-		</repository>
-	</repositories>
-
 	<distributionManagement>
 		<snapshotRepository>
 			<id>ossrh</id>
@@ -367,7 +358,7 @@
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
 		
-		<tencentcloud-sdk-java.version>4.0.11</tencentcloud-sdk-java.version>
+		<tencentcloud-sdk-java.version>3.1.301</tencentcloud-sdk-java.version>
 		<tencentcloud-tls-sig-api-v2.version>2.0</tencentcloud-tls-sig-api-v2.version>
 		<guava.version>30.0-jre</guava.version>
 		<fastjson.version>1.2.76</fastjson.version>
