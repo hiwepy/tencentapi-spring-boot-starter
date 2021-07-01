@@ -22,7 +22,7 @@ public class TencentTrtcAutoConfiguration {
 	 * 1、实例化 Trtc 的 client 对象 第二个参数是地域信息，可以直接填写字符串 ap-guangzhou，或者引用预设的常量
 	 */
 	@Bean
-	public TrtcClient tencentTrtcClient(TencentCloudProperties cloudProperties, TencentTrtcProperties trtcProperties) {
+	public TrtcClient trtcClient(TencentCloudProperties cloudProperties, TencentTrtcProperties trtcProperties) {
 		
 		/*
 		 * 实例化一个认证对象，入参需要传入腾讯云账户密钥对 secretId 和 secretKey
