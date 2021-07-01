@@ -13,27 +13,16 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  */
-package com.tencentcloud.spring.boot.live.resp;
+package com.tencentcloud.spring.boot.trtc;
 
-import lombok.Builder;
-import lombok.Data;
+public interface TrtcUserIdProvider {
 
-@Data
-@Builder
-public class StreamResult {
+	default String getUserIdByTrtcUser(Long sdkappid, String account)  {
+		return account;
+	}
 
-	private String streamName;
-	/**
-	 * 格式rtmp://domain/AppName/StreamName?txSecret=
-	 */
-	private String rtmpUrl;
-	/**
-	 * 格式http://domain/AppName/StreamName.flv?txSecret=
-	 */
-	private String flvUrl;
-	/**
-	 * 格式http://domain/AppName/StreamName.m3u8
-	 */
-	private String hlsUrl;
+	default String getTrtcUserByUserId(Long sdkappid, String userId) {
+		return userId;
+	}
 
 }

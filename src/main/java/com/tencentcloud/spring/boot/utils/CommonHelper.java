@@ -46,8 +46,8 @@ public final class CommonHelper {
 	public static final String SEPARATOR = "=";
 	public static final Joiner.MapJoiner joiner = Joiner.on(DELIMITER).withKeyValueSeparator(SEPARATOR);
 	
-	public static String getMixStreamSessionId(final String homeStreamName) {
-		StringBuilder mixStreamSessionId = new StringBuilder(homeStreamName);
+	public static String getMixStreamSessionId(final String streamName) {
+		StringBuilder mixStreamSessionId = new StringBuilder(streamName);
 		mixStreamSessionId.append("_").append(System.currentTimeMillis());
 		return mixStreamSessionId.toString();
 	}

@@ -35,6 +35,11 @@ public class TencentTrtcProperties {
 	private boolean enabled = false;
 	
 	/**
+    * TRTC的SDKAppId。
+    */
+    private Long sdkappid;
+	    
+	/**
 	 * 官网获取的 API ID（腾讯云应用的AK）
 	 */
 	private String secretId;
@@ -59,5 +64,13 @@ public class TencentTrtcProperties {
      * valid choices: zh-CN, en-US
      */
     private Language language = Language.ZH_CN;
+    
+  	private String pushDomain;
+  	
+    private String playDomain;
+    
+    private String appName;
+    
+    private Integer retryTimes = 2;
 	
 }

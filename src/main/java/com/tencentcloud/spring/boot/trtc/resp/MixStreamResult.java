@@ -1,4 +1,4 @@
-package com.tencentcloud.spring.boot.live.resp;
+package com.tencentcloud.spring.boot.trtc.resp;
 
 import lombok.Builder;
 import lombok.Data;

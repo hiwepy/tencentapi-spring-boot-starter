@@ -1,5 +1,6 @@
 package com.tencentcloud.spring.boot;
 
+import org.springframework.beans.factory.ObjectProvider;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
@@ -8,6 +9,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.util.StringUtils;
 
 import com.tencentcloud.spring.boot.trtc.TencentTrtcTemplate;
+import com.tencentcloud.spring.boot.trtc.TrtcUserIdProvider;
 import com.tencentcloudapi.common.Credential;
 import com.tencentcloudapi.common.profile.ClientProfile;
 import com.tencentcloudapi.trtc.v20190722.TrtcClient;
@@ -43,10 +45,13 @@ public class TencentTrtcAutoConfiguration {
         
 		return new TrtcClient(credential, trtcProperties.getRegion(), clientProfile);
 	}
-
+	
 	@Bean
-	public TencentTrtcTemplate tencentTrtcTemplate(TrtcClient trtcClient, TencentTrtcProperties properties) {
-		return new TencentTrtcTemplate(trtcClient, properties);
+	public TencentTrtcTemplate tencentTrtcTemplate(TrtcClient trtcClient, TencentTrtcProperties properties,
+			ObjectProvider<TrtcUserIdProvider> trtcUserIdProvider) {
+		return new TencentTrtcTemplate(trtcClient, properties, trtcUserIdProvider.getIfAvailable(() -> {
+			return new TrtcUserIdProvider() {};
+		}));
 	}
 
 }

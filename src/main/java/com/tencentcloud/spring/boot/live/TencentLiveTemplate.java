@@ -199,10 +199,10 @@ public class TencentLiveTemplate {
 	 * @param  retryTimes 重试次数
 	 * @return 是否取消混流成功
 	 */
-	public boolean cancelMixStream(String mixStreamSessionId, int retryTimes) {
+	public boolean stopMixStream(String mixStreamSessionId, int retryTimes) {
 		boolean isSuccess = Boolean.FALSE;
 		do {
-			isSuccess = this.cancelMixStream(mixStreamSessionId);
+			isSuccess = this.stopMixStream(mixStreamSessionId);
 			isSuccess = !isSuccess && ++retryTimes < liveProperties.getRetryTimes();
 		} while (isSuccess);
 		return isSuccess;
@@ -213,7 +213,7 @@ public class TencentLiveTemplate {
 	 * @param mixStreamSessionId 混流session id
 	 * @return 是否取消混流成功
 	 */
-	public boolean cancelMixStream(String mixStreamSessionId) {
+	public boolean stopMixStream(String mixStreamSessionId) {
 		if (StringUtils.hasText(mixStreamSessionId)) {
 			try {
 				CancelCommonMixStreamRequest req = new CancelCommonMixStreamRequest();
