@@ -28,6 +28,7 @@ import com.tencentcloudapi.cvm.v20170312.models.DescribeZonesRequest;
 import com.tencentcloudapi.live.v20180801.LiveClient;
 import com.tencentcloudapi.live.v20180801.models.CancelCommonMixStreamRequest;
 import com.tencentcloudapi.live.v20180801.models.CancelCommonMixStreamResponse;
+import com.tencentcloudapi.live.v20180801.models.CommonMixControlParams;
 import com.tencentcloudapi.live.v20180801.models.CommonMixCropParams;
 import com.tencentcloudapi.live.v20180801.models.CommonMixInputParam;
 import com.tencentcloudapi.live.v20180801.models.CommonMixLayoutParams;
@@ -84,7 +85,7 @@ public class TencentLiveTemplate {
 	 * @return 流地址信息
 	 */
 	public StreamResult createStreamByStreamName(String streamName) {
-		String secretUrl = CommonHelper.getSafeUrl(liveProperties.getTencentStreamUrlKey(), streamName, System.currentTimeMillis() / 1000 + ONE_WEEK_SECOND);
+		String secretUrl = CommonHelper.getSafeUrl(liveProperties.getStreamUrlKey(), streamName, System.currentTimeMillis() / 1000 + ONE_WEEK_SECOND);
 		return StreamResult.builder().streamName(streamName)
 				.rtmpUrl(CommonHelper.getRtmpUrl(liveProperties.getPushDomain(), liveProperties.getAppName(), streamName, secretUrl))
 				.flvUrl(CommonHelper.getFlvUrl(liveProperties.getPushDomain(), liveProperties.getAppName(), streamName, secretUrl))
@@ -96,12 +97,83 @@ public class TencentLiveTemplate {
 	/**
 	 * 2、创建通用混流
 	 * API:https://cloud.tencent.com/document/product/267/43404
-	 * @param homeStreamName
-	 * @param customStreamName
-	 * @param retryTimes
+	 * @param homeStreamName 主场流名称
+	 * @param awayStreamName 客场流名称
+	 * @param retryTimes	   重试次数
 	 * @return
 	 */
-	public MixStreamResult createMixStream(String homeStreamName, String customStreamName, int retryTimes) {
+	public MixStreamResult createMixStream(String homeStreamName, String awayStreamName, int retryTimes) {
+		
+		// 输出设置
+		CommonMixOutputParams outputParams = new CommonMixOutputParams();
+		String outputStreamName = System.currentTimeMillis() + DELIMITER + srandom.nextInt(10000);
+		outputParams.setOutputStreamName(outputStreamName);
+		outputParams.setOutputStreamType(1L);
+		
+		CommonMixInputParam[] inputStreams = new CommonMixInputParam[3];
+		
+		// 画布设置
+		CommonMixInputParam inputStream = new CommonMixInputParam();
+		inputStream.setInputStreamName(CANV_NAME);
+		CommonMixLayoutParams LayoutParams = new CommonMixLayoutParams();
+		LayoutParams.setImageLayer(1L);
+		LayoutParams.setInputType(3L);
+		LayoutParams.setImageWidth(2 * WIDTH);
+		LayoutParams.setImageHeight(HEIGHT);
+		inputStream.setLayoutParams(LayoutParams);
+		inputStreams[0] = inputStream;
+
+		// 主场画面设置
+		CommonMixInputParam inputStream1 = new CommonMixInputParam();
+		inputStream1.setInputStreamName(homeStreamName);
+		CommonMixLayoutParams layoutParams1 = new CommonMixLayoutParams();
+		layoutParams1.setImageLayer(2L);
+		layoutParams1.setImageWidth(WIDTH);
+		layoutParams1.setImageHeight(HEIGHT);
+		layoutParams1.setLocationX(DEFAULT_PARAM);
+		layoutParams1.setLocationY(DEFAULT_PARAM);
+		inputStream1.setLayoutParams(layoutParams1);
+
+		CommonMixCropParams cropParams1 = new CommonMixCropParams();
+		cropParams1.setCropWidth(WIDTH);
+		cropParams1.setCropHeight(HEIGHT);
+		inputStream1.setCropParams(cropParams1);
+		inputStreams[1] = inputStream1;
+
+		// 客场画面设置
+		CommonMixInputParam inputStream2 = new CommonMixInputParam();
+		inputStream2.setInputStreamName(awayStreamName);
+		CommonMixLayoutParams layoutParams2 = new CommonMixLayoutParams();
+		layoutParams2.setImageLayer(3L);
+		layoutParams2.setImageWidth(WIDTH);
+		layoutParams2.setImageHeight(HEIGHT);
+		layoutParams2.setLocationX(WIDTH);
+		layoutParams2.setLocationY(DEFAULT_PARAM);
+		inputStream2.setLayoutParams(layoutParams2);
+		CommonMixCropParams cropParams2 = new CommonMixCropParams();
+		cropParams2.setCropWidth(WIDTH);
+		cropParams2.setCropHeight(HEIGHT);
+		inputStream2.setCropParams(cropParams2);
+		inputStreams[2] = inputStream2;
+		
+		return this.createMixStream(homeStreamName, awayStreamName, retryTimes, inputStreams, outputParams);
+		
+	}
+	
+	/**
+	 * 2、创建通用混流
+	 * API:https://cloud.tencent.com/document/product/267/43404
+	 * @param homeStreamName 主场流名称
+	 * @param awayStreamName 客场流名称
+	 * @param retryTimes	   重试次数
+	 * @param controlParams  混流的特殊控制参数
+	 * @param inputStreams	   混流输入流列表
+	 * @param outputParams	   混流输出流参数
+	 * @return
+	 */
+	public MixStreamResult createMixStream(String homeStreamName, String awayStreamName, int retryTimes, 
+			CommonMixInputParam[] inputStreams,
+			CommonMixOutputParams outputParams) {
 		MixStreamResult result = null;
 		boolean isSuccess;
 		do {
@@ -113,60 +185,9 @@ public class TencentLiveTemplate {
 				
 				String mixStreamSessionId = CommonHelper.getMixStreamSessionId(homeStreamName);
 				
+				req.setInputStreamList(inputStreams);
 				req.setMixStreamSessionId(mixStreamSessionId);
-				// 输出设置
-				CommonMixOutputParams OutputParams = new CommonMixOutputParams();
-				String outputStreamName = System.currentTimeMillis() + DELIMITER + srandom.nextInt(10000);
-				OutputParams.setOutputStreamName(outputStreamName);
-				OutputParams.setOutputStreamType(1L);
-				req.setOutputParams(OutputParams);
-
-				CommonMixInputParam[] InputStreamList = new CommonMixInputParam[3];
-				// 画布设置
-				CommonMixInputParam inputStream = new CommonMixInputParam();
-				inputStream.setInputStreamName(CANV_NAME);
-				CommonMixLayoutParams LayoutParams = new CommonMixLayoutParams();
-				LayoutParams.setImageLayer(1L);
-				LayoutParams.setInputType(3L);
-				LayoutParams.setImageWidth(2 * WIDTH);
-				LayoutParams.setImageHeight(HEIGHT);
-				inputStream.setLayoutParams(LayoutParams);
-				InputStreamList[0] = inputStream;
-
-				// 主场画面设置
-				CommonMixInputParam inputStream1 = new CommonMixInputParam();
-				inputStream1.setInputStreamName(homeStreamName);
-				CommonMixLayoutParams LayoutParams1 = new CommonMixLayoutParams();
-				LayoutParams1.setImageLayer(2L);
-				LayoutParams1.setImageWidth(WIDTH);
-				LayoutParams1.setImageHeight(HEIGHT);
-				LayoutParams1.setLocationX(DEFAULT_PARAM);
-				LayoutParams1.setLocationY(DEFAULT_PARAM);
-				inputStream1.setLayoutParams(LayoutParams1);
-
-				CommonMixCropParams cropParams1 = new CommonMixCropParams();
-				cropParams1.setCropWidth(WIDTH);
-				cropParams1.setCropHeight(HEIGHT);
-				inputStream1.setCropParams(cropParams1);
-				InputStreamList[1] = inputStream1;
-
-				// 客场画面设置
-				CommonMixInputParam inputStream2 = new CommonMixInputParam();
-				inputStream2.setInputStreamName(customStreamName);
-				CommonMixLayoutParams LayoutParams2 = new CommonMixLayoutParams();
-				LayoutParams2.setImageLayer(3L);
-				LayoutParams2.setImageWidth(WIDTH);
-				LayoutParams2.setImageHeight(HEIGHT);
-				LayoutParams2.setLocationX(WIDTH);
-				LayoutParams2.setLocationY(DEFAULT_PARAM);
-				inputStream2.setLayoutParams(LayoutParams2);
-				CommonMixCropParams cropParams2 = new CommonMixCropParams();
-				cropParams2.setCropWidth(WIDTH);
-				cropParams2.setCropHeight(HEIGHT);
-				inputStream2.setCropParams(cropParams2);
-				InputStreamList[2] = inputStream2;
-
-				req.setInputStreamList(InputStreamList);
+				req.setOutputParams(outputParams);
 
 				// 通过client对象调用想要访问的接口，需要传入请求对象
 				CreateCommonMixStreamResponse commonMixStreamResponse = liveClient.CreateCommonMixStream(req);
@@ -176,7 +197,7 @@ public class TencentLiveTemplate {
 
 				result = MixStreamResult.builder()
 						.sessionId(mixStreamSessionId.toString())
-						.streamName(outputStreamName).build();
+						.streamName(outputParams.getOutputStreamName()).build();
 			} catch (TencentCloudSDKException e) {
 				log.error("{}混流异常", homeStreamName, e);
 			}
@@ -188,7 +209,62 @@ public class TencentLiveTemplate {
 		result.setHlsUrl(stream.getHlsUrl());
 		result.setRtmpUrl(stream.getRtmpUrl());
 		result.setFlvUrl(stream.getFlvUrl());
+		
+		return result;
+	}
+	
+	/**
+	 * 2、创建通用混流
+	 * API:https://cloud.tencent.com/document/product/267/43404
+	 * @param homeStreamName 主场流名称
+	 * @param awayStreamName 客场流名称
+	 * @param retryTimes	   重试次数
+	 * @param controlParams  混流的特殊控制参数
+	 * @param inputStreams	   混流输入流列表
+	 * @param outputParams	   混流输出流参数
+	 * @return
+	 */
+	public MixStreamResult createMixStream(String homeStreamName, String awayStreamName, int retryTimes, 
+			CommonMixControlParams controlParams,
+			CommonMixInputParam[] inputStreams,
+			CommonMixOutputParams outputParams) {
+		MixStreamResult result = null;
+		boolean isSuccess;
+		do {
+			try {
+				
+				CreateCommonMixStreamRequest req = new CreateCommonMixStreamRequest();
 
+				// 混流会话（申请混流开始到取消混流结束）标识 ID。 该值与CreateCommonMixStream中的MixStreamSessionId保持一致。
+				
+				String mixStreamSessionId = CommonHelper.getMixStreamSessionId(homeStreamName);
+				
+				req.setControlParams(controlParams);
+				req.setInputStreamList(inputStreams);
+				req.setMixStreamSessionId(mixStreamSessionId);
+				req.setOutputParams(outputParams);
+
+				// 通过client对象调用想要访问的接口，需要传入请求对象
+				CreateCommonMixStreamResponse commonMixStreamResponse = liveClient.CreateCommonMixStream(req);
+				
+				// 输出json格式的字符串回包
+				log.info("混流成功  {} {}", mixStreamSessionId, DescribeZonesRequest.toJsonString(commonMixStreamResponse));
+
+				result = MixStreamResult.builder()
+						.sessionId(mixStreamSessionId.toString())
+						.streamName(outputParams.getOutputStreamName()).build();
+			} catch (TencentCloudSDKException e) {
+				log.error("{}混流异常", homeStreamName, e);
+			}
+			
+			isSuccess = StringUtils.hasText(result.getSessionId()) && ++retryTimes < 2;
+		} while (isSuccess);
+
+		StreamResult stream = this.createStreamByStreamName(result.getStreamName());
+		result.setHlsUrl(stream.getHlsUrl());
+		result.setRtmpUrl(stream.getRtmpUrl());
+		result.setFlvUrl(stream.getFlvUrl());
+		
 		return result;
 	}
 	

@@ -63,7 +63,7 @@ public class TencentLiveProperties {
   	private String pushDomain;
     private String playDomain;
     private String appName;
-    private String tencentStreamUrlKey;
+    private String streamUrlKey;
     
     private Integer retryTimes = 2;
     
