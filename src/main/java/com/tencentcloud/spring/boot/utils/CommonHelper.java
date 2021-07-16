@@ -37,9 +37,11 @@ public final class CommonHelper {
 	private static final char[] DIGITS_LOWER = {'0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'a', 'b', 'c', 'd', 'e', 'f'};
 	
 	private static final String RTMP_PREFIX = "rtmp://";
+	private static final String WEBRTC_PREFIX = "webrtc://";
 	private static final String HTTP_PREFIX = "http://";
 	private static final String FLV_SUFFIX = ".flv";
 	private static final String HLS_SUFFIX = ".m3u8";
+	private static final String URL_DELIMITER = "/";
 	private static final String PARAMETER_CONNECTOR = "?";
 
 	public static final String DELIMITER = "&";
@@ -53,34 +55,46 @@ public final class CommonHelper {
 	}
 	
 	/**
-	 * 格式rtmp://domain/AppName/StreamName?txSecret=
+	 * 地址组成：推流域名+AppName+StreamName+鉴权信息
+	 * 地址格式：rtmp://domain/AppName/StreamName?txSecret=Md5(key+StreamName+hex(time))&txTime=hex(time)
 	 */
-	public static String getRtmpUrl(final String pushDomain, String appName, String streamName, final String safeUrl) {
+	public static StringBuilder getRtmpUrl(final String pushDomain, String appName, String streamName, final String safeUrl) {
 		StringBuilder rtmpUrl = new StringBuilder();
-		rtmpUrl.append(RTMP_PREFIX).append(pushDomain).append(appName).append(streamName).append(PARAMETER_CONNECTOR).append(safeUrl);
-		return rtmpUrl.toString();
+		rtmpUrl.append(RTMP_PREFIX).append(pushDomain).append(URL_DELIMITER).append(appName).append(URL_DELIMITER).append(streamName).append(PARAMETER_CONNECTOR).append(safeUrl);
+		return rtmpUrl;
+	}
+	
+	/**
+	 * 地址组成：推流域名+AppName+StreamName+鉴权信息
+	 * 地址格式：webrtc://domain/AppName/StreamName?txSecret=Md5(key+StreamName+hex(time))&txTime=hex(time)
+	 */
+	public static StringBuilder getWebrtcUrl(final String pushDomain, String appName, String streamName, final String safeUrl) {
+		StringBuilder rtmpUrl = new StringBuilder();
+		rtmpUrl.append(WEBRTC_PREFIX).append(pushDomain).append(URL_DELIMITER).append(appName).append(URL_DELIMITER).append(streamName).append(PARAMETER_CONNECTOR).append(safeUrl);
+		return rtmpUrl;
 	}
 	
 	/**
 	 * 格式http://domain/AppName/StreamName.flv?txSecret=
 	 */
-	public static String getFlvUrl(final String playDomain, String appName, String streamName, final String safeUrl) {
+	public static StringBuilder getFlvUrl(final String playDomain, String appName, String streamName, final String safeUrl) {
 		StringBuilder flvUrl = new StringBuilder();
-		flvUrl.append(HTTP_PREFIX).append(playDomain).append(appName).append(streamName).append(FLV_SUFFIX).append(PARAMETER_CONNECTOR).append(safeUrl);
-		return flvUrl.toString();
+		flvUrl.append(HTTP_PREFIX).append(playDomain).append(URL_DELIMITER).append(appName).append(URL_DELIMITER).append(streamName).append(FLV_SUFFIX).append(PARAMETER_CONNECTOR).append(safeUrl);
+		return flvUrl;
 	}
 	
 	/**
 	 * 格式http://domain/AppName/StreamName.m3u8
 	 */
-	public static String getHlsUrl(final String playDomain, String appName, String streamName, final String safeUrl) {
+	public static StringBuilder getHlsUrl(final String playDomain, String appName, String streamName, final String safeUrl) {
 		StringBuilder hlsUrl = new StringBuilder();
-		hlsUrl.append(HTTP_PREFIX).append(playDomain).append(appName).append(streamName).append(HLS_SUFFIX).append(PARAMETER_CONNECTOR).append(safeUrl);
-		return hlsUrl.toString();
+		hlsUrl.append(HTTP_PREFIX).append(playDomain).append(URL_DELIMITER).append(appName).append(URL_DELIMITER).append(streamName).append(HLS_SUFFIX).append(PARAMETER_CONNECTOR).append(safeUrl);
+		return hlsUrl;
 	}
 
 	 /*
      * KEY+ streamName + txTime
+     * txSecret=Md5(key+StreamName+hex(time))&txTime=hex(time)
      */
 	public static String getSafeUrl(String key, String streamName, long txTime) {
 		

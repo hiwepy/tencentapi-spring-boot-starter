@@ -58,7 +58,7 @@ public class TencentLiveTemplate {
 
 	private static final String CANV_NAME = "canv";
 	private static final String DELIMITER = "_";
-
+	
 	private static final Float DEFAULT_PARAM = 0F;
 	private static final Float WIDTH = 368F;
 	private static final Float HEIGHT = 640F;
@@ -90,11 +90,11 @@ public class TencentLiveTemplate {
 		String secretUrl = CommonHelper.getSafeUrl(liveProperties.getStreamUrlKey(), streamName, System.currentTimeMillis() / 1000 + ONE_WEEK_SECOND);
 		return StreamResult.builder().streamName(streamName)
 				.rtmpUrl(CommonHelper.getRtmpUrl(liveProperties.getPushDomain(), liveProperties.getAppName(), streamName, secretUrl))
-				.flvUrl(CommonHelper.getFlvUrl(liveProperties.getPushDomain(), liveProperties.getAppName(), streamName, secretUrl))
-				.hlsUrl(CommonHelper.getHlsUrl(liveProperties.getPushDomain(), liveProperties.getAppName(), streamName, secretUrl))
+				.webrtcUrl(CommonHelper.getWebrtcUrl(liveProperties.getPushDomain(), liveProperties.getAppName(), streamName, secretUrl))
+				.flvUrl(CommonHelper.getFlvUrl(liveProperties.getPlayDomain(), liveProperties.getAppName(), streamName, secretUrl))
+				.hlsUrl(CommonHelper.getHlsUrl(liveProperties.getPlayDomain(), liveProperties.getAppName(), streamName, secretUrl))
 				.build();
 	}
-	
 	
 	/**
 	 * 2、创建通用混流
@@ -208,8 +208,9 @@ public class TencentLiveTemplate {
 		} while (isSuccess);
 
 		StreamResult stream = this.createStreamByStreamName(result.getStreamName());
-		result.setHlsUrl(stream.getHlsUrl());
 		result.setRtmpUrl(stream.getRtmpUrl());
+		result.setWebrtcUrl(stream.getWebrtcUrl());
+		result.setHlsUrl(stream.getHlsUrl());
 		result.setFlvUrl(stream.getFlvUrl());
 		
 		return result;
@@ -263,8 +264,9 @@ public class TencentLiveTemplate {
 		} while (isSuccess);
 
 		StreamResult stream = this.createStreamByStreamName(result.getStreamName());
-		result.setHlsUrl(stream.getHlsUrl());
 		result.setRtmpUrl(stream.getRtmpUrl());
+		result.setWebrtcUrl(stream.getWebrtcUrl());
+		result.setHlsUrl(stream.getHlsUrl());
 		result.setFlvUrl(stream.getFlvUrl());
 		
 		return result;
