@@ -35,6 +35,8 @@ import com.tencentcloudapi.live.v20180801.models.CommonMixLayoutParams;
 import com.tencentcloudapi.live.v20180801.models.CommonMixOutputParams;
 import com.tencentcloudapi.live.v20180801.models.CreateCommonMixStreamRequest;
 import com.tencentcloudapi.live.v20180801.models.CreateCommonMixStreamResponse;
+import com.tencentcloudapi.live.v20180801.models.DescribeLiveStreamStateRequest;
+import com.tencentcloudapi.live.v20180801.models.DescribeLiveStreamStateResponse;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -307,6 +309,22 @@ public class TencentLiveTemplate {
 		return Boolean.FALSE;
 	}
 	
+	/**
+     * 4、查询视频流状态
+     * @return     流状态，active：活跃，inactive：非活跃，forbid：禁播。
+     * @throws TencentCloudSDKException
+     */
+    public String describeLiveStreamState(String streamName) throws TencentCloudSDKException {
+        LiveClient liveClient = getLiveClient();
+        DescribeLiveStreamStateRequest req = new DescribeLiveStreamStateRequest();
+        req.setAppName(getLiveProperties().getAppName());
+        req.setDomainName(getLiveProperties().getPushDomain());
+        req.setStreamName(streamName);
+        DescribeLiveStreamStateResponse resp = liveClient.DescribeLiveStreamState(req);
+        log.info("查看视频流状态result:{}", DescribeLiveStreamStateResponse.toJsonString(resp));
+        return resp.getStreamState();
+    }
+    
 	/**
 	 * 反向解析流名称获取userId
 	 * @param streamName
