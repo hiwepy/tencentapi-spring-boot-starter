@@ -1,6 +1,7 @@
 package com.tencentcloud.spring.boot;
 
 import org.springframework.beans.factory.ObjectProvider;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
@@ -24,6 +25,7 @@ public class TencentTrtcAutoConfiguration {
 	 * 1、实例化 Trtc 的 client 对象 第二个参数是地域信息，可以直接填写字符串 ap-guangzhou，或者引用预设的常量
 	 */
 	@Bean
+	@ConditionalOnBean
 	public TrtcClient trtcClient(TencentCloudProperties cloudProperties, TencentTrtcProperties trtcProperties) {
 		
 		/*
@@ -47,6 +49,7 @@ public class TencentTrtcAutoConfiguration {
 	}
 	
 	@Bean
+	@ConditionalOnBean
 	public TencentTrtcTemplate tencentTrtcTemplate(TrtcClient trtcClient, TencentTrtcProperties properties,
 			ObjectProvider<TrtcUserIdProvider> trtcUserIdProvider) {
 		return new TencentTrtcTemplate(trtcClient, properties, trtcUserIdProvider.getIfAvailable(() -> {

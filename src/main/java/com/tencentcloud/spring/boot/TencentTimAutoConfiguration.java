@@ -3,6 +3,7 @@ package com.tencentcloud.spring.boot;
 import java.util.concurrent.TimeUnit;
 
 import org.springframework.beans.factory.ObjectProvider;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
@@ -22,9 +23,8 @@ import okhttp3.OkHttpClient;
 @EnableConfigurationProperties({ TencentCloudProperties.class, TencentTimProperties.class, TencentOkHttp3Properties.class })
 public class TencentTimAutoConfiguration {
 	
-	
-	
 	@Bean
+	@ConditionalOnBean
 	public TencentTimTemplate tencentTimTemplate(
 			TencentTimProperties timProperties,
 			TencentOkHttp3Properties okHttp3Properties,

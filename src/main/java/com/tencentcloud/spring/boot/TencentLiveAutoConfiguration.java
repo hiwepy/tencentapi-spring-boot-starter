@@ -1,5 +1,6 @@
 package com.tencentcloud.spring.boot;
 
+import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
@@ -22,6 +23,7 @@ public class TencentLiveAutoConfiguration {
 	 * 1、实例化 Live 的 client 对象 第二个参数是地域信息，可以直接填写字符串 ap-guangzhou，或者引用预设的常量
 	 */
 	@Bean
+	@ConditionalOnBean
 	public LiveClient tencentLiveClient(TencentCloudProperties cloudProperties, TencentLiveProperties liveProperties) {
 		
 		/*
@@ -45,6 +47,7 @@ public class TencentLiveAutoConfiguration {
 	}
 	
 	@Bean
+	@ConditionalOnBean
 	public TencentLiveTemplate tencentLiveTemplate(LiveClient liveClient, TencentLiveProperties properties) {
 		return new TencentLiveTemplate(liveClient, properties);
 	}
