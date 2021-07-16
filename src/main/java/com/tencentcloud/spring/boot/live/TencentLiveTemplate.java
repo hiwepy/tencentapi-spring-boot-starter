@@ -329,5 +329,23 @@ public class TencentLiveTemplate {
 		StringBuilder streamName = new StringBuilder(userId).append(DELIMITER).append(System.currentTimeMillis());
 		return streamName.toString();
 	}
+	
+	/**
+	 * TODO
+	 * @author 		： <a href="https://github.com/vindell">vindell</a>
+	 * @return		: the liveClient
+	 */
+	public LiveClient getLiveClient() {
+		return liveClient;
+	}
+	
+	/**
+	 * TODO
+	 * @author 		： <a href="https://github.com/vindell">vindell</a>
+	 * @return		: the liveProperties
+	 */
+	public TencentLiveProperties getLiveProperties() {
+		return liveProperties;
+	}
 
 }

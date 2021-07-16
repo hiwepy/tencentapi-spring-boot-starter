@@ -393,5 +393,32 @@ public class TencentTrtcTemplate {
 	public String getTrtcUserByUserId(String userId) {
 		return trtcUserIdProvider.getTrtcUserByUserId(trtcProperties.getSdkappid(), userId);
 	}
-
+	
+	/**
+	 * TODO
+	 * @author 		： <a href="https://github.com/vindell">vindell</a>
+	 * @return		: the trtcClient
+	 */
+	public TrtcClient getTrtcClient() {
+		return trtcClient;
+	}
+	
+	/**
+	 * TODO
+	 * @author 		： <a href="https://github.com/vindell">vindell</a>
+	 * @return		: the trtcProperties
+	 */
+	public TencentTrtcProperties getTrtcProperties() {
+		return trtcProperties;
+	}
+	
+	/**
+	 * TODO
+	 * @author 		： <a href="https://github.com/vindell">vindell</a>
+	 * @return		: the trtcUserIdProvider
+	 */
+	public TrtcUserIdProvider getTrtcUserIdProvider() {
+		return trtcUserIdProvider;
+	}
+	
 }

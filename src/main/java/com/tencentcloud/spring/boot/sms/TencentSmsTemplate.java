@@ -91,5 +91,23 @@ public class TencentSmsTemplate {
 		 */
 		return smsClient.SendSms(req);
 	}
+	
+	/**
+	 * TODO
+	 * @author 		： <a href="https://github.com/vindell">vindell</a>
+	 * @return		: the smsClient
+	 */
+	public SmsClient getSmsClient() {
+		return smsClient;
+	}
+	
+	/**
+	 * TODO
+	 * @author 		： <a href="https://github.com/vindell">vindell</a>
+	 * @return		: the smsProperties
+	 */
+	public TencentSmsProperties getSmsProperties() {
+		return smsProperties;
+	}
 
 }
