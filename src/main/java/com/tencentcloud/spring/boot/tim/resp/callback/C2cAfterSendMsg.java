@@ -2,6 +2,7 @@ package com.tencentcloud.spring.boot.tim.resp.callback;
 
 import java.util.List;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
@@ -13,6 +14,7 @@ import lombok.Data;
  */
 @Data
 @JsonInclude(JsonInclude.Include.NON_NULL)
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class C2cAfterSendMsg {
 	
 	/**
@@ -56,6 +58,12 @@ public class C2cAfterSendMsg {
 	 */
 	@JsonProperty(value = "MsgKey")
 	private String msgKey;
+
+	/**
+	 * 在线消息，为1，否则为0；
+	 */
+	@JsonProperty(value = "OnlineOnlyFlag")
+	private Integer onlineFlag;
 	
 	/**
 	 * 该条消息的下发结果，0表示下发成功，非0表示下发失败
@@ -80,5 +88,11 @@ public class C2cAfterSendMsg {
 	 */
 	@JsonProperty(value = "MsgBody")
 	private List<C2cSendMsgBody> msgBody;
+	
+	/**
+	 * 消息自定义数据（云端保存，会发送到对端，程序卸载重装后还能拉取到）
+	 */
+	@JsonProperty(value = "CloudCustomData")
+	private String cloudCustomData;
 	    
 }

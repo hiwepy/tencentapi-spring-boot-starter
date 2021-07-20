@@ -1,5 +1,6 @@
 package com.tencentcloud.spring.boot.tim.resp.nospeaking;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.tencentcloud.spring.boot.tim.resp.TimActionResponse;
@@ -10,6 +11,7 @@ import lombok.EqualsAndHashCode;
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @Data
 @EqualsAndHashCode(callSuper = false)
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class NoSpeakingResponse extends TimActionResponse {
 
 	/**

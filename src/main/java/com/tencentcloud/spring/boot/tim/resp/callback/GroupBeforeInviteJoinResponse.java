@@ -2,6 +2,7 @@ package com.tencentcloud.spring.boot.tim.resp.callback;
 
 import java.util.List;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
@@ -14,6 +15,7 @@ import lombok.EqualsAndHashCode;
  */
 @Data
 @JsonInclude(JsonInclude.Include.NON_NULL)
+@JsonIgnoreProperties(ignoreUnknown = true)
 @EqualsAndHashCode(callSuper=false)
 public class GroupBeforeInviteJoinResponse extends CallbackRespone{
 	

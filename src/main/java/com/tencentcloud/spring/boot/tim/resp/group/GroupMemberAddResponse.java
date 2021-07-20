@@ -17,6 +17,7 @@ package com.tencentcloud.spring.boot.tim.resp.group;
 
 import java.util.List;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.tencentcloud.spring.boot.tim.resp.TimActionResponse;
@@ -27,6 +28,7 @@ import lombok.EqualsAndHashCode;
 @Data
 @EqualsAndHashCode(callSuper=false)
 @JsonInclude( JsonInclude.Include.NON_NULL)
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class GroupMemberAddResponse extends TimActionResponse {
 	
 	/**

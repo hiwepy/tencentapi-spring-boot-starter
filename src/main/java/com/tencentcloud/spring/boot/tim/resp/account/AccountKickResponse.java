@@ -15,6 +15,7 @@
  */
 package com.tencentcloud.spring.boot.tim.resp.account;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.tencentcloud.spring.boot.tim.resp.TimActionResponse;
 
@@ -24,6 +25,7 @@ import lombok.EqualsAndHashCode;
 @Data
 @EqualsAndHashCode(callSuper=false)
 @JsonInclude( JsonInclude.Include.NON_NULL)
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class AccountKickResponse extends TimActionResponse {
 
 }
