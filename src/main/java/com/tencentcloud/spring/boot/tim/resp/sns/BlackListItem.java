@@ -1,12 +1,14 @@
 package com.tencentcloud.spring.boot.tim.resp.sns;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 import lombok.Data;
 
-@JsonInclude( JsonInclude.Include.NON_NULL)
 @Data
+@JsonInclude( JsonInclude.Include.NON_NULL)
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class BlackListItem {
 
     /**

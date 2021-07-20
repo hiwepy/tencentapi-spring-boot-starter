@@ -15,6 +15,7 @@
  */
 package com.tencentcloud.spring.boot.tim.resp.group;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
@@ -24,11 +25,12 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 
-@JsonInclude( JsonInclude.Include.NON_NULL)
 @Data
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
+@JsonInclude( JsonInclude.Include.NON_NULL)
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class GroupMemberAccount {
 
     /**

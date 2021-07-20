@@ -2,6 +2,7 @@ package com.tencentcloud.spring.boot.tim.resp.group;
 
 import java.util.List;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.tencentcloud.spring.boot.tim.req.common.MapKV;
@@ -9,8 +10,9 @@ import com.tencentcloud.spring.boot.tim.req.group.GroupMember;
 
 import lombok.Data;
 
-@JsonInclude( JsonInclude.Include.NON_NULL)
 @Data
+@JsonInclude(JsonInclude.Include.NON_NULL)
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class GroupInfo {
 
     /**

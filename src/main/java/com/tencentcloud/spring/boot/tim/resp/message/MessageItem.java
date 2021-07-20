@@ -17,6 +17,7 @@ package com.tencentcloud.spring.boot.tim.resp.message;
 
 import java.util.List;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.tencentcloud.spring.boot.tim.req.message.MsgBody;
@@ -26,8 +27,9 @@ import lombok.Data;
 /**
  * 响应消息记录
  */
-@JsonInclude(JsonInclude.Include.NON_NULL)
 @Data
+@JsonInclude(JsonInclude.Include.NON_NULL)
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class MessageItem {
 	
 	/**
