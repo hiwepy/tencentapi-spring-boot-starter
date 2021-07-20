@@ -15,7 +15,7 @@ import lombok.EqualsAndHashCode;
  */
 @Data
 @JsonInclude(JsonInclude.Include.NON_NULL)
-@JsonIgnoreProperties(ignoreUnknown = true)
+@JsonIgnoreProperties(ignoreUnknown = false)
 @EqualsAndHashCode(callSuper=false)
 public class GroupBeforeInviteJoinResponse extends CallbackRespone{
 	
