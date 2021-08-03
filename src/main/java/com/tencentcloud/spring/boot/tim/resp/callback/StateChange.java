@@ -20,6 +20,9 @@ public class StateChange {
 	 */
 	@JsonProperty(value = "CallbackCommand")
 	private String command;
+
+	@JsonProperty(value = "EventTime")
+	private String eventTime;
 	/**
 	 * 用户上下线的信息
 	 */
