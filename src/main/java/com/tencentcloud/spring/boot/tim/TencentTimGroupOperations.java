@@ -276,11 +276,11 @@ public class TencentTimGroupOperations extends TencentTimOperations {
 	}
 	
 	/**
-	 * 12、获取群成员详细资料
+	 * 12、添加群成员
 	 * API：https://cloud.tencent.com/document/product/269/1617
 	 * @param groupId 群组ID（必填）
 	 * @param silence 是否静默加人。0：非静默加人；1：静默加人。不填该字段默认为0
-	 * @param userIds 待删除的群成员
+	 * @param userIds 待添加的群成员
 	 * @return 操作结果
 	 */
 	public GroupMemberAddResponse addGroupMember(String groupId, Integer silence, String... userIds) {
@@ -288,7 +288,7 @@ public class TencentTimGroupOperations extends TencentTimOperations {
 				.put("GroupId", groupId)
 				.put("Silence", Objects.nonNull(silence) ? silence : 0)
 				.put("MemberList", Stream.of(userIds).map(uid -> {
-					return GroupMemberAccount.builder().account(this.getImUserByUserId(uid));
+					return new GroupMemberAccount(this.getImUserByUserId(uid));
 				}).collect(Collectors.toList()))
 				.build();
 		return super.request(TimApiAddress.ADD_GROUP_MEMBER, requestBody, GroupMemberAddResponse.class);

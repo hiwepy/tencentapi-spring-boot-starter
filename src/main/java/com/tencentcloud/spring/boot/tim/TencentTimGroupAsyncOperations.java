@@ -282,11 +282,11 @@ public class TencentTimGroupAsyncOperations extends TencentTimGroupOperations {
 	}
 	
 	/**
-	 * 12、获取群成员详细资料
-	 * API：https://cloud.tencent.com/document/product/269/1617
+	 * 12、增加群成员
+	 * API：https://cloud.tencent.com/document/product/269/1621
 	 * @param groupId 群组ID（必填）
 	 * @param silence 是否静默加人。0：非静默加人；1：静默加人。不填该字段默认为0
-	 * @param userIds 待删除的群成员
+	 * @param userIds 要添加的群成员 ID
 	 * @param consumer 响应处理回调函数
 	 */
 	public void asyncAddGroupMember(String groupId, Integer silence, String[] userIds, Consumer<GroupMemberAddResponse> consumer) {
@@ -294,7 +294,7 @@ public class TencentTimGroupAsyncOperations extends TencentTimGroupOperations {
 				.put("GroupId", groupId)
 				.put("Silence", Objects.nonNull(silence) ? silence : 0)
 				.put("MemberList", Stream.of(userIds).map(uid -> {
-					return GroupMemberAccount.builder().account(this.getImUserByUserId(uid));
+					return new GroupMemberAccount(this.getImUserByUserId(uid));
 				}).collect(Collectors.toList()))
 				.build();
 		this.asyncRequest(TimApiAddress.ADD_GROUP_MEMBER, requestBody, GroupMemberAddResponse.class, consumer);
@@ -305,7 +305,7 @@ public class TencentTimGroupAsyncOperations extends TencentTimGroupOperations {
 	 * API：https://cloud.tencent.com/document/product/269/1622
 	 * @param groupId 群组ID（必填）
 	 * @param reason 踢出用户原因
-	 * @param userIds 待添加的群成员数组
+	 * @param userIds 要删除的群成员数组
 	 * @param consumer 响应处理回调函数
 	 */
 	public void asyncDeleteGroupMember(String groupId, String reason, String[] userIds, Consumer<GroupMemberDeleteResponse> consumer) {
@@ -323,7 +323,7 @@ public class TencentTimGroupAsyncOperations extends TencentTimGroupOperations {
 	 * @param groupId 群组ID（必填）
 	 * @param silence 是否静默删人。0表示非静默删人，1表示静默删人。静默即删除成员时不通知群里所有成员，只通知被删除群成员。不填写该字段时默认为0
 	 * @param reason 踢出用户原因
-	 * @param userIds 待添加的群成员数组
+	 * @param userIds 要删除的群成员数组
 	 * @param consumer 响应处理回调函数
 	 */
 	public void asyncDeleteGroupMember(String groupId, Integer silence, String reason,  String[] userIds, Consumer<GroupMemberDeleteResponse> consumer) {
@@ -431,7 +431,7 @@ public class TencentTimGroupAsyncOperations extends TencentTimGroupOperations {
 	 * @param consumer 响应处理回调函数
 	 */
 	public void asyncUpdateGroupMember(GroupMemberModify member, Consumer<GroupMemberModifyResponse> consumer) {
-		this.asyncRequest(TimApiAddress.GET_GROUP_MEMBER_INFO, member, GroupMemberModifyResponse.class, consumer);
+		this.asyncRequest(TimApiAddress.MODIFY_GROUP_MEMBER_INFO, member, GroupMemberModifyResponse.class, consumer);
 	}
 	
 	/**
