@@ -37,7 +37,12 @@ public class TencentTimAllMemberPushOperations extends TencentTimOperations {
 	 * @return 操作结果
 	 */
 	public AllMemberPushResponse push(String userId, String msgRandom, MsgBody... msgBody) {
-		return this.push(userId, msgRandom, null, null, null, msgBody);
+		Map<String, Object> requestBody = new ImmutableMap.Builder<String, Object>()
+				.put("From_Account", this.getImUserByUserId(userId))
+				.put("MsgRandom", msgRandom)
+				.put("MsgBody", msgBody)
+				.build();
+		return super.request(TimApiAddress.IM_PUSH, requestBody, AllMemberPushResponse.class);
 	}
 	
 	/**
@@ -50,7 +55,13 @@ public class TencentTimAllMemberPushOperations extends TencentTimOperations {
 	 * @return 操作结果
 	 */
 	public AllMemberPushResponse push(String userId, String msgRandom, Integer msgLifeTime, MsgBody... msgBody) {
-		return this.push(userId, msgRandom, msgLifeTime, null, null, msgBody);
+		Map<String, Object> requestBody = new ImmutableMap.Builder<String, Object>()
+				.put("From_Account", this.getImUserByUserId(userId))
+				.put("MsgRandom", msgRandom)
+				.put("MsgLifeTime", Objects.isNull(msgLifeTime) ? 0 : msgLifeTime)
+				.put("MsgBody", msgBody)
+				.build();
+		return super.request(TimApiAddress.IM_PUSH, requestBody, AllMemberPushResponse.class);
 	}
 	
 	/**
@@ -64,9 +75,15 @@ public class TencentTimAllMemberPushOperations extends TencentTimOperations {
 	 * @return 操作结果
 	 */
 	public AllMemberPushResponse push(String userId, String msgRandom, Integer msgLifeTime, OfflinePushInfo offlinePushInfo, MsgBody... msgBody) {
-		return this.push(userId, msgRandom, msgLifeTime, null, offlinePushInfo, msgBody);
+		Map<String, Object> requestBody = new ImmutableMap.Builder<String, Object>()
+				.put("From_Account", this.getImUserByUserId(userId))
+				.put("MsgRandom", msgRandom)
+				.put("MsgLifeTime", Objects.isNull(msgLifeTime) ? 0 : msgLifeTime)
+				.put("MsgBody", msgBody)
+				.put("OfflinePushInfo", offlinePushInfo)
+				.build();
+		return super.request(TimApiAddress.IM_PUSH, requestBody, AllMemberPushResponse.class);
 	}
-	
 	
 	/**
 	 * 1、全员推送

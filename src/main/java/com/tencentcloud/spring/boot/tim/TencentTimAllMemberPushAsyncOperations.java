@@ -49,7 +49,12 @@ public class TencentTimAllMemberPushAsyncOperations extends TencentTimAllMemberP
 	 * @param consumer 响应处理回调函数
 	 */
 	public void asyncPush(String userId, String msgRandom, MsgBody[] msgBody, Consumer<AllMemberPushResponse> consumer) {
-		this.asyncPush(userId, msgRandom, null, null, null, msgBody, consumer);
+		Map<String, Object> requestBody = new ImmutableMap.Builder<String, Object>()
+				.put("From_Account", this.getImUserByUserId(userId))
+				.put("MsgRandom", msgRandom)
+				.put("MsgBody", msgBody)
+				.build();
+		this.asyncRequest(TimApiAddress.IM_PUSH, requestBody, AllMemberPushResponse.class, consumer);
 	}
 	
 	/**
@@ -62,7 +67,13 @@ public class TencentTimAllMemberPushAsyncOperations extends TencentTimAllMemberP
 	 * @param consumer 响应处理回调函数
 	 */
 	public void asyncPush(String userId, String msgRandom, Integer msgLifeTime, MsgBody[] msgBody, Consumer<AllMemberPushResponse> consumer) {
-		this.asyncPush(userId, msgRandom, msgLifeTime, null, null, msgBody, consumer);
+		Map<String, Object> requestBody = new ImmutableMap.Builder<String, Object>()
+				.put("From_Account", this.getImUserByUserId(userId))
+				.put("MsgRandom", msgRandom)
+				.put("MsgLifeTime", Objects.isNull(msgLifeTime) ? 0 : msgLifeTime)
+				.put("MsgBody", msgBody)
+				.build();
+		this.asyncRequest(TimApiAddress.IM_PUSH, requestBody, AllMemberPushResponse.class, consumer);
 	}
 	
 	/**
@@ -77,7 +88,14 @@ public class TencentTimAllMemberPushAsyncOperations extends TencentTimAllMemberP
 	 */
 	public void asyncPush(String userId, String msgRandom, Integer msgLifeTime, OfflinePushInfo offlinePushInfo, 
 			MsgBody[] msgBody, Consumer<AllMemberPushResponse> consumer) {
-		this.asyncPush(userId, msgRandom, msgLifeTime, null, offlinePushInfo, msgBody, consumer);
+		Map<String, Object> requestBody = new ImmutableMap.Builder<String, Object>()
+				.put("From_Account", this.getImUserByUserId(userId))
+				.put("MsgRandom", msgRandom)
+				.put("MsgLifeTime", Objects.isNull(msgLifeTime) ? 0 : msgLifeTime)
+				.put("MsgBody", msgBody)
+				.put("OfflinePushInfo", offlinePushInfo)
+				.build();
+		this.asyncRequest(TimApiAddress.IM_PUSH, requestBody, AllMemberPushResponse.class, consumer);
 	}
 	
 	/**
