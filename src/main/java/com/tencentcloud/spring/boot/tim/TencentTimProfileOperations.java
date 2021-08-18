@@ -52,11 +52,11 @@ public class TencentTimProfileOperations extends TencentTimOperations {
 		return this.portraitSet(userId, nickname, null, avatar, null, null, null);
 	}
 	
-	public UserProfilePortraitSetResponse portraitSet(String userId, String nickname, GenderType gender, String avatar, String birthDay, String signature) {
+	public UserProfilePortraitSetResponse portraitSet(String userId, String nickname, GenderType gender, String avatar, Integer birthDay, String signature) {
 		return this.portraitSet(userId, nickname, gender, avatar, birthDay, signature, null);
 	}
 	
-	public UserProfilePortraitSetResponse portraitSet(String userId, String nickname, GenderType gender, String avatar, String birthDay, String signature, String level) {
+	public UserProfilePortraitSetResponse portraitSet(String userId, String nickname, GenderType gender, String avatar, Integer birthDay, String signature, Integer level) {
 		Map<String, Object> profile = new HashMap<>();
 		if(Objects.nonNull(nickname)) {
 			profile.put(TagProfile.Tag_Profile_IM_Nick.getValue(), nickname);
@@ -95,7 +95,7 @@ public class TencentTimProfileOperations extends TencentTimOperations {
 		return this.portraitSet(userId, ImmutableMap.of(TagProfile.Tag_Profile_IM_AllowType.getValue(), allowType.getValue()));
 	}
 	
-	public UserProfilePortraitSetResponse setBirthDay(String userId, String birthDay) {
+	public UserProfilePortraitSetResponse setBirthDay(String userId, Integer birthDay) {
 		return this.portraitSet(userId, ImmutableMap.of(TagProfile.Tag_Profile_IM_BirthDay.getValue(), birthDay));
 	}
 	
@@ -107,11 +107,11 @@ public class TencentTimProfileOperations extends TencentTimOperations {
 		return this.portraitSet(userId, ImmutableMap.of(TagProfile.Tag_Profile_IM_SelfSignature.getValue(), selfSignature));
 	}
 	
-	public UserProfilePortraitSetResponse setLanguage(String userId, String language) {
+	public UserProfilePortraitSetResponse setLanguage(String userId, Integer language) {
 		return this.portraitSet(userId, ImmutableMap.of(TagProfile.Tag_Profile_IM_Language.getValue(), language));
 	}
 	
-	public UserProfilePortraitSetResponse setMsgSettings(String userId, String msgSettings) {
+	public UserProfilePortraitSetResponse setMsgSettings(String userId, Integer msgSettings) {
 		return this.portraitSet(userId, ImmutableMap.of(TagProfile.Tag_Profile_IM_MsgSettings.getValue(), msgSettings));
 	}
 	
@@ -119,11 +119,11 @@ public class TencentTimProfileOperations extends TencentTimOperations {
 		return this.portraitSet(userId, ImmutableMap.of(TagProfile.Tag_Profile_IM_AdminForbidType.getValue(), adminForbidType.getValue()));
 	}
 	
-	public UserProfilePortraitSetResponse setLevel(String userId, String level) {
+	public UserProfilePortraitSetResponse setLevel(String userId, Integer level) {
 		return this.portraitSet(userId, ImmutableMap.of(TagProfile.Tag_Profile_IM_Level.getValue(), level));
 	}
 	
-	public UserProfilePortraitSetResponse setRole(String userId, String role) {
+	public UserProfilePortraitSetResponse setRole(String userId, Integer role) {
 		return this.portraitSet(userId, ImmutableMap.of(TagProfile.Tag_Profile_IM_Role.getValue(), role));
 	}
 
