@@ -7,6 +7,8 @@ import java.util.Objects;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+import org.apache.commons.lang3.StringUtils;
+
 import com.google.common.collect.ImmutableMap;
 import com.tencentcloud.spring.boot.tim.req.common.MapKV;
 import com.tencentcloud.spring.boot.tim.req.group.GroupInfo;
@@ -423,12 +425,36 @@ public class TencentTimGroupOperations extends TencentTimOperations {
 	 * @return 操作结果
 	 */
 	public GroupMemberModifyResponse updateGroupMember(GroupMemberModify member) {
-		return super.request(TimApiAddress.GET_GROUP_MEMBER_INFO, member, GroupMemberModifyResponse.class);
+		return super.request(TimApiAddress.MODIFY_GROUP_MEMBER_INFO, member, GroupMemberModifyResponse.class);
 	}
 	
+	/**
+	 * 21、获取群成员详细资料
+	 * API：https://cloud.tencent.com/document/product/269/1617
+	 * @param groupId 群组ID（必填）
+	 * @return 操作结果
+	 */
 	public GroupMemberGetResponse getGroupMembers(String groupId) {
+		return this.getGroupMembers(groupId, true);
+	}
+	
+	/**
+	 * 21、获取群成员详细资料
+	 * API：https://cloud.tencent.com/document/product/269/1617
+	 * @param groupId 群组ID（必填）
+	 * @param filterNotFound 是否过滤IM账号不存在的用户（群成员IM账号不存在的时，memberAccount值为@TLS#NOT_FOUND）
+	 * @return 操作结果
+	 */
+	public GroupMemberGetResponse getGroupMembers(String groupId, boolean filterNotFound) {
 		Map<String, Object> requestBody = ImmutableMap.of("GroupId", groupId);
-		return super.request(TimApiAddress.GET_GROUP_MEMBER_INFO, requestBody, GroupMemberGetResponse.class);
+		GroupMemberGetResponse response = super.request(TimApiAddress.GET_GROUP_MEMBER_INFO, requestBody, GroupMemberGetResponse.class);
+		if(filterNotFound && response.isSuccess() && response.getMemberNum() > 0) {
+			List<GroupMember> memberList = response.getMemberList().stream()
+				.filter(member -> !StringUtils.startsWith(member.getMemberAccount(), "@TLS#NOT_FOUND"))
+				.collect(Collectors.toList());
+			response.setMemberList(memberList);
+		}
+		return response;
 	}
 	
 	/**
@@ -440,12 +466,32 @@ public class TencentTimGroupOperations extends TencentTimOperations {
 	 * @return 操作结果
 	 */
 	public GroupMemberGetResponse getGroupMembers(String groupId, Integer limit, Integer offset) {
+		return this.getGroupMembers(groupId, limit, offset, true);
+	}
+	
+	/**
+	 * 21、获取群成员详细资料
+	 * API：https://cloud.tencent.com/document/product/269/1617
+	 * @param groupId 群组ID（必填）
+	 * @param limit 一次最多获取多少个成员的资料，不得超过6000。如果不填，则获取群内全部成员的信息
+	 * @param offset 从第几个成员开始获取，如果不填则默认为0，表示从第一个成员开始获取   
+	 * @param filterNotFound 是否过滤IM账号不存在的用户（群成员IM账号不存在的时，memberAccount值为@TLS#NOT_FOUND）
+	 * @return 操作结果
+	 */
+	public GroupMemberGetResponse getGroupMembers(String groupId, Integer limit, Integer offset, boolean filterNotFound) {
 		Map<String, Object> requestBody = new ImmutableMap.Builder<String, Object>()
 				.put("GroupId", groupId)
 				.put("Limit", limit)
 				.put("Offset", offset)
 				.build();
-		return super.request(TimApiAddress.GET_GROUP_MEMBER_INFO, requestBody, GroupMemberGetResponse.class);
+		GroupMemberGetResponse response = super.request(TimApiAddress.GET_GROUP_MEMBER_INFO, requestBody, GroupMemberGetResponse.class);
+		if(filterNotFound && response.isSuccess() && response.getMemberNum() > 0) {
+			List<GroupMember> memberList = response.getMemberList().stream()
+				.filter(member -> !StringUtils.startsWith(member.getMemberAccount(), "@TLS#NOT_FOUND"))
+				.collect(Collectors.toList());
+			response.setMemberList(memberList);
+		}
+		return response;
 	}
 	
 	/**
