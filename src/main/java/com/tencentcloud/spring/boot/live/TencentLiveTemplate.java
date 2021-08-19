@@ -168,7 +168,6 @@ public class TencentLiveTemplate {
 	 * @param homeStreamName 主场流名称
 	 * @param awayStreamName 客场流名称
 	 * @param retryTimes	   重试次数
-	 * @param controlParams  混流的特殊控制参数
 	 * @param inputStreams	   混流输入流列表
 	 * @param outputParams	   混流输出流参数
 	 * @return 混流结果
@@ -314,7 +313,7 @@ public class TencentLiveTemplate {
 	/**
      * 4、查询视频流状态
      * @return     流状态，active：活跃，inactive：非活跃，forbid：禁播。
-     * @throws TencentCloudSDKException
+     * @throws TencentCloudSDKException SDK异常
      */
     public String describeLiveStreamState(String streamName) throws TencentCloudSDKException {
         LiveClient liveClient = getLiveClient();

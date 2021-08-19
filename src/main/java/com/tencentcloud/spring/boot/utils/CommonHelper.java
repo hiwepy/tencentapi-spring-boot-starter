@@ -24,12 +24,12 @@ import java.util.Objects;
 import com.google.common.base.Joiner;
 import com.tencentcloud.spring.boot.tim.TimApiAddress;
 
-/**
+/*
  * This class gathers all the utilities methods.
  */
 public final class CommonHelper {
 
-	/**
+	/*
 	 * 一周秒数
 	 */
 	public static final Integer ONE_WEEK_SECOND = 7 * 24 * 60 * 60;
@@ -54,7 +54,7 @@ public final class CommonHelper {
 		return mixStreamSessionId.toString();
 	}
 	
-	/**
+	/*
 	 * 地址组成：推流域名+AppName+StreamName+鉴权信息
 	 * 地址格式：rtmp://domain/AppName/StreamName?txSecret=Md5(key+StreamName+hex(time))&txTime=hex(time)
 	 */
@@ -64,7 +64,7 @@ public final class CommonHelper {
 		return rtmpUrl;
 	}
 	
-	/**
+	/*
 	 * 地址组成：推流域名+AppName+StreamName+鉴权信息
 	 * 地址格式：webrtc://domain/AppName/StreamName?txSecret=Md5(key+StreamName+hex(time))&txTime=hex(time)
 	 */
@@ -74,7 +74,7 @@ public final class CommonHelper {
 		return rtmpUrl;
 	}
 	
-	/**
+	/*
 	 * 格式http://domain/AppName/StreamName.flv?txSecret=
 	 */
 	public static StringBuilder getFlvUrl(final String playDomain, String appName, String streamName, final String safeUrl) {
@@ -83,7 +83,7 @@ public final class CommonHelper {
 		return flvUrl;
 	}
 	
-	/**
+	/*
 	 * 格式http://domain/AppName/StreamName.m3u8
 	 */
 	public static StringBuilder getHlsUrl(final String playDomain, String appName, String streamName, final String safeUrl) {

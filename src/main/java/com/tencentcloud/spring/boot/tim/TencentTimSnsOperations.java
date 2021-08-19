@@ -100,10 +100,8 @@ public class TencentTimSnsOperations extends TencentTimOperations {
 	 * API：https://cloud.tencent.com/document/product/269/1644
 	 * @param userId 业务用户ID
 	 * @param deleteType 删除模式；
-	 * <pre>
 	 * 	单向删除好友 	Delete_Type_Single 	只将 To_Account 从 From_Account 的好友表中删除，但不会将 From_Account 从 To_Account 的好友表中删除
 	 * 	双向删除好友 	Delete_Type_Both 	将 To_Account 从 From_Account 的好友表中删除，同时将 From_Account 从 To_Account 的好友表中删除
-	 * <pre/>
 	 * @param friends 待删除的好友的 UserID 列表，单次请求的 To_Account 数不得超过1000
 	 * @return 操作结果
 	 */
@@ -123,10 +121,8 @@ public class TencentTimSnsOperations extends TencentTimOperations {
 	 * API：https://cloud.tencent.com/document/product/269/1645
 	 * @param userId 业务用户ID
 	 * @param deleteType 删除模式；
-	 * <pre>
 	 * 	单向删除好友 	Delete_Type_Single 	只将 To_Account 从 From_Account 的好友表中删除，但不会将 From_Account 从 To_Account 的好友表中删除
 	 * 	双向删除好友 	Delete_Type_Both 	将 To_Account 从 From_Account 的好友表中删除，同时将 From_Account 从 To_Account 的好友表中删除
-	 * <pre/>
 	 * @return 操作结果
 	 */
 	public FriendDeleteAllResponse deleteAllFriend(String userId, String deleteType) {
