@@ -43,7 +43,7 @@ public class TencentTimOpenimAsyncOperations extends TencentTimOpenimOperations 
 	 * API：https://cloud.tencent.com/document/product/269/2282
 	 * @param userId 业务用户ID
 	 * @param msgBody 消息体
-	 
+	 * @param consumer 响应处理回调函数
 	 */
 	public void sendAsyncMsg(String userId, MsgBody[] msgBody, Consumer<TimActionResponse> consumer) {
 		this.sendAsyncMsg(userId, false, msgBody, consumer);
@@ -58,7 +58,7 @@ public class TencentTimOpenimAsyncOperations extends TencentTimOpenimOperations 
 	 * @param userId 业务用户ID
 	 * @param syncOtherMachine 是否希望将消息同步至 From_Account
 	 * @param msgBody 消息体
-	 
+	 * @param consumer 响应处理回调函数
 	 */
 	public void sendAsyncMsg(String userId, boolean syncOtherMachine, MsgBody[] msgBody, Consumer<TimActionResponse> consumer) {
 		this.sendAsyncMsg(userId, syncOtherMachine, FORBID_CALLBACK_CONTROL, msgBody, consumer);

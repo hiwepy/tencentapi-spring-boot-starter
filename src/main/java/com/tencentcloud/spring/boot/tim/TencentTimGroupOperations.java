@@ -61,7 +61,6 @@ public class TencentTimGroupOperations extends TencentTimOperations {
 	/**
 	 * 1、获取 App 中的所有群组
 	 * API：https://cloud.tencent.com/document/product/269/1614
-	 * @param limit 本次获取的群组 ID 数量的上限，不得超过 10000。如果不填，默认为最大值 10000
 	 * @return 操作结果
 	 */
 	public AppGroupGetResponse getAppGroupList() {
