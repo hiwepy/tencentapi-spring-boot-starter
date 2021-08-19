@@ -42,7 +42,7 @@ public class TencentTimProfileAsyncOperations extends TencentTimProfileOperation
 	 * @param consumer 响应处理回调函数
 	 */
 	public void asyncPortraitSet(String userId, String nickname, String avatar, Consumer<UserProfilePortraitSetResponse> consumer) {
-		Map<String, String> profile = new HashMap<>();
+		Map<String, Object> profile = new HashMap<>();
 		profile.put("Tag_Profile_IM_Nick", nickname);
 		profile.put("Tag_Profile_IM_Image", avatar);
 		this.asyncPortraitSet(userId, profile, consumer);
@@ -55,11 +55,11 @@ public class TencentTimProfileAsyncOperations extends TencentTimProfileOperation
 	 * @param profile 用户资料
 	 * @param consumer 响应处理回调函数
 	 */
-	public void asyncPortraitSet(String userId, Map<String, String> profile, Consumer<UserProfilePortraitSetResponse> consumer) {
+	public void asyncPortraitSet(String userId, Map<String, Object> profile, Consumer<UserProfilePortraitSetResponse> consumer) {
 		Map<String, Object> requestBody = new ImmutableMap.Builder<String, Object>()
 				.put("From_Account", String.valueOf(userId))
 				.put("ProfileItem", profile.entrySet().stream().map(entry -> {
-					HashMap<String, String> hashMap = new HashMap<>();
+					HashMap<String, Object> hashMap = new HashMap<>();
 					hashMap.put("Tag", entry.getKey());
 					hashMap.put("Value", entry.getValue());
 					return hashMap;
