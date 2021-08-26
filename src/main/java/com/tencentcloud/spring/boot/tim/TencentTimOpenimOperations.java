@@ -27,6 +27,7 @@ import com.tencentcloud.spring.boot.tim.req.message.Message;
 import com.tencentcloud.spring.boot.tim.req.message.MsgBody;
 import com.tencentcloud.spring.boot.tim.resp.TimActionResponse;
 import com.tencentcloud.spring.boot.tim.resp.message.MessageGetResponse;
+import com.tencentcloud.spring.boot.tim.resp.message.MessageSendResponse;
 
 /**
  * 2、单聊信息
@@ -51,7 +52,7 @@ public class TencentTimOpenimOperations extends TencentTimOperations {
 	 * @param msgBody 消息体
 	 * @return 操作结果
 	 */
-	public TimActionResponse sendMsg(String userId, MsgBody... msgBody) {
+	public MessageSendResponse sendMsg(String userId, MsgBody... msgBody) {
 		return this.sendMsg(userId, false, msgBody);
 	}
 	
@@ -66,7 +67,7 @@ public class TencentTimOpenimOperations extends TencentTimOperations {
 	 * @param msgBody 消息体
 	 * @return 操作结果
 	 */
-	public TimActionResponse sendMsg(String userId, boolean syncOtherMachine, MsgBody... msgBody) {
+	public MessageSendResponse sendMsg(String userId, boolean syncOtherMachine, MsgBody... msgBody) {
 		return this.sendMsg(userId, syncOtherMachine, FORBID_CALLBACK_CONTROL, msgBody);
 	}
 	
@@ -82,7 +83,7 @@ public class TencentTimOpenimOperations extends TencentTimOperations {
 	 * @param msgBody 消息体
 	 * @return 操作结果
 	 */
-	public TimActionResponse sendMsg(String userId, boolean syncOtherMachine, String[] forbidCallbackControl, MsgBody... msgBody) {
+	public MessageSendResponse sendMsg(String userId, boolean syncOtherMachine, String[] forbidCallbackControl, MsgBody... msgBody) {
 		
 		Map<String, Object> requestBody = new ImmutableMap.Builder<String, Object>()
 				.put("SyncOtherMachine", syncOtherMachine ? 1 : 2) // 消息不同步至发送方
@@ -93,7 +94,7 @@ public class TencentTimOpenimOperations extends TencentTimOperations {
 				.put("ForbidCallbackControl", forbidCallbackControl)
 				.put("MsgBody", msgBody).build();
 
-		return super.request(TimApiAddress.SEND_MSG, requestBody, TimActionResponse.class);
+		return super.request(TimApiAddress.SEND_MSG, requestBody, MessageSendResponse.class);
 	}
 	
 	/**
@@ -107,7 +108,7 @@ public class TencentTimOpenimOperations extends TencentTimOperations {
 	 * @param msgBody 消息体
 	 * @return 操作结果
 	 */
-	public TimActionResponse sendMsg(String fromUid, String userId, MsgBody... msgBody) {
+	public MessageSendResponse sendMsg(String fromUid, String userId, MsgBody... msgBody) {
 		return this.sendMsg(fromUid, userId, false, msgBody);
 	}
 
@@ -123,7 +124,7 @@ public class TencentTimOpenimOperations extends TencentTimOperations {
 	 * @param msgBody 消息体
 	 * @return 操作结果
 	 */
-	public TimActionResponse sendMsg(String fromUid, String userId, boolean syncOtherMachine, MsgBody... msgBody) {
+	public MessageSendResponse sendMsg(String fromUid, String userId, boolean syncOtherMachine, MsgBody... msgBody) {
 		return this.sendMsg(fromUid, userId, syncOtherMachine, FORBID_CALLBACK_CONTROL, msgBody);
 	}
 	
@@ -140,7 +141,7 @@ public class TencentTimOpenimOperations extends TencentTimOperations {
 	 * @param msgBody 消息体
 	 * @return 操作结果
 	 */
-	public TimActionResponse sendMsg(String fromUid, String userId, boolean syncOtherMachine, String[] forbidCallbackControl, MsgBody... msgBody) {
+	public MessageSendResponse sendMsg(String fromUid, String userId, boolean syncOtherMachine, String[] forbidCallbackControl, MsgBody... msgBody) {
 		Map<String, Object> requestBody = new ImmutableMap.Builder<String, Object>()
 				.put("SyncOtherMachine", syncOtherMachine ? 1 : 2) // 若不希望将消息同步至 From_Account，则 SyncOtherMachine 填写2；若希望将消息同步至 From_Account，则 SyncOtherMachine 填写1。
 				.put("From_Account", getImUserByUserId(fromUid))
@@ -151,7 +152,7 @@ public class TencentTimOpenimOperations extends TencentTimOperations {
 				.put("ForbidCallbackControl", FORBID_CALLBACK_CONTROL)
 				.put("MsgBody", msgBody)
 				.build();
-		return super.request(TimApiAddress.SEND_MSG, requestBody, TimActionResponse.class);
+		return super.request(TimApiAddress.SEND_MSG, requestBody, MessageSendResponse.class);
 	}
 	
 	/**
@@ -163,8 +164,8 @@ public class TencentTimOpenimOperations extends TencentTimOperations {
 	 * @param message 消息实体
 	 * @return 操作结果
 	 */
-	public TimActionResponse sendMsg(Message message) {
-		return super.request(TimApiAddress.SEND_MSG, message, TimActionResponse.class);
+	public MessageSendResponse sendMsg(Message message) {
+		return super.request(TimApiAddress.SEND_MSG, message, MessageSendResponse.class);
 	}
 	
 	/**
@@ -179,7 +180,7 @@ public class TencentTimOpenimOperations extends TencentTimOperations {
 	 * @param msgBody 消息体，详细可参阅 消息格式描述
 	 * @return 操作结果
 	 */
-	public TimActionResponse sendMsg(List<String> userIds, MsgBody... msgBody) {
+	public MessageSendResponse sendMsg(List<String> userIds, MsgBody... msgBody) {
 		return this.sendMsg(userIds, false, msgBody);
 	}
 	
@@ -196,7 +197,7 @@ public class TencentTimOpenimOperations extends TencentTimOperations {
 	 * @param msgBody 消息体
 	 * @return 操作结果
 	 */
-	public TimActionResponse sendMsg(List<String> userIds, boolean syncOtherMachine, MsgBody... msgBody) {
+	public MessageSendResponse sendMsg(List<String> userIds, boolean syncOtherMachine, MsgBody... msgBody) {
 		return this.sendMsg(userIds, syncOtherMachine, FORBID_CALLBACK_CONTROL, msgBody);
 	}
 	
@@ -214,7 +215,7 @@ public class TencentTimOpenimOperations extends TencentTimOperations {
 	 * @param msgBody 消息体
 	 * @return 操作结果
 	 */
-	public TimActionResponse sendMsg(List<String> userIds, boolean syncOtherMachine, String[] forbidCallbackControl, MsgBody... msgBody) {
+	public MessageSendResponse sendMsg(List<String> userIds, boolean syncOtherMachine, String[] forbidCallbackControl, MsgBody... msgBody) {
 		Map<String, Object> requestBody = new ImmutableMap.Builder<String, Object>()
 				.put("SyncOtherMachine", syncOtherMachine ? 1 : 2) // 消息不同步至发送方
 				.put("To_Account", userIds.stream().map(uid -> this.getImUserByUserId(uid)).collect(Collectors.toList()))
@@ -224,7 +225,7 @@ public class TencentTimOpenimOperations extends TencentTimOperations {
 				.put("ForbidCallbackControl", forbidCallbackControl)
 				.put("MsgBody", msgBody)
 				.build();
-		return super.request(TimApiAddress.SEND_BATCH_MSG, requestBody, TimActionResponse.class);
+		return super.request(TimApiAddress.SEND_BATCH_MSG, requestBody, MessageSendResponse.class);
 	}
 	
 	/**
@@ -240,7 +241,7 @@ public class TencentTimOpenimOperations extends TencentTimOperations {
 	 * @param msgBody 消息体
 	 * @return 操作结果
 	 */
-	public TimActionResponse sendMsg(String fromUid, List<String> userIds, MsgBody... msgBody) {
+	public MessageSendResponse sendMsg(String fromUid, List<String> userIds, MsgBody... msgBody) {
 		return this.sendMsg(fromUid, userIds, false, msgBody);
 	}
 
@@ -258,7 +259,7 @@ public class TencentTimOpenimOperations extends TencentTimOperations {
 	 * @param msgBody 消息体
 	 * @return 操作结果
 	 */
-	public TimActionResponse sendMsg(String fromUid, List<String> userIds, boolean syncOtherMachine, MsgBody... msgBody) {
+	public MessageSendResponse sendMsg(String fromUid, List<String> userIds, boolean syncOtherMachine, MsgBody... msgBody) {
 		return this.sendMsg(fromUid, userIds, syncOtherMachine, FORBID_CALLBACK_CONTROL, msgBody);
 	}
 	
@@ -277,7 +278,7 @@ public class TencentTimOpenimOperations extends TencentTimOperations {
 	 * @param msgBody 消息体
 	 * @return 操作结果
 	 */
-	public TimActionResponse sendMsg(String fromUid, List<String> userIds, boolean syncOtherMachine, String[] forbidCallbackControl, MsgBody... msgBody) {
+	public MessageSendResponse sendMsg(String fromUid, List<String> userIds, boolean syncOtherMachine, String[] forbidCallbackControl, MsgBody... msgBody) {
 		Map<String, Object> requestBody = new ImmutableMap.Builder<String, Object>()
 				.put("SyncOtherMachine", syncOtherMachine ? 1 : 2) // 若不希望将消息同步至 From_Account，则 SyncOtherMachine 填写2；若希望将消息同步至 From_Account，则 SyncOtherMachine 填写1。
 				.put("From_Account", getImUserByUserId(fromUid))
@@ -288,7 +289,7 @@ public class TencentTimOpenimOperations extends TencentTimOperations {
 				.put("ForbidCallbackControl", FORBID_CALLBACK_CONTROL)
 				.put("MsgBody", msgBody)
 				.build();
-		return super.request(TimApiAddress.SEND_BATCH_MSG, requestBody, TimActionResponse.class);
+		return super.request(TimApiAddress.SEND_BATCH_MSG, requestBody, MessageSendResponse.class);
 	}
 	
 	/**
@@ -302,8 +303,8 @@ public class TencentTimOpenimOperations extends TencentTimOperations {
 	 * @param message 消息实体
 	 * @return 操作结果
 	 */
-	public TimActionResponse sendMsg(BatchMessage message) {
-		return super.request(TimApiAddress.SEND_BATCH_MSG, message, TimActionResponse.class);
+	public MessageSendResponse sendMsg(BatchMessage message) {
+		return super.request(TimApiAddress.SEND_BATCH_MSG, message, MessageSendResponse.class);
 	}
     
 	/**

@@ -28,6 +28,7 @@ import com.tencentcloud.spring.boot.tim.req.message.Message;
 import com.tencentcloud.spring.boot.tim.req.message.MsgBody;
 import com.tencentcloud.spring.boot.tim.resp.TimActionResponse;
 import com.tencentcloud.spring.boot.tim.resp.message.MessageGetResponse;
+import com.tencentcloud.spring.boot.tim.resp.message.MessageSendResponse;
 
 public class TencentTimOpenimAsyncOperations extends TencentTimOpenimOperations {
 
@@ -45,7 +46,7 @@ public class TencentTimOpenimAsyncOperations extends TencentTimOpenimOperations 
 	 * @param msgBody 消息体
 	 
 	 */
-	public void sendAsyncMsg(String userId, MsgBody[] msgBody, Consumer<TimActionResponse> consumer) {
+	public void sendAsyncMsg(String userId, MsgBody[] msgBody, Consumer<MessageSendResponse> consumer) {
 		this.sendAsyncMsg(userId, false, msgBody, consumer);
 	}
 	
@@ -60,7 +61,7 @@ public class TencentTimOpenimAsyncOperations extends TencentTimOpenimOperations 
 	 * @param msgBody 消息体
 	 
 	 */
-	public void sendAsyncMsg(String userId, boolean syncOtherMachine, MsgBody[] msgBody, Consumer<TimActionResponse> consumer) {
+	public void sendAsyncMsg(String userId, boolean syncOtherMachine, MsgBody[] msgBody, Consumer<MessageSendResponse> consumer) {
 		this.sendAsyncMsg(userId, syncOtherMachine, FORBID_CALLBACK_CONTROL, msgBody, consumer);
 	}
 	
@@ -77,7 +78,7 @@ public class TencentTimOpenimAsyncOperations extends TencentTimOpenimOperations 
 	 * @param consumer 响应处理回调函数
 	 */
 	public void sendAsyncMsg(String userId, boolean syncOtherMachine, String[] forbidCallbackControl, 
-			MsgBody[] msgBody, Consumer<TimActionResponse> consumer) {
+			MsgBody[] msgBody, Consumer<MessageSendResponse> consumer) {
 		Map<String, Object> requestBody = new ImmutableMap.Builder<String, Object>()
 				.put("SyncOtherMachine", syncOtherMachine ? 1 : 2) // 消息不同步至发送方
 				.put("To_Account", getImUserByUserId(userId))
@@ -87,7 +88,7 @@ public class TencentTimOpenimAsyncOperations extends TencentTimOpenimOperations 
 				.put("ForbidCallbackControl", forbidCallbackControl)
 				.put("MsgBody", msgBody)
 				.build();
-		this.asyncRequest(TimApiAddress.SEND_MSG, requestBody, TimActionResponse.class, consumer);
+		this.asyncRequest(TimApiAddress.SEND_MSG, requestBody, MessageSendResponse.class, consumer);
 	}
 	
 	/**
@@ -101,7 +102,7 @@ public class TencentTimOpenimAsyncOperations extends TencentTimOpenimOperations 
 	 * @param msgBody 消息体
 	 * @param consumer 响应处理回调函数
 	 */
-	public void sendAsyncMsg(String fromUid, String userId, MsgBody[] msgBody, Consumer<TimActionResponse> consumer) {
+	public void sendAsyncMsg(String fromUid, String userId, MsgBody[] msgBody, Consumer<MessageSendResponse> consumer) {
 		this.sendAsyncMsg(fromUid, userId, false, msgBody, consumer);
 	}
 
@@ -118,7 +119,7 @@ public class TencentTimOpenimAsyncOperations extends TencentTimOpenimOperations 
 	 * @param consumer 响应处理回调函数
 	 */
 	public void sendAsyncMsg(String fromUid, String userId, boolean syncOtherMachine, 
-			MsgBody[] msgBody, Consumer<TimActionResponse> consumer) {
+			MsgBody[] msgBody, Consumer<MessageSendResponse> consumer) {
 		this.sendAsyncMsg(fromUid, userId, syncOtherMachine, FORBID_CALLBACK_CONTROL, msgBody, consumer);
 	}
 	
@@ -136,7 +137,7 @@ public class TencentTimOpenimAsyncOperations extends TencentTimOpenimOperations 
 	 * @param consumer 响应处理回调函数
 	 */
 	public void sendAsyncMsg(String fromUid, String userId, boolean syncOtherMachine, String[] forbidCallbackControl, 
-			MsgBody[] msgBody, Consumer<TimActionResponse> consumer) {
+			MsgBody[] msgBody, Consumer<MessageSendResponse> consumer) {
 		Map<String, Object> requestBody = new ImmutableMap.Builder<String, Object>()
 				.put("SyncOtherMachine", syncOtherMachine ? 1 : 2) // 若不希望将消息同步至 From_Account，则 SyncOtherMachine 填写2；若希望将消息同步至 From_Account，则 SyncOtherMachine 填写1。
 				.put("From_Account", getImUserByUserId(fromUid))
@@ -147,7 +148,7 @@ public class TencentTimOpenimAsyncOperations extends TencentTimOpenimOperations 
 				.put("ForbidCallbackControl", FORBID_CALLBACK_CONTROL)
 				.put("MsgBody", msgBody)
 				.build();
-		this.asyncRequest(TimApiAddress.SEND_MSG, requestBody, TimActionResponse.class, consumer);
+		this.asyncRequest(TimApiAddress.SEND_MSG, requestBody, MessageSendResponse.class, consumer);
 	}
 	
 	/**
@@ -159,8 +160,8 @@ public class TencentTimOpenimAsyncOperations extends TencentTimOpenimOperations 
 	 * @param message 消息实体
 	 * @param consumer 响应处理回调函数
 	 */
-	public void sendAsyncMsg(Message message, Consumer<TimActionResponse> consumer) {
-		this.asyncRequest(TimApiAddress.SEND_MSG, message, TimActionResponse.class, consumer);
+	public void sendAsyncMsg(Message message, Consumer<MessageSendResponse> consumer) {
+		this.asyncRequest(TimApiAddress.SEND_MSG, message, MessageSendResponse.class, consumer);
 	}
 	
 	/**
@@ -175,7 +176,7 @@ public class TencentTimOpenimAsyncOperations extends TencentTimOpenimOperations 
 	 * @param msgBody 消息体
 	 * @param consumer 响应处理回调函数
 	 */
-	public void sendAsyncMsg(List<String> userIds, MsgBody[] msgBody, Consumer<TimActionResponse> consumer) {
+	public void sendAsyncMsg(List<String> userIds, MsgBody[] msgBody, Consumer<MessageSendResponse> consumer) {
 		this.sendAsyncMsg(userIds, false, msgBody, consumer);
 	}
 	
@@ -192,7 +193,7 @@ public class TencentTimOpenimAsyncOperations extends TencentTimOpenimOperations 
 	 * @param msgBody 消息体
 	 
 	 */
-	public void sendAsyncMsg(List<String> userIds, boolean syncOtherMachine, MsgBody[] msgBody, Consumer<TimActionResponse> consumer) {
+	public void sendAsyncMsg(List<String> userIds, boolean syncOtherMachine, MsgBody[] msgBody, Consumer<MessageSendResponse> consumer) {
 		this.sendAsyncMsg(userIds, syncOtherMachine, FORBID_CALLBACK_CONTROL, msgBody, consumer);
 	}
 	
@@ -211,7 +212,7 @@ public class TencentTimOpenimAsyncOperations extends TencentTimOpenimOperations 
 	 * @param consumer 响应处理回调函数
 	 */
 	public void sendAsyncMsg(List<String> userIds, boolean syncOtherMachine, String[] forbidCallbackControl, 
-			MsgBody[] msgBody, Consumer<TimActionResponse> consumer) {
+			MsgBody[] msgBody, Consumer<MessageSendResponse> consumer) {
 		
 		Map<String, Object> requestBody = new ImmutableMap.Builder<String, Object>()
 				.put("SyncOtherMachine", syncOtherMachine ? 1 : 2) // 消息不同步至发送方
@@ -222,7 +223,7 @@ public class TencentTimOpenimAsyncOperations extends TencentTimOpenimOperations 
 				.put("ForbidCallbackControl", forbidCallbackControl)
 				.put("MsgBody", msgBody)
 				.build();
-		this.asyncRequest(TimApiAddress.SEND_BATCH_MSG, requestBody, TimActionResponse.class, consumer);
+		this.asyncRequest(TimApiAddress.SEND_BATCH_MSG, requestBody, MessageSendResponse.class, consumer);
 	}
 	
 	/**
@@ -238,7 +239,7 @@ public class TencentTimOpenimAsyncOperations extends TencentTimOpenimOperations 
 	 * @param msgBody 消息体
 	 * @param consumer 响应处理回调函数
 	 */
-	public void sendAsyncMsg(String fromUid, List<String> userIds, MsgBody[] msgBody, Consumer<TimActionResponse> consumer) {
+	public void sendAsyncMsg(String fromUid, List<String> userIds, MsgBody[] msgBody, Consumer<MessageSendResponse> consumer) {
 		this.sendAsyncMsg(fromUid, userIds, false, msgBody, consumer);
 	}
 
@@ -257,7 +258,7 @@ public class TencentTimOpenimAsyncOperations extends TencentTimOpenimOperations 
 	 * @param consumer 响应处理回调函数
 	 */
 	public void sendAsyncMsg(String fromUid, List<String> userIds, boolean syncOtherMachine, 
-			MsgBody[] msgBody, Consumer<TimActionResponse> consumer) {
+			MsgBody[] msgBody, Consumer<MessageSendResponse> consumer) {
 		this.sendAsyncMsg(fromUid, userIds, syncOtherMachine, FORBID_CALLBACK_CONTROL, msgBody, consumer);
 	}
 	
@@ -277,7 +278,7 @@ public class TencentTimOpenimAsyncOperations extends TencentTimOpenimOperations 
 	 * @param consumer 响应处理回调函数
 	 */
 	public void sendAsyncMsg(String fromUid, List<String> userIds, boolean syncOtherMachine, String[] forbidCallbackControl,
-			MsgBody[] msgBody, Consumer<TimActionResponse> consumer) {
+			MsgBody[] msgBody, Consumer<MessageSendResponse> consumer) {
 		Map<String, Object> requestBody = new ImmutableMap.Builder<String, Object>()
 				.put("SyncOtherMachine", syncOtherMachine ? 1 : 2) // 若不希望将消息同步至 From_Account，则 SyncOtherMachine 填写2；若希望将消息同步至 From_Account，则 SyncOtherMachine 填写1。
 				.put("From_Account", getImUserByUserId(fromUid))
@@ -288,7 +289,7 @@ public class TencentTimOpenimAsyncOperations extends TencentTimOpenimOperations 
 				.put("ForbidCallbackControl", FORBID_CALLBACK_CONTROL)
 				.put("MsgBody", msgBody)
 				.build();
-		this.asyncRequest(TimApiAddress.SEND_BATCH_MSG, requestBody, TimActionResponse.class, consumer);
+		this.asyncRequest(TimApiAddress.SEND_BATCH_MSG, requestBody, MessageSendResponse.class, consumer);
 	}
 	
 	/**
@@ -302,8 +303,8 @@ public class TencentTimOpenimAsyncOperations extends TencentTimOpenimOperations 
 	 * @param message 消息实体
 	 * @param consumer 响应处理回调函数
 	 */
-	public void asyncSendMsg(BatchMessage message, Consumer<TimActionResponse> consumer) {
-		this.asyncRequest(TimApiAddress.SEND_BATCH_MSG, message, TimActionResponse.class, consumer);
+	public void asyncSendMsg(BatchMessage message, Consumer<MessageSendResponse> consumer) {
+		this.asyncRequest(TimApiAddress.SEND_BATCH_MSG, message, MessageSendResponse.class, consumer);
 	}
     
 	/**
