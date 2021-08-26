@@ -7,7 +7,11 @@ import java.util.UUID;
 import java.util.function.Consumer;
 
 import org.springframework.beans.BeanUtils;
+import org.springframework.beans.factory.InitializingBean;
 
+import com.fasterxml.jackson.annotation.JsonAutoDetect;
+import com.fasterxml.jackson.annotation.PropertyAccessor;
+import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.common.cache.CacheBuilder;
 import com.google.common.cache.CacheLoader;
@@ -30,7 +34,7 @@ import okhttp3.Response;
  * Tim 接口集成 https://cloud.tencent.com/document/product/269/42440
  */
 @Slf4j
-public class TencentTimTemplate {
+public class TencentTimTemplate implements InitializingBean {
 
 	public final static String APPLICATION_JSON_VALUE = "application/json";
 	public final static String APPLICATION_JSON_UTF8_VALUE = "application/json;charset=UTF-8";
@@ -57,6 +61,15 @@ public class TencentTimTemplate {
 	private final TencentTimProfileAsyncOperations profileOps = new TencentTimProfileAsyncOperations(this);
 	private final TencentTimSnsAsyncOperations snsOps = new TencentTimSnsAsyncOperations(this);
 	private LoadingCache<String, String> tlsSigCache;
+
+	@Override
+	public void afterPropertiesSet() throws Exception {
+		// 指定要序列化的域，field,get和set,以及修饰符范围，ANY是都有包括private和public
+		objectMapper.setVisibility(PropertyAccessor.ALL, JsonAutoDetect.Visibility.ANY);
+		// 指定序列化输入的类型，类必须是非final修饰的，final修饰的类，比如String,Integer等会跑出异常
+		objectMapper.activateDefaultTyping(objectMapper.getPolymorphicTypeValidator(), ObjectMapper.DefaultTyping.NON_FINAL);
+		objectMapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
+	}
 	
 	public TencentTimTemplate(TencentTimProperties timProperties, OkHttpClient okhttp3Client, TimUserIdProvider timUserIdProvider) {
 		this(timProperties, new TLSSigAPIv2(timProperties.getSdkappid(), timProperties.getPrivateKey()),
@@ -211,5 +224,4 @@ public class TencentTimTemplate {
 	public String getImUserByUserId(String userId) {
 		return timUserIdProvider.getImUserByUserId(timProperties.getSdkappid(), userId);
 	}
-
 }
