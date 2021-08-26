@@ -70,7 +70,7 @@ public class TencentTrtcTemplate {
 	 * @param roomId  房间ID
 	 * @param userIds 业务用户ID数组
 	 * @return 操作结果
-	 * @throws TencentCloudSDKException
+	 * @throws TencentCloudSDKException SDK操作异常
 	 */
 	public String kickout(Long roomId, String... userIds) throws TencentCloudSDKException {
 
@@ -98,7 +98,7 @@ public class TencentTrtcTemplate {
 	 * @param roomId  房间ID
 	 * @param userIds 业务用户ID数组
 	 * @return 操作结果
-	 * @throws TencentCloudSDKException
+	 * @throws TencentCloudSDKException SDK操作异常
 	 */
 	public String kickout(String roomId, String... userIds) throws TencentCloudSDKException {
 
@@ -124,7 +124,7 @@ public class TencentTrtcTemplate {
 	 * 
 	 * @param roomId 房间ID
 	 * @return 操作结果
-	 * @throws TencentCloudSDKException
+	 * @throws TencentCloudSDKException SDK操作异常
 	 */
 	public String dismissRoom(Long roomId) throws TencentCloudSDKException {
 
@@ -149,7 +149,7 @@ public class TencentTrtcTemplate {
 	 * 
 	 * @param roomId 房间ID
 	 * @return 操作结果
-	 * @throws TencentCloudSDKException
+	 * @throws TencentCloudSDKException SDK操作异常
 	 */
 	public String dismissRoom(String roomId) throws TencentCloudSDKException {
 
@@ -177,7 +177,7 @@ public class TencentTrtcTemplate {
 	 * @param recordId        自定义录制文件名称前缀。请先在实时音视频控制台开通录制功能，https://cloud.tencent.com/document/product/647/50768
 	 * @param recordAudioOnly 取值范围[0,1]，填0无实际含义;
 	 *                        填1：指定录制文件格式为mp3。此参数不建议使用，建议在实时音视频控制台配置纯音频录制模板。
-	 * @return
+	 * @return 输出参数
 	 */
 	public OutputParams outputParams(String streamId, Long pureAudioStream, String recordId, Long recordAudioOnly) {
 
@@ -203,8 +203,8 @@ public class TencentTrtcTemplate {
 	 * @param encodeParams     混流输出编码参数：https://cloud.tencent.com/document/api/647/44055#EncodeParams
 	 * @param layoutParams     混流输出布局参数：https://cloud.tencent.com/document/api/647/44055#LayoutParams
 	 * @param publishCdnParams 第三方CDN转推参数：https://cloud.tencent.com/document/api/647/44055#PublishCdnParams
-	 * @return
-	 * @throws TencentCloudSDKException
+	 * @return 混流地址
+	 * @throws TencentCloudSDKException SDK操作异常
 	 */
 	public String createMixStream(Long roomId, OutputParams outputParams, EncodeParams encodeParams,
 			LayoutParams layoutParams, PublishCdnParams publishCdnParams) throws TencentCloudSDKException {
@@ -240,8 +240,8 @@ public class TencentTrtcTemplate {
 	 * @param encodeParams     混流输出编码参数：https://cloud.tencent.com/document/api/647/44055#EncodeParams
 	 * @param layoutParams     混流输出布局参数：https://cloud.tencent.com/document/api/647/44055#LayoutParams
 	 * @param publishCdnParams 第三方CDN转推参数：https://cloud.tencent.com/document/api/647/44055#PublishCdnParams
-	 * @return
-	 * @throws TencentCloudSDKException
+	 * @return 混流地址
+	 * @throws TencentCloudSDKException SDK操作异常
 	 */
 	public String createMixStream(String roomId, OutputParams outputParams, EncodeParams encodeParams,
 			LayoutParams layoutParams, PublishCdnParams publishCdnParams) throws TencentCloudSDKException {
@@ -364,7 +364,7 @@ public class TencentTrtcTemplate {
 	/**
 	 * 反向解析流名称获取userId
 	 * 
-	 * @param streamId
+	 * @param streamId 流ID
 	 * @return userId
 	 */
 	public String getUserIdByStreamName(String streamId) {
@@ -378,7 +378,7 @@ public class TencentTrtcTemplate {
 	/**
 	 * 根据userId生成流名称
 	 * 
-	 * @param userId
+	 * @param userId 用户ID
 	 * @return 流名称
 	 */
 	public String getStreamNameByUserId(String userId) {
@@ -394,29 +394,14 @@ public class TencentTrtcTemplate {
 		return trtcUserIdProvider.getTrtcUserByUserId(trtcProperties.getSdkappid(), userId);
 	}
 	
-	/**
-	 * TODO
-	 * @author 		： <a href="https://github.com/vindell">vindell</a>
-	 * @return		: the trtcClient
-	 */
 	public TrtcClient getTrtcClient() {
 		return trtcClient;
 	}
 	
-	/**
-	 * TODO
-	 * @author 		： <a href="https://github.com/vindell">vindell</a>
-	 * @return		: the trtcProperties
-	 */
 	public TencentTrtcProperties getTrtcProperties() {
 		return trtcProperties;
 	}
-	
-	/**
-	 * TODO
-	 * @author 		： <a href="https://github.com/vindell">vindell</a>
-	 * @return		: the trtcUserIdProvider
-	 */
+
 	public TrtcUserIdProvider getTrtcUserIdProvider() {
 		return trtcUserIdProvider;
 	}

@@ -102,7 +102,7 @@ public class TencentLiveTemplate {
 	 * @param homeStreamName 主场流名称
 	 * @param awayStreamName 客场流名称
 	 * @param retryTimes	   重试次数
-	 * @return
+	 * @return 混流结果
 	 */
 	public MixStreamResult createMixStream(String homeStreamName, String awayStreamName, int retryTimes) {
 		
@@ -168,10 +168,9 @@ public class TencentLiveTemplate {
 	 * @param homeStreamName 主场流名称
 	 * @param awayStreamName 客场流名称
 	 * @param retryTimes	   重试次数
-	 * @param controlParams  混流的特殊控制参数
 	 * @param inputStreams	   混流输入流列表
 	 * @param outputParams	   混流输出流参数
-	 * @return
+	 * @return 混流结果
 	 */
 	public MixStreamResult createMixStream(String homeStreamName, String awayStreamName, int retryTimes, 
 			CommonMixInputParam[] inputStreams,
@@ -225,7 +224,7 @@ public class TencentLiveTemplate {
 	 * @param controlParams  混流的特殊控制参数
 	 * @param inputStreams	   混流输入流列表
 	 * @param outputParams	   混流输出流参数
-	 * @return
+	 * @return 混流结果
 	 */
 	public MixStreamResult createMixStream(String homeStreamName, String awayStreamName, int retryTimes, 
 			CommonMixControlParams controlParams,
@@ -314,7 +313,7 @@ public class TencentLiveTemplate {
 	/**
      * 4、查询视频流状态
      * @return     流状态，active：活跃，inactive：非活跃，forbid：禁播。
-     * @throws TencentCloudSDKException
+     * @throws TencentCloudSDKException SDK异常
      */
     public String describeLiveStreamState(String streamName) throws TencentCloudSDKException {
         LiveClient liveClient = getLiveClient();
@@ -329,8 +328,8 @@ public class TencentLiveTemplate {
     
 	/**
 	 * 反向解析流名称获取userId
-	 * @param streamName
-	 * @return userId
+	 * @param streamName 流名称
+	 * @return userId 用户ID
 	 */
 	public String getUserIdByStreamName(String streamName) {
 		String[] split = streamName.split(DELIMITER);
@@ -342,7 +341,7 @@ public class TencentLiveTemplate {
 	
 	/**
 	 * 根据userId生成流名称
-	 * @param userId
+	 * @param userId 用户ID
 	 * @return 流名称
 	 */
 	public String getStreamNameByUserId(String userId) {
@@ -350,20 +349,10 @@ public class TencentLiveTemplate {
 		return streamName.toString();
 	}
 	
-	/**
-	 * TODO
-	 * @author 		： <a href="https://github.com/vindell">vindell</a>
-	 * @return		: the liveClient
-	 */
 	public LiveClient getLiveClient() {
 		return liveClient;
 	}
 	
-	/**
-	 * TODO
-	 * @author 		： <a href="https://github.com/vindell">vindell</a>
-	 * @return		: the liveProperties
-	 */
 	public TencentLiveProperties getLiveProperties() {
 		return liveProperties;
 	}
