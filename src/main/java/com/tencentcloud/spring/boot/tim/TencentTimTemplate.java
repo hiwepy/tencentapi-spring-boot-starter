@@ -171,7 +171,7 @@ public class TencentTimTemplate implements InitializingBean {
 			try(Response response = okhttp3Client.newCall(request).execute();) {
 				if (response.isSuccessful()) {
 					String body = response.body().string();
-					log.debug("Request Success : url : {}, params : {}, code : {}, body : {} , use time : {} ", url, params, response.code(), body , System.currentTimeMillis() - start);
+					log.info("Request Success : url : {}, params : {}, code : {}, body : {} , use time : {} ", url, params, response.code(), body , System.currentTimeMillis() - start);
 					res = objectMapper.readValue(body, cls);
 	            } else {
 	            	log.error("Request Failure : url : {}, params : {}, code : {}, message : {}, use time : {} ", url, params, response.code(), response.message(), System.currentTimeMillis() - start);
@@ -204,7 +204,7 @@ public class TencentTimTemplate implements InitializingBean {
 	            @Override
 	            public void onResponse(Call call, Response response) {
                 	if (response.isSuccessful()) {
-    					log.debug("Async Request Success : url : {}, params : {}, code : {}, message : {} , use time : {} ", url, params, response.code(), response.message(), System.currentTimeMillis() - start);
+    					log.info("Async Request Success : url : {}, params : {}, code : {}, message : {} , use time : {} ", url, params, response.code(), response.message(), System.currentTimeMillis() - start);
     					consumer.accept(response);
                     } else {
                     	log.error("Async Request Failure : url : {}, params : {}, code : {}, message : {}, use time : {} ", url, params, response.code(), response.message(), System.currentTimeMillis() - start);
