@@ -163,9 +163,10 @@ public class TencentTimTemplate implements InitializingBean {
 		T res = null;
 		try {
 			
-			RequestBody requestBody = RequestBody.create(MediaType.parse(APPLICATION_JSON_VALUE),
-					objectMapper.writeValueAsString(params));
+			String paramStr = objectMapper.writeValueAsString(params);
+			log.info("Request Param :  {}", paramStr);
 			
+			RequestBody requestBody = RequestBody.create(MediaType.parse(APPLICATION_JSON_VALUE), paramStr);
 			Request request = new Request.Builder().url(url).post(requestBody).build();
 			
 			try(Response response = okhttp3Client.newCall(request).execute();) {
@@ -191,8 +192,10 @@ public class TencentTimTemplate implements InitializingBean {
 		
 		try {
 			
-			RequestBody requestBody = RequestBody.create(MediaType.parse(APPLICATION_JSON_VALUE),
-					objectMapper.writeValueAsString(params));
+			String paramStr = objectMapper.writeValueAsString(params);
+			log.info("Request Param :  {}", paramStr);
+			
+			RequestBody requestBody = RequestBody.create(MediaType.parse(APPLICATION_JSON_VALUE), paramStr);
 			Request request = new Request.Builder().url(url).post(requestBody).build();
 			okhttp3Client.newCall(request).enqueue(new Callback() {
 				

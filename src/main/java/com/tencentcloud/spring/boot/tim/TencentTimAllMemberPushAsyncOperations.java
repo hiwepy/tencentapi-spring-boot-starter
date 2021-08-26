@@ -48,7 +48,7 @@ public class TencentTimAllMemberPushAsyncOperations extends TencentTimAllMemberP
 	 * @param msgBody  消息内容，具体格式请参考 MsgBody 消息内容说明（一条消息可包括多种消息元素，所以 MsgBody 为 Array 类型）
 	 * @param consumer 响应处理回调函数
 	 */
-	public void asyncPush(String userId, String msgRandom, MsgBody[] msgBody, Consumer<AllMemberPushResponse> consumer) {
+	public void asyncPush(String userId, Integer msgRandom, MsgBody[] msgBody, Consumer<AllMemberPushResponse> consumer) {
 		Map<String, Object> requestBody = new ImmutableMap.Builder<String, Object>()
 				.put("From_Account", this.getImUserByUserId(userId))
 				.put("MsgRandom", msgRandom)
@@ -66,7 +66,7 @@ public class TencentTimAllMemberPushAsyncOperations extends TencentTimAllMemberP
 	 * @param msgBody  消息内容，具体格式请参考 MsgBody 消息内容说明（一条消息可包括多种消息元素，所以 MsgBody 为 Array 类型）
 	 * @param consumer 响应处理回调函数
 	 */
-	public void asyncPush(String userId, String msgRandom, Integer msgLifeTime, MsgBody[] msgBody, Consumer<AllMemberPushResponse> consumer) {
+	public void asyncPush(String userId, Integer msgRandom, Integer msgLifeTime, MsgBody[] msgBody, Consumer<AllMemberPushResponse> consumer) {
 		Map<String, Object> requestBody = new ImmutableMap.Builder<String, Object>()
 				.put("From_Account", this.getImUserByUserId(userId))
 				.put("MsgRandom", msgRandom)
@@ -86,7 +86,7 @@ public class TencentTimAllMemberPushAsyncOperations extends TencentTimAllMemberP
 	 * @param msgBody  消息内容，具体格式请参考 MsgBody 消息内容说明（一条消息可包括多种消息元素，所以 MsgBody 为 Array 类型）
 	 * @param consumer 响应处理回调函数
 	 */
-	public void asyncPush(String userId, String msgRandom, Integer msgLifeTime, OfflinePushInfo offlinePushInfo, 
+	public void asyncPush(String userId, Integer msgRandom, Integer msgLifeTime, OfflinePushInfo offlinePushInfo, 
 			MsgBody[] msgBody, Consumer<AllMemberPushResponse> consumer) {
 		Map<String, Object> requestBody = new ImmutableMap.Builder<String, Object>()
 				.put("From_Account", this.getImUserByUserId(userId))
@@ -109,7 +109,7 @@ public class TencentTimAllMemberPushAsyncOperations extends TencentTimAllMemberP
 	 * @param msgBody  消息内容，具体格式请参考 MsgBody 消息内容说明（一条消息可包括多种消息元素，所以 MsgBody 为 Array 类型）
 	 * @param consumer 响应处理回调函数
 	 */
-	public void asyncPush(String userId, String msgRandom, Integer msgLifeTime, Condition condition,
+	public void asyncPush(String userId, Integer msgRandom, Integer msgLifeTime, Condition condition,
 			OfflinePushInfo offlinePushInfo, MsgBody[] msgBody, Consumer<AllMemberPushResponse> consumer) {
 		Map<String, Object> requestBody = new ImmutableMap.Builder<String, Object>()
 				.put("From_Account", this.getImUserByUserId(userId))

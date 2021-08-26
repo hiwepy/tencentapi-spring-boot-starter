@@ -36,7 +36,7 @@ public class TencentTimAllMemberPushOperations extends TencentTimOperations {
 	 * @param msgBody  消息内容，具体格式请参考 MsgBody 消息内容说明（一条消息可包括多种消息元素，所以 MsgBody 为 Array 类型）
 	 * @return 操作结果
 	 */
-	public AllMemberPushResponse push(String userId, String msgRandom, MsgBody... msgBody) {
+	public AllMemberPushResponse push(String userId, Integer msgRandom, MsgBody... msgBody) {
 		Map<String, Object> requestBody = new ImmutableMap.Builder<String, Object>()
 				.put("From_Account", this.getImUserByUserId(userId))
 				.put("MsgRandom", msgRandom)
@@ -54,7 +54,7 @@ public class TencentTimAllMemberPushOperations extends TencentTimOperations {
 	 * @param msgBody  消息内容，具体格式请参考 MsgBody 消息内容说明（一条消息可包括多种消息元素，所以 MsgBody 为 Array 类型）
 	 * @return 操作结果
 	 */
-	public AllMemberPushResponse push(String userId, String msgRandom, Integer msgLifeTime, MsgBody... msgBody) {
+	public AllMemberPushResponse push(String userId, Integer msgRandom, Integer msgLifeTime, MsgBody... msgBody) {
 		Map<String, Object> requestBody = new ImmutableMap.Builder<String, Object>()
 				.put("From_Account", this.getImUserByUserId(userId))
 				.put("MsgRandom", msgRandom)
@@ -74,7 +74,7 @@ public class TencentTimAllMemberPushOperations extends TencentTimOperations {
 	 * @param msgBody  消息内容，具体格式请参考 MsgBody 消息内容说明（一条消息可包括多种消息元素，所以 MsgBody 为 Array 类型）
 	 * @return 操作结果
 	 */
-	public AllMemberPushResponse push(String userId, String msgRandom, Integer msgLifeTime, OfflinePushInfo offlinePushInfo, MsgBody... msgBody) {
+	public AllMemberPushResponse push(String userId, Integer msgRandom, Integer msgLifeTime, OfflinePushInfo offlinePushInfo, MsgBody... msgBody) {
 		Map<String, Object> requestBody = new ImmutableMap.Builder<String, Object>()
 				.put("From_Account", this.getImUserByUserId(userId))
 				.put("MsgRandom", msgRandom)
@@ -96,7 +96,7 @@ public class TencentTimAllMemberPushOperations extends TencentTimOperations {
 	 * @param msgBody  消息内容，具体格式请参考 MsgBody 消息内容说明（一条消息可包括多种消息元素，所以 MsgBody 为 Array 类型）
 	 * @return 操作结果
 	 */
-	public AllMemberPushResponse push(String userId, String msgRandom, Integer msgLifeTime, Condition condition, OfflinePushInfo offlinePushInfo, MsgBody... msgBody) {
+	public AllMemberPushResponse push(String userId, Integer msgRandom, Integer msgLifeTime, Condition condition, OfflinePushInfo offlinePushInfo, MsgBody... msgBody) {
 		Map<String, Object> requestBody = new ImmutableMap.Builder<String, Object>()
 				.put("From_Account", this.getImUserByUserId(userId))
 				.put("MsgRandom", msgRandom)

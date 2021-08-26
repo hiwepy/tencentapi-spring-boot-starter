@@ -90,7 +90,7 @@ public class TencentTimOpenimOperations extends TencentTimOperations {
 				.put("To_Account", getImUserByUserId(userId))
 				.put("MsgLifeTime", getTimTemplate().getMsgLifeTime())
 				.put("MsgRandom", RandomUtils.nextInt())
-				.put("MsgTimeStamp", System.currentTimeMillis() / 1000)
+				.put("MsgTimeStamp", Long.valueOf(System.currentTimeMillis() /1000L).intValue())
 				.put("ForbidCallbackControl", forbidCallbackControl)
 				.put("MsgBody", msgBody).build();
 
@@ -148,7 +148,7 @@ public class TencentTimOpenimOperations extends TencentTimOperations {
 				.put("To_Account", getImUserByUserId(userId))
 				.put("MsgLifeTime", getTimTemplate().getMsgLifeTime())
 				.put("MsgRandom", RandomUtils.nextInt())
-				.put("MsgTimeStamp", System.currentTimeMillis() / 1000)
+				.put("MsgTimeStamp", Long.valueOf(System.currentTimeMillis() /1000L).intValue())
 				.put("ForbidCallbackControl", FORBID_CALLBACK_CONTROL)
 				.put("MsgBody", msgBody)
 				.build();
@@ -221,7 +221,7 @@ public class TencentTimOpenimOperations extends TencentTimOperations {
 				.put("To_Account", userIds.stream().map(uid -> this.getImUserByUserId(uid)).collect(Collectors.toList()))
 				.put("MsgLifeTime", getTimTemplate().getMsgLifeTime())
 				.put("MsgRandom", RandomUtils.nextInt())
-				.put("MsgTimeStamp", System.currentTimeMillis() / 1000)
+				.put("MsgTimeStamp", Long.valueOf(System.currentTimeMillis() /1000L).intValue())
 				.put("ForbidCallbackControl", forbidCallbackControl)
 				.put("MsgBody", msgBody)
 				.build();
@@ -285,7 +285,7 @@ public class TencentTimOpenimOperations extends TencentTimOperations {
 				.put("To_Account", userIds.stream().map(uid -> this.getImUserByUserId(uid)).collect(Collectors.toList()))
 				.put("MsgLifeTime", getTimTemplate().getMsgLifeTime())
 				.put("MsgRandom", RandomUtils.nextInt())
-				.put("MsgTimeStamp", System.currentTimeMillis() / 1000)
+				.put("MsgTimeStamp", Long.valueOf(System.currentTimeMillis() /1000L).intValue())
 				.put("ForbidCallbackControl", FORBID_CALLBACK_CONTROL)
 				.put("MsgBody", msgBody)
 				.build();
@@ -327,7 +327,7 @@ public class TencentTimOpenimOperations extends TencentTimOperations {
 				.put("From_Account", getImUserByUserId(fromUid))
 				.put("To_Account", this.getImUserByUserId(userId))
 				.put("MsgRandom", RandomUtils.nextInt())
-				.put("MsgTimeStamp", System.currentTimeMillis() / 1000)
+				.put("MsgTimeStamp", Long.valueOf(System.currentTimeMillis() /1000L).intValue())
 				.put("MsgBody", msgBody)
 				.build();
 		return super.request(TimApiAddress.IMPORT_MSG, requestBody, TimActionResponse.class);
