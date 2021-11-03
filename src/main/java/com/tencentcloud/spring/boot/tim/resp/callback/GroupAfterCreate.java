@@ -61,6 +61,6 @@ public class GroupAfterCreate {
 	 * 用户建群时的自定义字段
 	 */
 	@JsonProperty(value = "UserDefinedDataList")
-	private List<GroupAfterCreateUserDefinedData> UserDefinedDataList;
+	private List<GroupAfterCreateUserDefinedData> userDefinedDataList;
 	
 }

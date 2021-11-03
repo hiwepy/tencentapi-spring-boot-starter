@@ -9,16 +9,16 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Data;
 
 /**
- * 状态变更回调
- * https://cloud.tencent.com/document/product/269/2570
+ * 添加好友回应之前回调
+ * https://cloud.tencent.com/document/product/269/61699
  */
 @Data
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonIgnoreProperties(ignoreUnknown = false)
-public class StateChange {
+public class SnsPrevFriendResponse {
 	
 	/**
-	 * 回调命令 - 状态变更 State.StateChange
+	 * 回调命令 - Sns.CallbackPrevFriendResponse
 	 */
 	@JsonProperty(value = "CallbackCommand")
 	private String command;
@@ -28,14 +28,19 @@ public class StateChange {
 	@JsonProperty(value = "EventTime")
 	private Integer eventTime;
 	/**
-	 * 用户上下线的信息
+	 * 请求发起方的 UserID
 	 */
-	@JsonProperty(value = "Info")
-	private StateChangeInfo info;
+	@JsonProperty(value = "Requester_Account")
+	private String requester;
 	/**
-	 * 如果本次状态变更为 Login + Register，而且有其他设备被踢下线，才会有此字段。此字段表示其他被踢下线的设备的信息。
+	 * 请求添加好友的用户的 UserID
 	 */
-	@JsonProperty(value = "KickedDevice")
-	private List<StateChangeKickedDevice> kickedDevices;
-
+	@JsonProperty(value = "From_Account")
+	private String account;
+	/**
+	 * 加好友回应请求的参数
+	 */
+	@JsonProperty(value = "ResponseFriendItem")
+	private List<SnsPrevFriendResponseItem> responses;
+	
 }

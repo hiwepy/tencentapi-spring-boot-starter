@@ -24,22 +24,36 @@ import lombok.Data;
 @Data
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonIgnoreProperties(ignoreUnknown = false)
-public class GroupSendMsgBodyContent {
+public class SnsFriendItem {
 
 	/**
-	 * 文本
+	 * 请求添加的用户的 UserID
 	 */
-	@JsonProperty(value = "Text")
-	private String text;
-	/**
-	 * 描述
-	 */
-	@JsonProperty(value = "Desc")
-	private String desc;
-	/**
-	 *  数据
-	 */
-	@JsonProperty(value = "Data")
-	private String data;
+	@JsonProperty(value = "To_Account")
+	private String account;
 
+	/**
+	 * From_Account 对 To_Account 设置的好友备注，详情可参见 标配好友字段
+	 */
+	@JsonProperty(value = "Remark")
+	private String remark;
+
+	/**
+	 * From_Account 对 To_Account 设置的好友分组，详情可参见 标配好友字段
+	 */
+	@JsonProperty(value = "GroupName")
+	private String groupName;
+
+	/**
+	 * 加好友来源，详情可参见 标配好友字段
+	 */
+	@JsonProperty(value = "AddSource")
+	private String addSource;
+
+	/**
+	 * 加好友附言，详情可参见 标配好友字段
+	 */
+	@JsonProperty(value = "AddWording")
+	private String addWording;
+	
 }

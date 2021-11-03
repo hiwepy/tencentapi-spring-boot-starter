@@ -51,7 +51,13 @@ public class GroupBeforeSendMsg {
 	 *发消息请求中的 32 位随机数
 	 */
 	@JsonProperty(value = "Random")
-	private String random;
+	private Integer random;
+	
+	/**
+	 *在线消息，为1，否则为0；直播群忽略此属性，为默认值0。
+	 */
+	@JsonProperty(value = "OnlineOnlyFlag")
+	private Integer onlineOnlyFlag;
 	
 	/**
 	 *  消息体，参见 TIMMessage 消息对象
