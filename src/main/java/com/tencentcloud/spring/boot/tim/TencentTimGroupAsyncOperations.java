@@ -411,10 +411,10 @@ public class TencentTimGroupAsyncOperations extends TencentTimGroupOperations {
 	 * API：https://cloud.tencent.com/document/product/269/1623
 	 * @param groupId 群组ID（必填）
 	 * @param userId 要操作的群成员ID（必填）
-	 * @param shutUpTime 群成员的禁言时间，单位为秒，0表示取消禁言
+	 * @param shutUpTime 群成员的禁言时间，单位为秒，0表示取消禁言，4294967295为永久禁言
 	 * @param consumer 响应处理回调函数
 	 */
-	public void asyncUpdateGroupMemberShutUpTime(String groupId, String userId, Integer shutUpTime,
+	public void asyncUpdateGroupMemberShutUpTime(String groupId, String userId, Long shutUpTime,
 			Consumer<GroupMemberModifyResponse> consumer) {
 		Map<String, Object> requestBody = new ImmutableMap.Builder<String, Object>()
 				.put("GroupId", groupId)
@@ -594,7 +594,7 @@ public class TencentTimGroupAsyncOperations extends TencentTimGroupOperations {
 	 * @param shutUpTime 需禁言时间，单位为秒，为0时表示取消禁言
 	 * @param consumer 响应处理回调函数
 	 */
-	public void asyncUpdateGroupMemberShutUpTime(String groupId, String[] userIds, Integer shutUpTime,
+	public void asyncUpdateGroupMemberShutUpTime(String groupId, String[] userIds, Long shutUpTime,
 			Consumer<GroupMemberForbidSendMsgResponse> consumer) {
 		Map<String, Object> requestBody = new ImmutableMap.Builder<String, Object>()
 				.put("GroupId", groupId)

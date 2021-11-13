@@ -404,10 +404,10 @@ public class TencentTimGroupOperations extends TencentTimOperations {
 	 * API：https://cloud.tencent.com/document/product/269/1623
 	 * @param groupId 群组ID（必填）
 	 * @param userId 要操作的群成员ID（必填）
-	 * @param shutUpTime 群成员的禁言时间，单位为秒，0表示取消禁言
+	 * @param shutUpTime 群成员的禁言时间，单位为秒，0表示取消禁言，4294967295为永久禁言
 	 * @return 操作结果
 	 */
-	public GroupMemberModifyResponse updateGroupMemberShutUpTime(String groupId, String userId, Integer shutUpTime) {
+	public GroupMemberModifyResponse updateGroupMemberShutUpTime(String groupId, String userId, Long shutUpTime) {
 		Map<String, Object> requestBody = new ImmutableMap.Builder<String, Object>()
 				.put("GroupId", groupId)
 				.put("Member_Account", this.getImUserByUserId(userId))
@@ -628,11 +628,11 @@ public class TencentTimGroupOperations extends TencentTimOperations {
 	 * 37、批量禁言和取消禁言
 	 * API：https://cloud.tencent.com/document/product/269/1627
 	 * @param groupId 群组ID（必填）
-	 * @param shutUpTime 需禁言时间，单位为秒，为0时表示取消禁言
+	 * @param shutUpTime 需禁言时间，单位为秒，为0时表示取消禁言，4294967295为永久禁言。
 	 * @param userIds 需要禁言的用户帐号，最多支持500个帐号
 	 * @return 操作结果
 	 */
-	public GroupMemberForbidSendMsgResponse updateGroupMemberShutUpTime(String groupId, Integer shutUpTime, String... userIds) {
+	public GroupMemberForbidSendMsgResponse updateGroupMemberShutUpTime(String groupId, Long shutUpTime, String... userIds) {
 		Map<String, Object> requestBody = new ImmutableMap.Builder<String, Object>()
 				.put("GroupId", groupId)
 				.put("Members_Account", Stream.of(userIds).map(uid -> this.getImUserByUserId(uid)).collect(Collectors.toList()))
