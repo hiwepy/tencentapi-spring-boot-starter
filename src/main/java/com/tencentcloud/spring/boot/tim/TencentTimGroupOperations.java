@@ -57,7 +57,7 @@ public class TencentTimGroupOperations extends TencentTimOperations {
 	public TencentTimGroupOperations(TencentTimTemplate timTemplate) {
 		super(timTemplate);
 	}
-	
+
 	/**
 	 * 1、获取 App 中的所有群组
 	 * API：https://cloud.tencent.com/document/product/269/1614
@@ -67,7 +67,7 @@ public class TencentTimGroupOperations extends TencentTimOperations {
 		Map<String, Object> requestBody = ImmutableMap.of();
 		return super.request(TimApiAddress.GET_APPID_GROUP_LIST, requestBody, AppGroupGetResponse.class);
 	}
-	
+
 	/**
 	 * 2、获取 App 中的所有群组
 	 * API：https://cloud.tencent.com/document/product/269/1614
@@ -82,9 +82,9 @@ public class TencentTimGroupOperations extends TencentTimOperations {
 				.build();
 		return super.request(TimApiAddress.GET_APPID_GROUP_LIST, requestBody, AppGroupGetResponse.class);
 	}
-	
+
 	/**
-	 * 1、获取 App 中的所有群组
+	 * 3、获取 App 中的所有群组
 	 * API：https://cloud.tencent.com/document/product/269/1614
 	 * @param groupType 如果仅需要返回特定群组形态的群组，可以通过 GroupType 进行过滤，但此时返回的 TotalCount 的含义就变成了 App 中属于该群组形态的群组总数。不填为获取所有类型的群组。
 	 * 群组形态包括 Public（公开群），Private（私密群），ChatRoom（聊天室），AVChatRoom（音视频聊天室）和 BChatRoom（在线成员广播大群）
@@ -96,7 +96,7 @@ public class TencentTimGroupOperations extends TencentTimOperations {
 	}
 
 	/**
-	 * 3、获取 App 中的所有群组
+	 * 4、获取 App 中的所有群组
 	 * API：https://cloud.tencent.com/document/product/269/1614
 	 * @param limit 本次获取的群组 ID 数量的上限，不得超过 10000。如果不填，默认为最大值 10000
 	 * @param next  群太多时分页拉取标志，第一次填0，以后填上一次返回的值，返回的 Next 为0代表拉完了
@@ -114,7 +114,7 @@ public class TencentTimGroupOperations extends TencentTimOperations {
 	}
 
 	/**
-	 * 4、创建群组
+	 * 5、创建群组
 	 * API：https://cloud.tencent.com/document/product/269/1615
 	 * @param ownerId 业务用户ID
 	 * @param groupType 如果仅需要返回特定群组形态的群组，可以通过 GroupType 进行过滤，但此时返回的 TotalCount 的含义就变成了 App 中属于该群组形态的群组总数。不填为获取所有类型的群组。
@@ -130,9 +130,9 @@ public class TencentTimGroupOperations extends TencentTimOperations {
 				.build();
 		return super.request(TimApiAddress.CREATE_GROUP, requestBody, GroupCreateResponse.class);
 	}
-	
+
 	/**
-	 * 5、创建群组，并指定群简介、群公告等群基础信息
+	 * 6、创建群组，并指定群简介、群公告等群基础信息
 	 * API：https://cloud.tencent.com/document/product/269/1615
 	 * @param ownerId 业务用户ID
 	 * @param groupType 如果仅需要返回特定群组形态的群组，可以通过 GroupType 进行过滤，但此时返回的 TotalCount 的含义就变成了 App 中属于该群组形态的群组总数。不填为获取所有类型的群组。
@@ -159,9 +159,9 @@ public class TencentTimGroupOperations extends TencentTimOperations {
 				.build();
 		return super.request(TimApiAddress.CREATE_GROUP, requestBody, GroupCreateResponse.class);
 	}
-	
+
 	/**
-	 * 6、创建群组，并指定初始化群成员列表，群成员列表在请求包说明表中有描述。
+	 * 7、创建群组，并指定初始化群成员列表，群成员列表在请求包说明表中有描述。
 	 * API：https://cloud.tencent.com/document/product/269/1615
 	 * @param ownerId 业务用户ID
 	 * @param groupType 如果仅需要返回特定群组形态的群组，可以通过 GroupType 进行过滤，但此时返回的 TotalCount 的含义就变成了 App 中属于该群组形态的群组总数。不填为获取所有类型的群组。
@@ -179,9 +179,9 @@ public class TencentTimGroupOperations extends TencentTimOperations {
 				.build();
 		return super.request(TimApiAddress.CREATE_GROUP, requestBody, GroupCreateResponse.class);
 	}
-	
+
 	/**
-	 * 7、创建群组，并指定自定义群组 ID
+	 * 8、创建群组，并指定自定义群组 ID
 	 * API：https://cloud.tencent.com/document/product/269/1615
 	 * @param ownerId 业务用户ID
 	 * @param groupId 用户自定义群组ID
@@ -201,9 +201,9 @@ public class TencentTimGroupOperations extends TencentTimOperations {
 				.build();
 		return super.request(TimApiAddress.CREATE_GROUP, requestBody, GroupCreateResponse.class);
 	}
-	
+
 	/**
-	 * 8、创建群组
+	 * 9、创建群组
 	 * API：https://cloud.tencent.com/document/product/269/1615
 	 * @param group 群组信息
 	 * @return 操作结果
@@ -211,9 +211,9 @@ public class TencentTimGroupOperations extends TencentTimOperations {
 	public GroupCreateResponse createGroup(GroupInfo group) {
 		return super.request(TimApiAddress.CREATE_GROUP, group, GroupCreateResponse.class);
 	}
-	
+
 	/**
-	* 9、修改群基础资料
+	 * 10、修改群基础资料
 	 * API：https://cloud.tencent.com/document/product/269/1620
 	 * @param groupId 需要修改基础信息的群组的 ID
 	 * @param groupName  群名称，最长30字节，使用 UTF-8 编码，1个汉字占3个字节
@@ -237,9 +237,9 @@ public class TencentTimGroupOperations extends TencentTimOperations {
 				.build();
 		return super.request(TimApiAddress.MODIFY_GROUP_BASE_INFO, requestBody, GroupModifyResponse.class);
 	}
-	
+
 	/**
-	 * 10、修改群基础资料
+	 * 11、修改群基础资料
 	 * API：https://cloud.tencent.com/document/product/269/1620
 	 * @param group 修改内容
 	 * @return 操作结果
@@ -247,9 +247,9 @@ public class TencentTimGroupOperations extends TencentTimOperations {
 	public GroupModifyResponse updateGroup(GroupModify group) {
 		return super.request(TimApiAddress.MODIFY_GROUP_BASE_INFO, group, GroupModifyResponse.class);
 	}
-	
+
 	/**
-	 * 11、获取群详细资料
+	 * 12、获取群详细资料
 	 * API：https://cloud.tencent.com/document/product/269/1616
 	 * @param groupIds 群组列表（必填）
 	 * @return 操作结果
@@ -260,9 +260,9 @@ public class TencentTimGroupOperations extends TencentTimOperations {
 				.build();
 		return super.request(TimApiAddress.GET_GROUP_INFO, requestBody, GroupInfoGetResponse.class);
 	}
-	
+
 	/**
-	 * 12、获取群详细资料
+	 * 13、获取群详细资料
 	 * API：https://cloud.tencent.com/document/product/269/1616
 	 * @param groupIds 群组列表（必填）
 	 * @param responseFilter 包含三个过滤器：GroupBaseInfoFilter，MemberInfoFilter，AppDefinedDataFilter_Group，分别是基础信息字段过滤器，成员信息字段过滤器，群组维度的自定义字段过滤器
@@ -275,9 +275,9 @@ public class TencentTimGroupOperations extends TencentTimOperations {
 				.build();
 		return super.request(TimApiAddress.GET_GROUP_INFO, requestBody, GroupInfoGetResponse.class);
 	}
-	
+
 	/**
-	 * 12、添加群成员
+	 * 14、添加群成员
 	 * API：https://cloud.tencent.com/document/product/269/1617
 	 * @param groupId 群组ID（必填）
 	 * @param silence 是否静默加人。0：非静默加人；1：静默加人。不填该字段默认为0
@@ -294,9 +294,9 @@ public class TencentTimGroupOperations extends TencentTimOperations {
 				.build();
 		return super.request(TimApiAddress.ADD_GROUP_MEMBER, requestBody, GroupMemberAddResponse.class);
 	}
-	
+
 	/**
-	 * 13、删除群成员
+	 * 15、删除群成员
 	 * API：https://cloud.tencent.com/document/product/269/1622
 	 * @param groupId 群组ID（必填）
 	 * @param reason 踢出用户原因
@@ -311,9 +311,9 @@ public class TencentTimGroupOperations extends TencentTimOperations {
 				.build();
 		return super.request(TimApiAddress.DELETE_GROUP_MEMBER, requestBody, GroupMemberDeleteResponse.class);
 	}
-	
+
 	/**
-	 * 14、删除群成员
+	 * 16、删除群成员
 	 * API：https://cloud.tencent.com/document/product/269/1622
 	 * @param groupId 群组ID（必填）
 	 * @param silence 是否静默删人。0表示非静默删人，1表示静默删人。静默即删除成员时不通知群里所有成员，只通知被删除群成员。不填写该字段时默认为0
@@ -330,9 +330,9 @@ public class TencentTimGroupOperations extends TencentTimOperations {
 				.build();
 		return super.request(TimApiAddress.DELETE_GROUP_MEMBER, requestBody, GroupMemberDeleteResponse.class);
 	}
-	
+
 	/**
-	 * 15、修改群成员资料-设置/取消指定群成员的管理员身份
+	 * 17、修改群成员资料-设置/取消指定群成员的管理员身份
 	 * API：https://cloud.tencent.com/document/product/269/1623
 	 * @param groupId 群组ID（必填）
 	 * @param userId 要操作的群成员ID（必填）
@@ -347,10 +347,9 @@ public class TencentTimGroupOperations extends TencentTimOperations {
 				.build();
 		return super.request(TimApiAddress.MODIFY_GROUP_MEMBER_INFO, requestBody, GroupMemberModifyResponse.class);
 	}
-	
 
 	/**
-	 * 16、修改群成员资料-设置成员消息屏蔽位
+	 * 18、修改群成员资料-设置成员消息屏蔽位
 	 * API：https://cloud.tencent.com/document/product/269/1623
 	 * @param groupId 群组ID（必填）
 	 * @param userId 要操作的群成员ID（必填）
@@ -365,9 +364,9 @@ public class TencentTimGroupOperations extends TencentTimOperations {
 				.build();
 		return super.request(TimApiAddress.MODIFY_GROUP_MEMBER_INFO, requestBody, GroupMemberModifyResponse.class);
 	}
-	
+
 	/**
-	 * 17、修改群成员资料-设置成员的群名片
+	 * 19、修改群成员资料-设置成员的群名片
 	 * API：https://cloud.tencent.com/document/product/269/1623
 	 * @param groupId 群组ID（必填）
 	 * @param userId 要操作的群成员ID（必填）
@@ -384,7 +383,7 @@ public class TencentTimGroupOperations extends TencentTimOperations {
 	}
 
 	/**
-	 * 18、修改群成员资料-设置成员自定义字段
+	 * 20、修改群成员资料-设置成员自定义字段
 	 * API：https://cloud.tencent.com/document/product/269/1623
 	 * @param groupId 群组ID（必填）
 	 * @param userId 要操作的群成员ID（必填）
@@ -399,9 +398,9 @@ public class TencentTimGroupOperations extends TencentTimOperations {
 				.build();
 		return super.request(TimApiAddress.MODIFY_GROUP_MEMBER_INFO, requestBody, GroupMemberModifyResponse.class);
 	}
-	
+
 	/**
-	 * 19、修改群成员资料-设置群成员禁言时间
+	 * 21、修改群成员资料-设置群成员禁言时间
 	 * API：https://cloud.tencent.com/document/product/269/1623
 	 * @param groupId 群组ID（必填）
 	 * @param userId 要操作的群成员ID（必填）
@@ -416,9 +415,9 @@ public class TencentTimGroupOperations extends TencentTimOperations {
 				.build();
 		return super.request(TimApiAddress.MODIFY_GROUP_MEMBER_INFO, requestBody, GroupMemberModifyResponse.class);
 	}
-	
+
 	/**
-	 * 20、修改群成员资料
+	 * 22、修改群成员资料
 	 * API：https://cloud.tencent.com/document/product/269/1623
 	 * @param member 群成员资料
 	 * @return 操作结果
@@ -426,9 +425,9 @@ public class TencentTimGroupOperations extends TencentTimOperations {
 	public GroupMemberModifyResponse updateGroupMember(GroupMemberModify member) {
 		return super.request(TimApiAddress.MODIFY_GROUP_MEMBER_INFO, member, GroupMemberModifyResponse.class);
 	}
-	
+
 	/**
-	 * 21、获取群成员详细资料
+	 * 23、获取群成员详细资料
 	 * API：https://cloud.tencent.com/document/product/269/1617
 	 * @param groupId 群组ID（必填）
 	 * @return 操作结果
@@ -436,9 +435,9 @@ public class TencentTimGroupOperations extends TencentTimOperations {
 	public GroupMemberGetResponse getGroupMembers(String groupId) {
 		return this.getGroupMembers(groupId, true);
 	}
-	
+
 	/**
-	 * 21、获取群成员详细资料
+	 * 24、获取群成员详细资料
 	 * API：https://cloud.tencent.com/document/product/269/1617
 	 * @param groupId 群组ID（必填）
 	 * @param filterNotFound 是否过滤IM账号不存在的用户（群成员IM账号不存在的时，memberAccount值为@TLS#NOT_FOUND）
@@ -455,25 +454,25 @@ public class TencentTimGroupOperations extends TencentTimOperations {
 		}
 		return response;
 	}
-	
+
 	/**
-	 * 21、获取群成员详细资料
+	 * 25、获取群成员详细资料
 	 * API：https://cloud.tencent.com/document/product/269/1617
 	 * @param groupId 群组ID（必填）
 	 * @param limit 一次最多获取多少个成员的资料，不得超过6000。如果不填，则获取群内全部成员的信息
-	 * @param offset 从第几个成员开始获取，如果不填则默认为0，表示从第一个成员开始获取   
+	 * @param offset 从第几个成员开始获取，如果不填则默认为0，表示从第一个成员开始获取
 	 * @return 操作结果
 	 */
 	public GroupMemberGetResponse getGroupMembers(String groupId, Integer limit, Integer offset) {
 		return this.getGroupMembers(groupId, limit, offset, true);
 	}
-	
+
 	/**
-	 * 21、获取群成员详细资料
+	 * 27、获取群成员详细资料
 	 * API：https://cloud.tencent.com/document/product/269/1617
 	 * @param groupId 群组ID（必填）
 	 * @param limit 一次最多获取多少个成员的资料，不得超过6000。如果不填，则获取群内全部成员的信息
-	 * @param offset 从第几个成员开始获取，如果不填则默认为0，表示从第一个成员开始获取   
+	 * @param offset 从第几个成员开始获取，如果不填则默认为0，表示从第一个成员开始获取
 	 * @param filterNotFound 是否过滤IM账号不存在的用户（群成员IM账号不存在的时，memberAccount值为@TLS#NOT_FOUND）
 	 * @return 操作结果
 	 */
@@ -492,9 +491,9 @@ public class TencentTimGroupOperations extends TencentTimOperations {
 		}
 		return response;
 	}
-	
+
 	/**
-	 * 22、获取群成员详细资料
+	 * 28、获取群成员详细资料
 	 * API：https://cloud.tencent.com/document/product/269/1617
 	 * @param query 筛选条件
 	 * @return 操作结果
@@ -502,9 +501,9 @@ public class TencentTimGroupOperations extends TencentTimOperations {
 	public GroupMemberGetResponse getGroupMembers(GroupMemberQuery query) {
 		return super.request(TimApiAddress.GET_GROUP_MEMBER_INFO, query, GroupMemberGetResponse.class);
 	}
-	
+
 	/**
-	 * 23、解散群组（群组解散之后将无法恢复，请谨慎调用该接口）
+	 * 29、解散群组（群组解散之后将无法恢复，请谨慎调用该接口）
 	 * API：https://cloud.tencent.com/document/product/269/1624
 	 * @param groupId 群组ID（必填）
 	 * @return 操作结果
@@ -513,9 +512,9 @@ public class TencentTimGroupOperations extends TencentTimOperations {
 		Map<String, Object> requestBody = ImmutableMap.of("GroupId", groupId);
 		return super.request(TimApiAddress.DESTROY_GROUP, requestBody, GroupDestoryResponse.class);
 	}
-	
+
 	/**
-	 * 21、获取用户所加入的群组
+	 * 30、获取用户所加入的群组
 	 * API：https://cloud.tencent.com/document/product/269/1625
 	 * @param userId 业务用户ID
 	 * @return 操作结果
@@ -526,9 +525,9 @@ public class TencentTimGroupOperations extends TencentTimOperations {
 				.build();
 		return super.request(TimApiAddress.GET_JOINED_GROUP_LIST, requestBody, GroupJoinedListGetResponse.class);
 	}
-	
+
 	/**
-	 * 21、获取用户所加入的群组
+	 * 31、获取用户所加入的群组
 	 * API：https://cloud.tencent.com/document/product/269/1625
 	 * @param userId 业务用户ID
 	 * @param groupType 所拉取的群组所属的群组类型，例如 Public（陌生人社交群），Private（同新版本 Work，好友工作群）和 ChatRoom（同新版本 Meeting，会议群），如果指定 AVChatRoom（直播群），获得的成员可能不完整。
@@ -541,13 +540,13 @@ public class TencentTimGroupOperations extends TencentTimOperations {
 				.build();
 		return super.request(TimApiAddress.GET_JOINED_GROUP_LIST, requestBody, GroupJoinedListGetResponse.class);
 	}
-	
+
 	/**
-	 * 21、获取用户所加入的群组
+	 * 32、获取用户所加入的群组
 	 * API：https://cloud.tencent.com/document/product/269/1625
 	 * @param userId 业务用户ID
 	 * @param limit 一次最多获取多少个成员的资料，不得超过6000。如果不填，则获取群内全部成员的信息
-	 * @param offset 从第几个成员开始获取，如果不填则默认为0，表示从第一个成员开始获取   
+	 * @param offset 从第几个成员开始获取，如果不填则默认为0，表示从第一个成员开始获取
 	 * @return 操作结果
 	 */
 	public GroupJoinedListGetResponse getJoinedGroupList(String userId, Integer limit, Integer offset) {
@@ -558,14 +557,14 @@ public class TencentTimGroupOperations extends TencentTimOperations {
 				.build();
 		return super.request(TimApiAddress.GET_JOINED_GROUP_LIST, requestBody, GroupJoinedListGetResponse.class);
 	}
-	
+
 	/**
-	 * 21、获取用户所加入的群组
+	 * 33、获取用户所加入的群组
 	 * API：https://cloud.tencent.com/document/product/269/1625
 	 * @param userId 业务用户ID
 	 * @param groupType 所拉取的群组所属的群组类型，例如 Public（陌生人社交群），Private（同新版本 Work，好友工作群）和 ChatRoom（同新版本 Meeting，会议群），如果指定 AVChatRoom（直播群），获得的成员可能不完整。
 	 * @param limit 一次最多获取多少个成员的资料，不得超过6000。如果不填，则获取群内全部成员的信息
-	 * @param offset 从第几个成员开始获取，如果不填则默认为0，表示从第一个成员开始获取   
+	 * @param offset 从第几个成员开始获取，如果不填则默认为0，表示从第一个成员开始获取
 	 * @return 操作结果
 	 */
 	public GroupJoinedListGetResponse getJoinedGroupList(String userId, String groupType, Integer limit, Integer offset) {
@@ -577,16 +576,16 @@ public class TencentTimGroupOperations extends TencentTimOperations {
 				.build();
 		return super.request(TimApiAddress.GET_JOINED_GROUP_LIST, requestBody, GroupJoinedListGetResponse.class);
 	}
-	
-	
+
+
 	/**
-	 * 22、获取用户所加入的群组
+	 * 34、获取用户所加入的群组
 	 * API：https://cloud.tencent.com/document/product/269/1625
 	 * @param userId 业务用户ID
 	 * @param withHugeGroups 是否获取用户加入的 AVChatRoom(直播群)，0表示不获取，1表示获取。默认为0
 	 * @param withNoActiveGroups 是否获取用户已加入但未激活的 Private（即新版本中 Work，好友工作群) 群信息，0表示不获取，1表示获取。默认为0
 	 * @param limit 一次最多获取多少个成员的资料，不得超过6000。如果不填，则获取群内全部成员的信息
-	 * @param offset 从第几个成员开始获取，如果不填则默认为0，表示从第一个成员开始获取   
+	 * @param offset 从第几个成员开始获取，如果不填则默认为0，表示从第一个成员开始获取
 	 * @return 操作结果
 	 */
 	public GroupJoinedListGetResponse getJoinedGroupList(String userId, Integer withHugeGroups, Integer withNoActiveGroups, Integer limit, Integer offset) {
@@ -599,9 +598,9 @@ public class TencentTimGroupOperations extends TencentTimOperations {
 				.build();
 		return super.request(TimApiAddress.GET_JOINED_GROUP_LIST, requestBody, GroupJoinedListGetResponse.class);
 	}
-	
+
 	/**
-	 * 23、获取用户所加入的群组
+	 * 35、获取用户所加入的群组
 	 * API：https://cloud.tencent.com/document/product/269/1625
 	 * @param query 筛选条件
 	 * @return 操作结果
@@ -609,9 +608,9 @@ public class TencentTimGroupOperations extends TencentTimOperations {
 	public GroupJoinedListGetResponse getJoinedGroupList(GroupJoinedQuery query) {
 		return super.request(TimApiAddress.GET_JOINED_GROUP_LIST, query, GroupJoinedListGetResponse.class);
 	}
-	
+
 	/**
-	 * 24、查询用户在群组中的身份
+	 * 36、查询用户在群组中的身份
 	 * API：https://cloud.tencent.com/document/product/269/1626
 	 * @param groupId 群组ID（必填）
 	 * @param userIds 业务用户ID数组
@@ -626,14 +625,14 @@ public class TencentTimGroupOperations extends TencentTimOperations {
 	}
 
 	/**
-	 * 25、批量禁言和取消禁言
+	 * 37、批量禁言和取消禁言
 	 * API：https://cloud.tencent.com/document/product/269/1627
 	 * @param groupId 群组ID（必填）
-	 * @param userIds 需要禁言的用户帐号，最多支持500个帐号
 	 * @param shutUpTime 需禁言时间，单位为秒，为0时表示取消禁言
+	 * @param userIds 需要禁言的用户帐号，最多支持500个帐号
 	 * @return 操作结果
 	 */
-	public GroupMemberForbidSendMsgResponse updateGroupMemberShutUpTime(String groupId, String[] userIds, Integer shutUpTime) {
+	public GroupMemberForbidSendMsgResponse updateGroupMemberShutUpTime(String groupId, Integer shutUpTime, String... userIds) {
 		Map<String, Object> requestBody = new ImmutableMap.Builder<String, Object>()
 				.put("GroupId", groupId)
 				.put("Members_Account", Stream.of(userIds).map(uid -> this.getImUserByUserId(uid)).collect(Collectors.toList()))
@@ -641,9 +640,9 @@ public class TencentTimGroupOperations extends TencentTimOperations {
 				.build();
 		return super.request(TimApiAddress.FORBID_SEND_MSG, requestBody, GroupMemberForbidSendMsgResponse.class);
 	}
-	
+
 	/**
-	 * 26、获取被禁言群成员列表
+	 * 38、获取被禁言群成员列表
 	 * API：https://cloud.tencent.com/document/product/269/2925
 	 * @param groupId 群组ID（必填）
 	 * @return 操作结果
@@ -652,9 +651,9 @@ public class TencentTimGroupOperations extends TencentTimOperations {
 		Map<String, Object> requestBody = ImmutableMap.of("GroupId", groupId);
 		return super.request(TimApiAddress.GET_GROUP_SHUTTED_UIN, requestBody, GroupMemberShuttedUinResponse.class);
 	}
-	
+
 	/**
-	 * 27、在群组中发送普通消息
+	 * 39、在群组中发送普通消息
      * API：https://cloud.tencent.com/document/product/269/1629
      * @param groupId 群组ID（必填）
 	 * @param random 随机数字，五分钟数字相同认为是重复消息
@@ -671,9 +670,9 @@ public class TencentTimGroupOperations extends TencentTimOperations {
 				.build();
 		return super.request(TimApiAddress.SEND_GROUP_MSG, requestBody, GroupMsgSendResponse.class);
 	}
-	
+
 	/**
-	 * 28、在群组中发送普通消息
+	 * 40、在群组中发送普通消息
      * API：https://cloud.tencent.com/document/product/269/1629
      * @param groupId 群组ID（必填）
 	 * @param random 随机数字，五分钟数字相同认为是重复消息
@@ -692,10 +691,10 @@ public class TencentTimGroupOperations extends TencentTimOperations {
 				.build();
 		return super.request(TimApiAddress.SEND_GROUP_MSG, requestBody, GroupMsgSendResponse.class);
 	}
-	
+
 	/**
-	 * 29、在群组中发送普通消息-指定消息不存离线及漫游
-	 * 
+	 * 41、在群组中发送普通消息-指定消息不存离线及漫游
+	 *
      * API：https://cloud.tencent.com/document/product/269/1629
      * @param groupId 群组ID（必填）
 	 * @param random 随机数字，五分钟数字相同认为是重复消息
@@ -707,15 +706,15 @@ public class TencentTimGroupOperations extends TencentTimOperations {
 		Map<String, Object> requestBody = new ImmutableMap.Builder<String, Object>()
 				.put("GroupId", groupId)
 				.put("Random", random)
-				.put("OnlineOnlyFlag", onlineOnlyFlag) 
+				.put("OnlineOnlyFlag", onlineOnlyFlag)
 				.put("MsgBody", msgBody)
 				.build();
 		return super.request(TimApiAddress.SEND_GROUP_MSG, requestBody, GroupMsgSendResponse.class);
 	}
 
 	/**
-	 * 30、在群组中发送普通消息-指定消息不存离线及漫游
-	 * 
+	 * 42、在群组中发送普通消息-指定消息不存离线及漫游
+	 *
      * API：https://cloud.tencent.com/document/product/269/1629
      * @param groupId 群组ID（必填）
 	 * @param random 随机数字，五分钟数字相同认为是重复消息
@@ -729,16 +728,16 @@ public class TencentTimGroupOperations extends TencentTimOperations {
 		Map<String, Object> requestBody = new ImmutableMap.Builder<String, Object>()
 				.put("GroupId", groupId)
 				.put("Random", random)
-				.put("OnlineOnlyFlag", onlineOnlyFlag) 
+				.put("OnlineOnlyFlag", onlineOnlyFlag)
 				.put("ForbidCallbackControl", forbidCallbackControl)
 				.put("OfflinePushInfo", offlinePushInfo)
 				.put("MsgBody", msgBody)
 				.build();
 		return super.request(TimApiAddress.SEND_GROUP_MSG, requestBody, GroupMsgSendResponse.class);
 	}
-	
+
 	/**
-	 * 31、在群组中发送普通消息-指定消息发送者
+	 * 43、在群组中发送普通消息-指定消息发送者
 	 * 可以指定某一位群成员作为消息发送者，在 From_Account 中设置。其他用户收到群消息后，显示的消息来自 App 管理员指定的那一位群成员。
      * API：https://cloud.tencent.com/document/product/269/1629
      * @param groupId 群组ID（必填）
@@ -756,9 +755,9 @@ public class TencentTimGroupOperations extends TencentTimOperations {
 				.build();
 		return super.request(TimApiAddress.SEND_GROUP_MSG, requestBody, GroupMsgSendResponse.class);
 	}
-	
+
 	/**
-	 * 32、在群组中发送普通消息
+	 * 44、在群组中发送普通消息
 	 * API：https://cloud.tencent.com/document/product/269/1629
 	 * @param message 消息对象
 	 * @return 操作结果
@@ -766,9 +765,9 @@ public class TencentTimGroupOperations extends TencentTimOperations {
 	public GroupMsgSendResponse sendGroupMsg(GroupMessage message) {
 		return super.request(TimApiAddress.SEND_GROUP_MSG, message, GroupMsgSendResponse.class);
 	}
-	
+
 	/**
-	 * 33、在群组中发送系统通知
+	 * 45、在群组中发送系统通知
      * API：https://cloud.tencent.com/document/product/269/1630
      * @param groupId 群组ID（必填）
 	 * @param content 系统通知的内容
@@ -781,9 +780,9 @@ public class TencentTimGroupOperations extends TencentTimOperations {
 				.build();
 		return super.request(TimApiAddress.SEND_GROUP_SYSTEM_NOTIFICATION, requestBody, GroupSystemNotificationSendResponse.class);
 	}
-	
+
 	/**
-	 * 34、在群组中发送系统通知
+	 * 46、在群组中发送系统通知
      * API：https://cloud.tencent.com/document/product/269/1630
      * @param groupId 群组ID（必填）
 	 * @param userIds 接收者群成员列表，请填写接收者 UserID，不填或为空表示全员下发
@@ -798,9 +797,9 @@ public class TencentTimGroupOperations extends TencentTimOperations {
 				.build();
 		return super.request(TimApiAddress.SEND_GROUP_SYSTEM_NOTIFICATION, requestBody, GroupSystemNotificationSendResponse.class);
 	}
-	
+
 	/**
-	 * 32、转让群主
+	 * 47、转让群主
      * API：https://cloud.tencent.com/document/product/269/1633
      * @param groupId 要被转移的群 ID（必填）
      * @param userId 新群主 ID（必填）
@@ -813,9 +812,9 @@ public class TencentTimGroupOperations extends TencentTimOperations {
 				.build();
 		return super.request(TimApiAddress.CHANGE_GROUP_OWNER, requestBody, GroupChangeOwnerResponse.class);
 	}
-	
+
 	/**
-	 * 33、撤回群消息
+	 * 48、撤回群消息
      * API：https://cloud.tencent.com/document/product/269/12341
      * @param groupId 要被转移的群 ID（必填）
      * @param msgSeqs 被撤回的消息 seq 数组，一次请求最多可以撤回10条消息 seq
@@ -834,7 +833,7 @@ public class TencentTimGroupOperations extends TencentTimOperations {
 	}
 
 	/**
-	 * 34、导入群基础资料
+	 * 49、导入群基础资料
 	 * App 管理员可以通过该接口导入群组，不会触发回调、不会下发通知；当 App 需要从其他即时通信系统迁移到即时通信 IM 时，使用该协议导入存量群组数据。
 	 * API：https://cloud.tencent.com/document/product/269/1634
 	 * @param userId 需要修改基础信息的群组的 ID
@@ -852,9 +851,9 @@ public class TencentTimGroupOperations extends TencentTimOperations {
 				.build();
 		return super.request(TimApiAddress.IMPORT_GROUP, requestBody, GroupMsgImportResponse.class);
 	}
-	
+
 	/**
-	 * 35、导入群基础资料
+	 * 50、导入群基础资料
 	 * App 管理员可以通过该接口导入群组，不会触发回调、不会下发通知；当 App 需要从其他即时通信系统迁移到即时通信 IM 时，使用该协议导入存量群组数据。
 	 * API：https://cloud.tencent.com/document/product/269/1634
 	 * @param userId 需要修改基础信息的群组的 ID
@@ -887,7 +886,7 @@ public class TencentTimGroupOperations extends TencentTimOperations {
 	}
 
 	/**
-	 * 36、导入群消息
+	 * 51、导入群消息
 	 * API：https://cloud.tencent.com/document/product/269/1635
 	 * @param groupId 要导入消息的群 ID
 	 * @param msgList 导入的消息列表
@@ -900,9 +899,9 @@ public class TencentTimGroupOperations extends TencentTimOperations {
 				.build();
 		return super.request(TimApiAddress.IMPORT_GROUP_MSG, requestBody, GroupMsgImportResponse.class);
 	}
-	
+
 	/**
-	 * 37、导入群成员
+	 * 52、导入群成员
 	 * API：https://cloud.tencent.com/document/product/269/1636
 	 * @param groupId 要导入消息的群 ID
 	 * @param memberList 导入的消息列表
@@ -915,9 +914,9 @@ public class TencentTimGroupOperations extends TencentTimOperations {
 				.build();
 		return super.request(TimApiAddress.IMPORT_GROUP_MSG, requestBody, GroupMemberImportResponse.class);
 	}
-	
+
 	/**
-	 * 38、设置成员未读消息计数
+	 * 52、设置成员未读消息计数
 	 * API：https://cloud.tencent.com/document/product/269/1637
 	 * @param groupId 操作的群 ID
 	 * @param userId 要操作的群成员 ID
@@ -934,12 +933,12 @@ public class TencentTimGroupOperations extends TencentTimOperations {
 	}
 
 	/**
-	 * 39、撤回指定用户发送的消息
+	 * 54、撤回指定用户发送的消息
 	 * API：https://cloud.tencent.com/document/product/269/2359
 	 * @param groupId 要撤回消息的群 ID
 	 * @param userId 被撤回消息的发送者 ID
 	 * @return 操作结果
-	 */ 
+	 */
 	public GroupMsgUnreadNumResponse recallGroupMemberMsg(String groupId, String userId) {
 		Map<String, Object> requestBody = new ImmutableMap.Builder<String, Object>()
 				.put("GroupId", groupId)
@@ -947,14 +946,14 @@ public class TencentTimGroupOperations extends TencentTimOperations {
 				.build();
 		return super.request(TimApiAddress.DELETE_GROUP_MSG_BY_SENDER, requestBody, GroupMsgUnreadNumResponse.class);
 	}
-	
+
 	/**
-	 * 40、拉取群历史消息
+	 * 55、拉取群历史消息
 	 * API：https://cloud.tencent.com/document/product/269/2738
 	 * @param groupId 要拉取历史消息的群组 ID
 	 * @param reqMsgSeq 拉取消息的最大 seq
 	 * @return 操作结果
-	 */ 
+	 */
 	public GroupMsgGetResponse getGroupMsg(String groupId, Integer reqMsgSeq) {
 		Map<String, Object> requestBody = new ImmutableMap.Builder<String, Object>()
 				.put("GroupId", groupId)
@@ -963,15 +962,15 @@ public class TencentTimGroupOperations extends TencentTimOperations {
 				.build();
 		return super.request(TimApiAddress.GROUP_MSG_GET_SIMPLE, requestBody, GroupMsgGetResponse.class);
 	}
-	
+
 	/**
-	 * 41、拉取群历史消息
+	 * 56、拉取群历史消息
 	 * API：https://cloud.tencent.com/document/product/269/2738
 	 * @param groupId 要拉取历史消息的群组 ID
 	 * @param reqMsgSeq 拉取消息的最大 seq
 	 * @param reqMsgNumber 拉取的历史消息的条数，目前一次请求最多返回20条历史消息，所以这里最好小于等于20
 	 * @return 操作结果
-	 */ 
+	 */
 	public GroupMsgGetResponse getGroupMsg(String groupId, Integer reqMsgSeq, Integer reqMsgNumber) {
 		Map<String, Object> requestBody = new ImmutableMap.Builder<String, Object>()
 				.put("GroupId", groupId)
@@ -982,11 +981,11 @@ public class TencentTimGroupOperations extends TencentTimOperations {
 	}
 
 	/**
-	 * 42、获取直播群在线人数：App 管理员可以根据群组 ID 获取直播群在线人数。
+	 * 57、获取直播群在线人数：App 管理员可以根据群组 ID 获取直播群在线人数。
 	 * API：https://cloud.tencent.com/document/product/269/49180
 	 * @param groupId 要撤回消息的群 ID
 	 * @return 操作结果
-	 */ 
+	 */
 	public GroupMemberOnlineNumGetResponse getGroupMemberOnlineNum(String groupId) {
 		Map<String, Object> requestBody = ImmutableMap.of("GroupId", groupId);
 		return super.request(TimApiAddress.GET_ONLINE_MEMBER_NUM, requestBody, GroupMemberOnlineNumGetResponse.class);
