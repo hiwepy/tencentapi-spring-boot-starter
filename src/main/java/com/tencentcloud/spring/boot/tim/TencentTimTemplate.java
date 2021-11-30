@@ -38,7 +38,9 @@ public class TencentTimTemplate implements InitializingBean {
 
 	public final static String APPLICATION_JSON_VALUE = "application/json";
 	public final static String APPLICATION_JSON_UTF8_VALUE = "application/json;charset=UTF-8";
-
+	public final static MediaType APPLICATION_JSON = MediaType.parse(APPLICATION_JSON_VALUE);
+	public final static MediaType APPLICATION_JSON_UTF8 = MediaType.parse(APPLICATION_JSON_UTF8_VALUE);
+    
 	private static final String USER_SIG = "usersig";
 	private static final String IDENTIFIER = "identifier";
 	private static final String SDKAPPID = "sdkappid";
@@ -162,23 +164,23 @@ public class TencentTimTemplate implements InitializingBean {
 		try {
 			
 			String paramStr = objectMapper.writeValueAsString(params);
-			log.info("Request Param :  {}", paramStr);
+			log.info("Tim Request Param :  {}", paramStr);
 			
-			RequestBody requestBody = RequestBody.create(MediaType.parse(APPLICATION_JSON_VALUE), paramStr);
+			RequestBody requestBody = RequestBody.create(APPLICATION_JSON_UTF8, paramStr);
 			Request request = new Request.Builder().url(url).post(requestBody).build();
 			
 			try(Response response = okhttp3Client.newCall(request).execute();) {
 				if (response.isSuccessful()) {
 					String body = response.body().string();
-					log.info("Request Success : url : {}, params : {}, code : {}, body : {} , use time : {} ", url, params, response.code(), body , System.currentTimeMillis() - start);
+					log.info("Tim Request Success : url : {}, params : {}, code : {}, body : {} , use time : {} ", url, params, response.code(), body , System.currentTimeMillis() - start);
 					res = objectMapper.readValue(body, cls);
 	            } else {
-	            	log.error("Request Failure : url : {}, params : {}, code : {}, message : {}, use time : {} ", url, params, response.code(), response.message(), System.currentTimeMillis() - start);
+	            	log.error("Tim Request Failure : url : {}, params : {}, code : {}, message : {}, use time : {} ", url, params, response.code(), response.message(), System.currentTimeMillis() - start);
 	            	res = BeanUtils.instantiateClass(cls);
 				}
 			}
 		} catch (Exception e) {
-			log.error("Request Error : url : {}, params : {}, use time : {} ,  {}", url, params, e.getMessage(), System.currentTimeMillis() - start);
+			log.error("Tim Request Error : url : {}, params : {}, use time : {} ,  {}", url, params, e.getMessage(), System.currentTimeMillis() - start);
 			res = BeanUtils.instantiateClass(cls);
 		}
 		return res;
@@ -191,30 +193,30 @@ public class TencentTimTemplate implements InitializingBean {
 		try {
 			
 			String paramStr = objectMapper.writeValueAsString(params);
-			log.info("Request Param :  {}", paramStr);
+			log.info("Tim Request Param :  {}", paramStr);
 			
-			RequestBody requestBody = RequestBody.create(MediaType.parse(APPLICATION_JSON_VALUE), paramStr);
+			RequestBody requestBody = RequestBody.create(APPLICATION_JSON_UTF8, paramStr);
 			Request request = new Request.Builder().url(url).post(requestBody).build();
 			okhttp3Client.newCall(request).enqueue(new Callback() {
 				
 	            @Override
 	            public void onFailure(Call call, IOException e) {
-	            	log.error("Async Request Failure : url : {}, params : {}, message : {}, use time : {} ", url, params, e.getMessage(), System.currentTimeMillis() - start);
+	            	log.error("Tim Async Request Failure : url : {}, params : {}, message : {}, use time : {} ", url, params, e.getMessage(), System.currentTimeMillis() - start);
 	            }
 	            
 	            @Override
 	            public void onResponse(Call call, Response response) {
                 	if (response.isSuccessful()) {
-    					log.info("Async Request Success : url : {}, params : {}, code : {}, message : {} , use time : {} ", url, params, response.code(), response.message(), System.currentTimeMillis() - start);
+    					log.info("Tim Async Request Success : url : {}, params : {}, code : {}, message : {} , use time : {} ", url, params, response.code(), response.message(), System.currentTimeMillis() - start);
     					consumer.accept(response);
                     } else {
-                    	log.error("Async Request Failure : url : {}, params : {}, code : {}, message : {}, use time : {} ", url, params, response.code(), response.message(), System.currentTimeMillis() - start);
+                    	log.error("Tim Async Request Failure : url : {}, params : {}, code : {}, message : {}, use time : {} ", url, params, response.code(), response.message(), System.currentTimeMillis() - start);
         			}
 	            }
 	            
 	        });
 		} catch (Exception e) {
-			log.error("Async Request Error : url : {}, params : {}, message : {} , use time : {} ", url, params, e.getMessage(), System.currentTimeMillis() - start);
+			log.error("Tim Async Request Error : url : {}, params : {}, message : {} , use time : {} ", url, params, e.getMessage(), System.currentTimeMillis() - start);
 		}
 	}
 	
