@@ -6,6 +6,7 @@ import java.util.Map;
 import java.util.UUID;
 import java.util.function.Consumer;
 
+import com.alibaba.fastjson.JSONObject;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.InitializingBean;
 
@@ -40,7 +41,7 @@ public class TencentTimTemplate implements InitializingBean {
 	public final static String APPLICATION_JSON_UTF8_VALUE = "application/json;charset=UTF-8";
 	public final static MediaType APPLICATION_JSON = MediaType.parse(APPLICATION_JSON_VALUE);
 	public final static MediaType APPLICATION_JSON_UTF8 = MediaType.parse(APPLICATION_JSON_UTF8_VALUE);
-    
+
 	private static final String USER_SIG = "usersig";
 	private static final String IDENTIFIER = "identifier";
 	private static final String SDKAPPID = "sdkappid";
@@ -70,7 +71,7 @@ public class TencentTimTemplate implements InitializingBean {
 		objectMapper.setVisibility(PropertyAccessor.ALL, JsonAutoDetect.Visibility.ANY);
 		objectMapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
 	}
-	
+
 	public TencentTimTemplate(TencentTimProperties timProperties, OkHttpClient okhttp3Client, TimUserIdProvider timUserIdProvider) {
 		this(timProperties, new TLSSigAPIv2(timProperties.getSdkappid(), timProperties.getPrivateKey()),
 				okhttp3Client, timUserIdProvider);
@@ -90,9 +91,9 @@ public class TencentTimTemplate implements InitializingBean {
 							public String load(String key) throws Exception {
 								return tlsSigAPIv2.genUserSig(timProperties.getIdentifier(), timProperties.getExpire());
 							}
-							
+
 						});
-		
+
 	}
 
 	public TencentTimAccountAsyncOperations opsForAccount() {
@@ -102,15 +103,15 @@ public class TencentTimTemplate implements InitializingBean {
 	public TencentTimAllMemberPushAsyncOperations opsForPush() {
 		return pushOps;
 	}
-	
+
 	public TencentTimGroupAsyncOperations opsForGroup() {
 		return groupOps;
 	}
-	
+
 	public TencentTimNospeakingAsyncOperations opsForNoSpeaking() {
 		return noSpeakingOps;
 	}
-	
+
 	public TencentTimOpenimAsyncOperations opsForOpenim() {
 		return imOps;
 	}
@@ -134,11 +135,11 @@ public class TencentTimTemplate implements InitializingBean {
 	public TLSSigAPIv2 getTlsSigAPIv2() {
 		return tlsSigAPIv2;
 	}
-	
+
 	public long getMsgLifeTime() {
 		return timProperties.getMsgLifeTime();
 	}
-	
+
 	public Map<String, String> getDefaultParams() {
 		Map<String, String> pathParams = Maps.newHashMap();
 		pathParams.put(USER_SIG, tlsSigCache.getUnchecked(USER_SIG));
@@ -148,32 +149,33 @@ public class TencentTimTemplate implements InitializingBean {
 		pathParams.put(CONTENTTYPE, CONTENTTYPE_JSON);
 		return pathParams;
 	}
-	
+
 	public <T> T readValue(String json, Class<T> cls) {
 		try {
-			return objectMapper.readValue(json, cls);
-		} catch (IOException e) {
+			return JSONObject.parseObject(json, cls);
+			//return objectMapper.readValue(json, cls);
+		} catch (Exception e) {
 			log.error(e.getMessage());
 			return BeanUtils.instantiateClass(cls);
 		}
 	}
-	
+
 	public <T extends TimActionResponse> T requestInvoke(String url, Object params, Class<T> cls) {
 		long start = System.currentTimeMillis();
 		T res = null;
 		try {
-			
+
 			String paramStr = objectMapper.writeValueAsString(params);
 			log.info("Tim Request Param :  {}", paramStr);
-			
+
 			RequestBody requestBody = RequestBody.create(APPLICATION_JSON_UTF8, paramStr);
 			Request request = new Request.Builder().url(url).post(requestBody).build();
-			
+
 			try(Response response = okhttp3Client.newCall(request).execute();) {
 				if (response.isSuccessful()) {
 					String body = response.body().string();
 					log.info("Tim Request Success : url : {}, params : {}, code : {}, body : {} , use time : {} ", url, params, response.code(), body , System.currentTimeMillis() - start);
-					res = objectMapper.readValue(body, cls);
+					res = this.readValue(body, cls);
 	            } else {
 	            	log.error("Tim Request Failure : url : {}, params : {}, code : {}, message : {}, use time : {} ", url, params, response.code(), response.message(), System.currentTimeMillis() - start);
 	            	res = BeanUtils.instantiateClass(cls);
@@ -185,25 +187,25 @@ public class TencentTimTemplate implements InitializingBean {
 		}
 		return res;
 	}
-	
+
 	public void requestAsyncInvoke(String url, Object params, Consumer<Response> consumer) {
-		
+
 		long start = System.currentTimeMillis();
-		
+
 		try {
-			
+
 			String paramStr = objectMapper.writeValueAsString(params);
 			log.info("Tim Request Param :  {}", paramStr);
-			
+
 			RequestBody requestBody = RequestBody.create(APPLICATION_JSON_UTF8, paramStr);
 			Request request = new Request.Builder().url(url).post(requestBody).build();
 			okhttp3Client.newCall(request).enqueue(new Callback() {
-				
+
 	            @Override
 	            public void onFailure(Call call, IOException e) {
 	            	log.error("Tim Async Request Failure : url : {}, params : {}, message : {}, use time : {} ", url, params, e.getMessage(), System.currentTimeMillis() - start);
 	            }
-	            
+
 	            @Override
 	            public void onResponse(Call call, Response response) {
                 	if (response.isSuccessful()) {
@@ -213,13 +215,13 @@ public class TencentTimTemplate implements InitializingBean {
                     	log.error("Tim Async Request Failure : url : {}, params : {}, code : {}, message : {}, use time : {} ", url, params, response.code(), response.message(), System.currentTimeMillis() - start);
         			}
 	            }
-	            
+
 	        });
 		} catch (Exception e) {
 			log.error("Tim Async Request Error : url : {}, params : {}, message : {} , use time : {} ", url, params, e.getMessage(), System.currentTimeMillis() - start);
 		}
 	}
-	
+
 	public String getUserIdByImUser(String account) {
 		return timUserIdProvider.getUserIdByImUser(timProperties.getSdkappid(), account);
 	}
