@@ -152,8 +152,7 @@ public class TencentTimTemplate implements InitializingBean {
 
 	public <T> T readValue(String json, Class<T> cls) {
 		try {
-			return JSONObject.parseObject(json, cls);
-			//return objectMapper.readValue(json, cls);
+			return objectMapper.readValue(json, cls);
 		} catch (Exception e) {
 			log.error(e.getMessage());
 			return BeanUtils.instantiateClass(cls);
