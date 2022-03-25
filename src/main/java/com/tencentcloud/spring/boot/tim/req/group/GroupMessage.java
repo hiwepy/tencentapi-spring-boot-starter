@@ -21,9 +21,9 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class GroupMessage {
-	
+
 	/**
-	 * 社团编号
+	 * 群组ID
 	 */
 	@JsonProperty("GroupId")
 	private String groupId;
@@ -33,7 +33,7 @@ public class GroupMessage {
 	 */
 	@JsonProperty("From_Account")
 	private String account;
-	
+
 	/**
 	 * 随机数字，五分钟数字相同认为是重复消息
 	 */
@@ -52,7 +52,7 @@ public class GroupMessage {
 	 */
 	@JsonProperty("MsgBody")
 	private List<MsgBody> msgBody;
-	
+
 	/**
 	 * 如果消息体中指定 OnlineOnlyFlag，只要值大于0，则消息表示只在线下发，不存离线和漫游（AVChatRoom 和 BChatRoom 不允许使用）。
 	 */
@@ -64,7 +64,7 @@ public class GroupMessage {
 	 */
 	@JsonProperty("ForbidCallbackControl")
 	private List<String> forbidCallbackControl;
-	
+
 	/**
 	 * 离线信息设置
 	 */
