@@ -1,7 +1,5 @@
 package com.tencentcloud.spring.boot;
 
-import org.junit.Before;
-import org.junit.Test;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -9,6 +7,8 @@ import com.tencentcloud.spring.boot.sms.TencentSmsTemplate;
 import com.tencentcloudapi.common.Credential;
 import com.tencentcloudapi.sms.v20190711.SmsClient;
 import com.tencentcloudapi.sms.v20190711.models.SendSmsResponse;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.Test;
 
 public class TencentSms_Test {
 
@@ -16,7 +16,7 @@ public class TencentSms_Test {
 	SmsClient tencentSmsClient;
 	TencentSmsProperties properties = new TencentSmsProperties();
 
-	@Before
+	@BeforeAll
 	public void setup() {
 		objectMapper.setSerializationInclusion(JsonInclude.Include.NON_NULL);
 		/*
@@ -26,7 +26,7 @@ public class TencentSms_Test {
 		 */
 		Credential credential = new Credential(properties.getSecretId(), properties.getSecretKey());
 		tencentSmsClient = new SmsClient(credential, properties.getRegion());
-		
+
 	}
 
 	@Test
@@ -41,5 +41,5 @@ public class TencentSms_Test {
 		}
 
 	}
- 
+
 }
