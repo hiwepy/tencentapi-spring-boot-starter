@@ -3,8 +3,8 @@
 
 #### 组件简介
 
-> 基于 [腾讯云 - 即时通信 IM ](https://cloud.tencent.com/document/product/269/42440) 在线API封装
-> 基于 [腾讯云 - 腾讯云短信（Short Message Service，SMS） ](https://cloud.tencent.com/document/product/382/3784) 在线API封装
+- 基于 [腾讯云 - 即时通信 IM ](https://cloud.tencent.com/document/product/269/42440) 在线API封装 IM SDK
+- 基于 [腾讯云 - 腾讯云短信（Short Message Service，SMS） ](https://cloud.tencent.com/document/product/382/3784) 在线API封装短信发送组件
 
 #### 使用说明
 
