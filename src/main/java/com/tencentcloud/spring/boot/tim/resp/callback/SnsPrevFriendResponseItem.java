@@ -15,6 +15,7 @@
  */
 package com.tencentcloud.spring.boot.tim.resp.callback;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
@@ -22,17 +23,34 @@ import lombok.Data;
 
 @Data
 @JsonInclude(JsonInclude.Include.NON_NULL)
-public class GroupSendMsgBody {
+@JsonIgnoreProperties(ignoreUnknown = false)
+public class SnsPrevFriendResponseItem {
 
 	/**
-	 * 消息类型
+	 * 请求回应的用户的 UserID
 	 */
-	@JsonProperty(value = "MsgType")
-	private String MsgType;
+	@JsonProperty(value = "To_Account")
+	private String account;
+
 	/**
-	 * 消息内容
+	 * From_Account 对 To_Account 设置的好友备注，详情可参见 标配好友字段
 	 */
-	@JsonProperty(value = "MsgContent")
-	private GroupSendMsgBodyContent MsgContent;
+	@JsonProperty(value = "Remark")
+	private String remark;
+
+	/**
+	 * From_Account 对 To_Account 设置的好友分组，详情可参见 标配好友字段
+	 */
+	@JsonProperty(value = "TagName")
+	private String tagName;
+
+	/**
+	 * 加好友回应方式：
+	 * 1、Response_Action_AgreeAndAdd 表示同意且添加对方为好友
+	 * 2、Response_Action_Agree 表示同意对方加自己为好友
+	 * 3、Response_Action_Reject 表示拒绝对方的加好友请求
+	 */
+	@JsonProperty(value = "ResponseAction")
+	private String action;
 	
 }

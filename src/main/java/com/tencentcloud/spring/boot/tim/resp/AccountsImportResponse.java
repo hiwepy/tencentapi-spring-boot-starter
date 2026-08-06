@@ -1,3 +1,4 @@
+<<<<<<< Updated upstream:src/main/java/com/tencentcloud/spring/boot/tim/resp/AccountsImportResponse.java
 /*
  * Copyright (c) 2018, hiwepy (https://github.com/hiwepy).
  *
@@ -35,3 +36,5 @@ public class AccountsImportResponse extends ApiResponse {
 	private List<String> failAccounts;
 
 }
+=======
+>>>>>>> Stashed changes:src/main/java/com/tencentcloud/spring/boot/tim/resp/account/AccountsImportResponse.java

@@ -13,26 +13,33 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  */
-package com.tencentcloud.spring.boot.tim.resp.callback;
+package com.tencentcloud.spring.boot.tim.resp.sns;
 
+import java.util.List;
+
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.tencentcloud.spring.boot.tim.resp.TimActionResponse;
 
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 
 @Data
-@JsonInclude(JsonInclude.Include.NON_NULL)
-public class GroupSendMsgBody {
+@EqualsAndHashCode(callSuper=false)
+@JsonInclude( JsonInclude.Include.NON_NULL)
+@JsonIgnoreProperties(ignoreUnknown = false)
+public class FriendGetListResponse extends TimActionResponse {
 
 	/**
-	 * 消息类型
+	 *好友对象数组，每一个好友对象都包含一个 To_Account 字段和一个 SnsProfileItem 数组
 	 */
-	@JsonProperty(value = "MsgType")
-	private String MsgType;
+	@JsonProperty("InfoItem")
+	private List<InfoItem> infoItems;
 	/**
-	 * 消息内容
+	 * 返回处理失败的 UserID 列表，仅当存在失败用户时才返回该字段
 	 */
-	@JsonProperty(value = "MsgContent")
-	private GroupSendMsgBodyContent MsgContent;
-	
+	@JsonProperty("Fail_Account")
+	private List<String> failAccounts;
+
 }

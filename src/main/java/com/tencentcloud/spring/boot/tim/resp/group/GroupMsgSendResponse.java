@@ -13,26 +13,32 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  */
-package com.tencentcloud.spring.boot.tim.resp.callback;
+package com.tencentcloud.spring.boot.tim.resp.group;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.tencentcloud.spring.boot.tim.resp.TimActionResponse;
 
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 
 @Data
-@JsonInclude(JsonInclude.Include.NON_NULL)
-public class GroupSendMsgBody {
+@EqualsAndHashCode(callSuper=false)
+@JsonInclude( JsonInclude.Include.NON_NULL)
+@JsonIgnoreProperties(ignoreUnknown = false)
+public class GroupMsgSendResponse extends TimActionResponse {
 
-	/**
-	 * 消息类型
+    /**
+	 * 消息发送的时间戳，对应后台 server 时间
 	 */
-	@JsonProperty(value = "MsgType")
-	private String MsgType;
-	/**
-	 * 消息内容
+	@JsonProperty("MsgTime")
+	private Long msgTime;
+
+    /**
+	 * 消息序列号，唯一标示一条消息
 	 */
-	@JsonProperty(value = "MsgContent")
-	private GroupSendMsgBodyContent MsgContent;
-	
+	@JsonProperty("MsgSeq")
+	private Long msgSeq;
+
 }

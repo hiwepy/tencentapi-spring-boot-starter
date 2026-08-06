@@ -13,12 +13,14 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  */
-package com.tencentcloud.spring.boot.tim.resp;
+package com.tencentcloud.spring.boot.tim.resp.group;
 
 import java.util.List;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.tencentcloud.spring.boot.tim.resp.TimActionResponse;
 
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -26,18 +28,30 @@ import lombok.EqualsAndHashCode;
 @Data
 @EqualsAndHashCode(callSuper=false)
 @JsonInclude( JsonInclude.Include.NON_NULL)
-public class AccountStateResponse extends ApiResponse {
+@JsonIgnoreProperties(ignoreUnknown = false)
+public class GroupMemberRoleGetResponse extends TimActionResponse {
 
 	/**
-	 * 用户在线状态结构化信息
-	 */
-	@JsonProperty("QueryResult")
-	private List<AccountStateQueryResult> queryResult;
+	 * 拉取到的成员角色，包括：Owner(群主)，Admin(群管理员)，Member(普通群成员），NotMember(非群成员)
+	 */ 
+	@JsonProperty("UserIdList")
+	private List<GroupMemberRole> userIdList;
 	
-	/**
-	 * 状态查询失败的帐号列表，在此列表中的目标帐号，状态查询失败或目标帐号不存在。若状态全部查询成功，则 ErrorList 为空
-	 */
-	@JsonProperty("ErrorList")
-	private List<AccountStateQueryError> errorList;
+	@JsonInclude( JsonInclude.Include.NON_NULL)
+	@Data
+	public class GroupMemberRole {
+	
+	    /**
+	     * 成员ID
+	     */
+	    @JsonProperty("Member_Account")
+	    private String account;
+
+	    /**
+	     * 成员角色：Owner/Admin/Member/NotMember
+	     */
+	    @JsonProperty("Role")
+	    private String role;
+	}
 	
 }

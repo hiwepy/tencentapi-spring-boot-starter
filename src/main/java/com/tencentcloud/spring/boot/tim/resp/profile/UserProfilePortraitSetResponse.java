@@ -13,26 +13,19 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  */
-package com.tencentcloud.spring.boot.tim.resp.callback;
+package com.tencentcloud.spring.boot.tim.resp.profile;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
-import com.fasterxml.jackson.annotation.JsonProperty;
+import com.tencentcloud.spring.boot.tim.resp.TimActionResponse;
 
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 
 @Data
-@JsonInclude(JsonInclude.Include.NON_NULL)
-public class GroupSendMsgBody {
+@EqualsAndHashCode(callSuper=false)
+@JsonInclude( JsonInclude.Include.NON_NULL)
+@JsonIgnoreProperties(ignoreUnknown = false)
+public class UserProfilePortraitSetResponse extends TimActionResponse {
 
-	/**
-	 * 消息类型
-	 */
-	@JsonProperty(value = "MsgType")
-	private String MsgType;
-	/**
-	 * 消息内容
-	 */
-	@JsonProperty(value = "MsgContent")
-	private GroupSendMsgBodyContent MsgContent;
-	
 }

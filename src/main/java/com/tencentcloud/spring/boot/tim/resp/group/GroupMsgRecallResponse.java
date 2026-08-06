@@ -13,12 +13,14 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  */
-package com.tencentcloud.spring.boot.tim.resp;
+package com.tencentcloud.spring.boot.tim.resp.group;
 
 import java.util.List;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.tencentcloud.spring.boot.tim.resp.TimActionResponse;
 
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -26,18 +28,30 @@ import lombok.EqualsAndHashCode;
 @Data
 @EqualsAndHashCode(callSuper=false)
 @JsonInclude( JsonInclude.Include.NON_NULL)
-public class AccountStateResponse extends ApiResponse {
+@JsonIgnoreProperties(ignoreUnknown = false)
+public class GroupMsgRecallResponse extends TimActionResponse {
+	
+	/**
+	 * 消息撤回请求的详细结果
+	 */ 
+	@JsonProperty("RecallRetList")
+	private List<GroupMsgRecallRet> recallRetList;
+	
+	@JsonInclude( JsonInclude.Include.NON_NULL)
+	@Data
+	public class GroupMsgRecallRet {
+	
+	    /**
+	     * 单个被撤回消息的 seq
+	     */
+	    @JsonProperty("MsgSeq")
+	    private String msgSeq;
 
-	/**
-	 * 用户在线状态结构化信息
-	 */
-	@JsonProperty("QueryResult")
-	private List<AccountStateQueryResult> queryResult;
-	
-	/**
-	 * 状态查询失败的帐号列表，在此列表中的目标帐号，状态查询失败或目标帐号不存在。若状态全部查询成功，则 ErrorList 为空
-	 */
-	@JsonProperty("ErrorList")
-	private List<AccountStateQueryError> errorList;
-	
+	    /**
+	     * 单个消息的被撤回结果：0表示成功；其它表示失败，参考下文错误码说明
+	     */
+	    @JsonProperty("RetCode")
+	    private String retCode;
+	    
+	}
 }
