@@ -21,18 +21,36 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 
 import lombok.Data;
 
+/**
+ * Configuration properties for the Tencent Cloud IM (TIM) integration.
+ * <p>
+ * Bound to the {@code tencent.cloud.tim.*} namespace and extends
+ * {@link TencentTimOption} which carries the SDKAppid, key and account fields
+ * required by the {@code TLSSigAPIv2} user signature generator. When
+ * {@link #isEnabled()} is {@code true} the {@link TencentTimAutoConfiguration}
+ * creates a {@link com.tencentcloud.spring.boot.tim.TencentTimTemplate}.</p>
+ *
+ * <h3>Configuration</h3>
+ * <ul>
+ *   <li>{@code tencent.cloud.tim.enabled} — opt-in switch (default {@code false})</li>
+ *   <li>{@code tencent.cloud.tim.domain} — TIM REST API base domain</li>
+ * </ul>
+ *
+ * @author [@Loong Wan](https://github.com/loong10k)
+ * @since 1.0.0
+ */
 @EqualsAndHashCode(callSuper = true)
 @ConfigurationProperties(TencentTimProperties.PREFIX)
 @Data
 public class TencentTimProperties extends TencentTimOption {
 
+	/** Configuration prefix for Tencent Cloud IM (TIM) properties. */
 	public static final String PREFIX = "tencent.cloud.tim";
-	
-	/**
-	 * Enable Tencent Tim.
-	 */
+
+	/** Whether the Tencent IM integration should be activated (default {@code false}). */
 	private boolean enabled = false;
 
+	/** Base domain (host) of the TIM REST API endpoints. */
 	private String domain;
 
 }

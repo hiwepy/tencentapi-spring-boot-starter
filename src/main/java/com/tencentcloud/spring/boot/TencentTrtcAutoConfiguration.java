@@ -15,38 +15,62 @@ import com.tencentcloudapi.common.Credential;
 import com.tencentcloudapi.common.profile.ClientProfile;
 import com.tencentcloudapi.trtc.v20190722.TrtcClient;
 
+/**
+ * Spring Boot auto-configuration for the Tencent Real-Time Communication (TRTC)
+ * integration.
+ * <p>
+ * Activates only when both the {@code TrtcClient} class is on the classpath and
+ * {@code tencent.cloud.trtc.enabled=true}. It builds the SDK {@link TrtcClient}
+ * (using the per-service credentials with fallback to the shared
+ * {@link TencentCloudProperties}) and exposes a
+ * {@link TencentTrtcTemplate} facade bean for application code.</p>
+ *
+ * @author [@Loong Wan](https://github.com/loong10k)
+ * @since 1.0.0
+ */
 @Configuration
 @ConditionalOnClass(TrtcClient.class)
 @ConditionalOnProperty(prefix = TencentTrtcProperties.PREFIX, value = "enabled", havingValue = "true")
 @EnableConfigurationProperties({ TencentCloudProperties.class, TencentTrtcProperties.class })
 public class TencentTrtcAutoConfiguration {
 
-	/*
-	 * 1、实例化 Trtc 的 client 对象 第二个参数是地域信息，可以直接填写字符串 ap-guangzhou，或者引用预设的常量
+	/**
+	 * Creates the Tencent Cloud TRTC SDK client.
+	 * <p>
+	 * Credentials are resolved with per-service override first, falling back to
+	 * the shared {@link TencentCloudProperties} values. The {@link ClientProfile}
+	 * is configured with the signature method, HTTP profile, debug flag and
+	 * response language from the bound properties.
+	 *
+	 * @param cloudProperties shared Tencent Cloud credentials and global flags
+	 * @param trtcProperties  TRTC-specific configuration (region, profile, signing)
+	 * @return a configured {@link TrtcClient} bound to the requested region
 	 */
 	@Bean
 	public TrtcClient trtcClient(TencentCloudProperties cloudProperties, TencentTrtcProperties trtcProperties) {
-		
-		/*
-		 * 实例化一个认证对象，入参需要传入腾讯云账户密钥对 secretId 和 secretKey
-		 * 密钥查询：https://console.cloud.tencent.com/cam/capi
-		 */
+
 		String secretId = StringUtils.hasText(trtcProperties.getSecretId()) ? trtcProperties.getSecretId() : cloudProperties.getSecretId();
 		String secretKey = StringUtils.hasText(trtcProperties.getSecretKey()) ? trtcProperties.getSecretKey() : cloudProperties.getSecretKey();
 		Credential credential = new Credential(secretId, secretKey);
 
-        // 实例化一个client选项，可选的，没有特殊需求可以跳过
         ClientProfile clientProfile = new ClientProfile();
-        clientProfile.setSignMethod(trtcProperties.getSignMethod()); // 指定签名算法(默认为HmacSHA256)
-        // 自3.1.80版本开始，SDK 支持打印日志。
+        clientProfile.setSignMethod(trtcProperties.getSignMethod());
         clientProfile.setHttpProfile(trtcProperties.getHttpProfile());
         clientProfile.setDebug(cloudProperties.isDebug());
-        // 从3.1.16版本开始，支持设置公共参数 Language, 默认不传，选择(ZH_CN or EN_US)
         clientProfile.setLanguage(trtcProperties.getLanguage());
-        
+
 		return new TrtcClient(credential, trtcProperties.getRegion(), clientProfile);
 	}
-	
+
+	/**
+	 * Creates the {@link TencentTrtcTemplate} facade used by application code to
+	 * manage TRTC rooms and users.
+	 *
+	 * @param trtcClient         the {@link TrtcClient} created above
+	 * @param properties         TRTC-specific configuration
+	 * @param trtcUserIdProvider object provider for the optional user-id resolver
+	 * @return a {@link TencentTrtcTemplate} wrapping the client, properties and provider
+	 */
 	@Bean
 	@ConditionalOnBean
 	public TencentTrtcTemplate tencentTrtcTemplate(TrtcClient trtcClient, TencentTrtcProperties properties,

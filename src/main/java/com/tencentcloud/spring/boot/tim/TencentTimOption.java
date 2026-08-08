@@ -2,38 +2,47 @@ package com.tencentcloud.spring.boot.tim;
 
 import lombok.Data;
 
+/**
+ * Base option holder for Tencent Cloud IM (TIM) shared by the bound
+ * {@link com.tencentcloud.spring.boot.TencentTimProperties} and the
+ * {@link TimInfoProvider} SPI. Carries the SdkAppid, administrator identifier,
+ * private key and signature / message-lifetime defaults required by the
+ * {@code TLSSigAPIv2} user-signature generator.
+ *
+ * @author [@Loong Wan](https://github.com/loong10k)
+ * @since 1.0.0
+ */
 @Data
 public class TencentTimOption {
 
+    /** Default administrator identifier used when none is configured. */
     public static final String ADMINISTRATOR = "administrator";
-    // 单位秒
+
+    /** Default signature expiry: 30 days, in seconds. */
     private static final long EXPIRE = 86400 * 30;
 
     /**
-     * 帐号管理员
+     * Administrator account identifier used to sign server-side REST API
+     * requests (default {@value #ADMINISTRATOR}).
      */
     private String identifier = ADMINISTRATOR;
 
-    /**
-     * SDKAppID
-     */
+    /** TIM application SdkAppid obtained from the IM console. */
     private Long sdkappid;
 
-    /**
-     * 密钥
-     */
+    /** Private key used by {@code TLSSigAPIv2} to generate user signatures. */
     private String privateKey;
 
-    /**
-     * 签名过期时间，单位秒
-     */
+    /** User-signature validity in seconds (default 30 days). */
     private long expire = EXPIRE;
 
     /**
-     * 消息离线保存时长（单位：秒），最长为7天（604800秒）
-     * 若设置该字段为0，则消息只发在线用户，不保存离线
-     * 若设置该字段超过7天（604800秒），仍只保存7天
-     * 若不设置该字段，则默认保存7天
+     * Offline message retention in seconds. Maximum is 7 days ({@code 604800}).
+     * <ul>
+     *   <li>{@code 0} &mdash; messages are delivered to online users only and not retained offline;</li>
+     *   <li>values greater than {@code 604800} are clamped to {@code 604800};</li>
+     *   <li>the default is {@code 604800} (7 days).</li>
+     * </ul>
      */
     private long msgLifeTime = 604800;
 
