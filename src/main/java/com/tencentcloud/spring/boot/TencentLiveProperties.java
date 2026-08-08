@@ -23,49 +23,83 @@ import com.tencentcloudapi.common.profile.Language;
 
 import lombok.Data;
 
+/**
+ * Configuration properties for the Tencent Cloud Live (LVB) integration.
+ * <p>
+ * Bound to the {@code tencent.cloud.live.*} namespace. When {@link #isEnabled()}
+ * is {@code true} the {@link TencentLiveAutoConfiguration} creates a
+ * {@link com.tencentcloud.spring.boot.live.TencentLiveTemplate} together with
+ * the underlying {@code LiveClient}. Credentials fall back to the shared
+ * {@link TencentCloudProperties} when not overridden here.</p>
+ *
+ * <h3>Configuration</h3>
+ * <ul>
+ *   <li>{@code tencent.cloud.live.enabled} — opt-in switch (default {@code false})</li>
+ *   <li>{@code tencent.cloud.live.secret-id} / {@code secret-key} — per-service credential override</li>
+ *   <li>{@code tencent.cloud.live.region} — service region, e.g. {@code ap-guangzhou}</li>
+ *   <li>{@code tencent.cloud.live.sign-method} — signature algorithm (default {@code TC3-HMAC-SHA256})</li>
+ *   <li>{@code tencent.cloud.live.unsigned-payload} — exclude the request payload from signing (default {@code false})</li>
+ *   <li>{@code tencent.cloud.live.language} — response language, {@code ZH_CN} or {@code EN_US} (default {@code ZH_CN})</li>
+ *   <li>{@code tencent.cloud.live.push-domain} / {@code play-domain} / {@code app-name} / {@code stream-url-key} — live streaming domain parameters</li>
+ *   <li>{@code tencent.cloud.live.retry-times} — operation retry count (default {@code 2})</li>
+ * </ul>
+ *
+ * @author [@Loong Wan](https://github.com/loong10k)
+ * @since 1.0.0
+ */
 @ConfigurationProperties(TencentLiveProperties.PREFIX)
 @Data
 public class TencentLiveProperties {
 
+	/** Configuration prefix for Tencent Cloud Live properties. */
 	public static final String PREFIX = "tencent.cloud.live";
 
-	/**
-	 * Enable Tencent Live .
-	 */
+	/** Whether the Tencent Live integration should be activated (default {@code false}). */
 	private boolean enabled = false;
-	
+
 	/**
-	 * 官网获取的 API ID（腾讯云应用的AK）
+	 * Per-service override of the Tencent Cloud API key (AK).
+	 * When blank the value from {@link TencentCloudProperties#getSecretId()} is used.
 	 */
 	private String secretId;
+
 	/**
-	 * 官网获取的 Secret Key（腾讯应用的SK）
+	 * Per-service override of the Tencent Cloud API secret (SK).
+	 * When blank the value from {@link TencentCloudProperties#getSecretKey()} is used.
 	 */
   	private String secretKey;
-  	
+
+	/** Service region for the Live client, e.g. {@code ap-guangzhou}. */
   	private String region;
-	
+
+	/** Tencent SDK HTTP profile (endpoint, protocol, proxy, timeouts). */
     private HttpProfile httpProfile = new HttpProfile();
 
+	/** Signature algorithm used by the Live client (default {@code TC3-HMAC-SHA256}). */
     private String signMethod = ClientProfile.SIGN_TC3_256;
-    
-    /**
-     * If payload is NOT involved in signing process, true means will ignore payload, default is
-     * false.
-     */
+
+	/**
+	 * If {@code true} the request payload is excluded from the signature
+	 * computation (default {@code false}).
+	 */
     private boolean unsignedPayload;
 
-    /**
-     * valid choices: zh-CN, en-US
-     */
+	/** Response language: {@code ZH_CN} or {@code EN_US} (default {@code ZH_CN}). */
     private Language language = Language.ZH_CN;
-    
+
+	/** Push (ingest) domain used to build live push URLs. */
   	private String pushDomain;
+
+	/** Playback domain used to build live play URLs. */
     private String playDomain;
+
+	/** App name segment used in the live push/play URL path. */
     private String appName;
+
+	/** Authentication key used to sign live stream URLs. */
     private String streamUrlKey;
-    
+
+	/** Number of times to retry failed Live operations (default {@code 2}). */
     private Integer retryTimes = 2;
-    
-	
+
 }

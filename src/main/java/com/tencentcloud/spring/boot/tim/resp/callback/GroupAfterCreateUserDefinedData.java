@@ -23,7 +23,7 @@ import lombok.Data;
 
 /**
  * 用户建群时的自定义字段
- * @author 		： <a href="https://github.com/hiwepy">hiwepy</a>
+ * @author [@Loong Wan](https://github.com/loong10k)
  */
 @Data
 @JsonInclude(JsonInclude.Include.NON_NULL)
