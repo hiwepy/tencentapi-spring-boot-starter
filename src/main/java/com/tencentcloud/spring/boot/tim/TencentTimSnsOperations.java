@@ -214,7 +214,7 @@ public class TencentTimSnsOperations extends TencentTimOperations {
 	/**
 	 * 9、添加黑名单
 	 * API：https://cloud.tencent.com/document/product/269/3718
-	 * @author 		： <a href="https://github.com/hiwepy">hiwepy</a>
+	 * @author [@Loong Wan](https://github.com/loong10k)
 	  * @param fromUserId 需要添加该 UserID 的黑名单
 	 * @param userIds 待添加的黑名单的 UserID 列表，单次请求的 To_Account 数不得超过1000
 	 * @return 操作结果
@@ -230,7 +230,7 @@ public class TencentTimSnsOperations extends TencentTimOperations {
 	/**
 	 * 10、删除黑名单
 	 * API：https://cloud.tencent.com/document/product/269/3719
-	 * @author 		： <a href="https://github.com/hiwepy">hiwepy</a>
+	 * @author [@Loong Wan](https://github.com/loong10k)
 	 * @param fromUserId 需要删除该 UserID 的黑名单
 	 * @param userIds 待删除的黑名单的 UserID 列表，单次请求的 To_Account 数不得超过1000
 	 * @return 操作结果
@@ -246,7 +246,7 @@ public class TencentTimSnsOperations extends TencentTimOperations {
 	/**
 	 * 11、拉取黑名单
 	 * API：https://cloud.tencent.com/document/product/269/3722
-	 * @author 		： <a href="https://github.com/hiwepy">hiwepy</a>
+	 * @author [@Loong Wan](https://github.com/loong10k)
 	 * @param userId 需要拉取该 UserID 的黑名单
 	 * @param startIndex 拉取的起始位置
 	 * @param maxLimited 每页最多拉取的黑名单数
@@ -266,7 +266,7 @@ public class TencentTimSnsOperations extends TencentTimOperations {
 	/**
 	 * 12、校验黑名单
 	 * API：https://cloud.tencent.com/document/product/269/3725
-	 * @author 		： <a href="https://github.com/hiwepy">hiwepy</a>
+	 * @author [@Loong Wan](https://github.com/loong10k)
 	 * @param checkType 校验模式，详情可参见 校验黑名单
 	 * @param fromUserId 需要校验该 UserID 的黑名单
 	 * @param userIds 待校验的黑名单的 UserID 列表，单次请求的 To_Account 数不得超过1000
@@ -284,7 +284,7 @@ public class TencentTimSnsOperations extends TencentTimOperations {
 	/**
 	 * 12、添加分组
 	 * API：https://cloud.tencent.com/document/product/269/10107
-	 * @author 		： <a href="https://github.com/hiwepy">hiwepy</a>
+	 * @author [@Loong Wan](https://github.com/loong10k)
 	 * @param fromUserId 需要为该 UserID 添加新分组
 	 * @param groupNames 新增分组列表
 	 * @return 操作结果
@@ -300,7 +300,7 @@ public class TencentTimSnsOperations extends TencentTimOperations {
 	/**
 	 * 12、添加分组
 	 * API：https://cloud.tencent.com/document/product/269/10107
-	 * @author 		： <a href="https://github.com/hiwepy">hiwepy</a>
+	 * @author [@Loong Wan](https://github.com/loong10k)
 	 * @param fromUserId 需要为该 UserID 添加新分组
 	 * @param groupNames 新增分组列表
 	 * @param userIds 需要加入新增分组的好友的 UserID 列表
@@ -318,7 +318,7 @@ public class TencentTimSnsOperations extends TencentTimOperations {
 	/**
 	 * 13、删除分组
 	 * API：https://cloud.tencent.com/document/product/269/3719
-	 * @author 		： <a href="https://github.com/hiwepy">hiwepy</a>
+	 * @author [@Loong Wan](https://github.com/loong10k)
 	 * @param fromUserId 需要删除该 UserID 的黑名单
 	 * @param groupNames 要删除的分组列表
 	 * @return 操作结果
@@ -334,7 +334,7 @@ public class TencentTimSnsOperations extends TencentTimOperations {
 	/**
 	 * 14、拉取分组
 	 * API：https://cloud.tencent.com/document/product/269/3722
-	 * @author 		： <a href="https://github.com/hiwepy">hiwepy</a>
+	 * @author [@Loong Wan](https://github.com/loong10k)
 	 * @param userId 指定要拉取分组的用户的 UserID
 	 * @param lastSequence 上一次拉取分组时后台返回给客户端的 Seq，初次拉取时为0，只有 GroupName 为空时有效
 	 * @param groupNames 要拉取的分组名称
@@ -352,7 +352,7 @@ public class TencentTimSnsOperations extends TencentTimOperations {
 	/**
 	 * 15、拉取分组
 	 * API：https://cloud.tencent.com/document/product/269/3722
-	 * @author 		： <a href="https://github.com/hiwepy">hiwepy</a>
+	 * @author [@Loong Wan](https://github.com/loong10k)
 	 * @param userId 指定要拉取分组的用户的 UserID
 	 * @param lastSequence 上一次拉取分组时后台返回给客户端的 Seq，初次拉取时为0，只有 GroupName 为空时有效
 	 * @param needFriend 是否需要拉取分组下的 User 列表, Need_Friend_Type_Yes: 需要拉取, 不填时默认不拉取, 只有 GroupName 为空时有效
