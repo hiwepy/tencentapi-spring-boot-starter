@@ -13,36 +13,58 @@ import com.tencentcloudapi.common.Credential;
 import com.tencentcloudapi.common.profile.ClientProfile;
 import com.tencentcloudapi.sms.v20190711.SmsClient;
 
+/**
+ * Spring Boot auto-configuration for the Tencent Cloud SMS integration.
+ * <p>
+ * Activates only when both the {@code SmsClient} class is on the classpath and
+ * {@code tencent.cloud.sms.enabled=true}. It builds the SDK {@link SmsClient}
+ * (using the per-service credentials with fallback to the shared
+ * {@link TencentCloudProperties}) and exposes a
+ * {@link TencentSmsTemplate} facade bean for application code.</p>
+ *
+ * @author [@Loong Wan](https://github.com/loong10k)
+ * @since 1.0.0
+ */
 @Configuration
 @ConditionalOnClass(SmsClient.class)
 @ConditionalOnProperty(prefix = TencentSmsProperties.PREFIX, value = "enabled", havingValue = "true")
 @EnableConfigurationProperties({ TencentCloudProperties.class, TencentSmsProperties.class })
 public class TencentSmsAutoConfiguration {
-	
-	/* 
-	 * 1、实例化 SMS 的 client 对象 第二个参数是地域信息，可以直接填写字符串 ap-guangzhou，或者引用预设的常量
+
+	/**
+	 * Creates the Tencent Cloud SMS SDK client.
+	 * <p>
+	 * Credentials are resolved with per-service override first, falling back to
+	 * the shared {@link TencentCloudProperties} values. The {@link ClientProfile}
+	 * is configured with the signature method, HTTP profile, debug flag and
+	 * response language from the bound properties.
+	 *
+	 * @param cloudProperties shared Tencent Cloud credentials and global flags
+	 * @param smsProperties   SMS-specific configuration (region, profile, signing)
+	 * @return a configured {@link SmsClient} bound to the requested region
 	 */
 	@Bean
 	public SmsClient tencentSmsClient(TencentCloudProperties cloudProperties,TencentSmsProperties smsProperties) {
-		/*
-		 * 实例化一个认证对象，入参需要传入腾讯云账户密钥对 secretId 和 secretKey
-		 * 密钥查询：https://console.cloud.tencent.com/cam/capi
-		 */
 		String secretId = StringUtils.hasText(smsProperties.getSecretId()) ? smsProperties.getSecretId() : cloudProperties.getSecretId();
 		String secretKey = StringUtils.hasText(smsProperties.getSecretKey()) ? smsProperties.getSecretKey() : cloudProperties.getSecretKey();
 		Credential credential = new Credential(secretId, secretKey);
-		// 实例化一个client选项，可选的，没有特殊需求可以跳过
         ClientProfile clientProfile = new ClientProfile();
-        clientProfile.setSignMethod(smsProperties.getSignMethod()); // 指定签名算法(默认为HmacSHA256)
-        // 自3.1.80版本开始，SDK 支持打印日志。
+        clientProfile.setSignMethod(smsProperties.getSignMethod());
         clientProfile.setHttpProfile(smsProperties.getHttpProfile());
         clientProfile.setDebug(cloudProperties.isDebug());
-        // 从3.1.16版本开始，支持设置公共参数 Language, 默认不传，选择(ZH_CN or EN_US)
         clientProfile.setLanguage(smsProperties.getLanguage());
-		
+
 		return new SmsClient(credential, smsProperties.getRegion(), clientProfile);
 	}
-	
+
+	/**
+	 * Creates the {@link TencentSmsTemplate} facade used by application code to
+	 * send SMS messages.
+	 *
+	 * @param smsClient   the {@link SmsClient} created above
+	 * @param properties  SMS-specific configuration
+	 * @return a {@link TencentSmsTemplate} wrapping the client and properties
+	 */
 	@Bean
 	@ConditionalOnBean
 	public TencentSmsTemplate tencentSmsTemplate(SmsClient smsClient, TencentSmsProperties properties) {

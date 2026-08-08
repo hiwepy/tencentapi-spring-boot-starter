@@ -41,50 +41,67 @@ import com.tencentcloudapi.live.v20180801.models.DescribeLiveStreamStateResponse
 import lombok.extern.slf4j.Slf4j;
 
 /**
- * Live: 腾讯云直播
- * https://cloud.tencent.com/document/product/267/41299
- * https://cloud.tencent.com/document/product/267/32744
- * @author 		： <a href="https://github.com/hiwepy">hiwepy</a>
+ * Facade around the Tencent Cloud Live (LVB) SDK {@link LiveClient} that builds
+ * push/play stream URLs, manages common stream mixing sessions and queries live
+ * stream state.
+ * <p>
+ * Push and play URLs are signed using the configured stream key and are valid
+ * for one week (see {@link #ONE_WEEK_SECOND}). See the
+ * <a href="https://cloud.tencent.com/document/product/267/41299">Live docs</a>
+ * and the <a href="https://cloud.tencent.com/document/product/267/32744">mix-stream docs</a>.
+ *
+ * @author [@Loong Wan](https://github.com/loong10k)
+ * @since 1.0.0
  */
 @Slf4j
 public class TencentLiveTemplate {
-	
+
 	private static SecureRandom srandom = new SecureRandom();
-	/**
-	 * 一周秒数
-	 */
+
+	/** Number of seconds in one week; used as the validity window for generated stream URLs. */
 	public static final Integer ONE_WEEK_SECOND = 7 * 24 * 60 * 60;
 	//private static final char[] DIGITS_LOWER = { '0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'a', 'b', 'c', 'd', 'e', 'f' };
 
+	/** Logical input-stream name used for the mix-stream canvas layer. */
 	private static final String CANV_NAME = "canv";
+
+	/** Delimiter used when composing/parsing stream names ({@code userId_timestamp}). */
 	private static final String DELIMITER = "_";
-	
+
 	private static final Float DEFAULT_PARAM = 0F;
 	private static final Float WIDTH = 368F;
 	private static final Float HEIGHT = 640F;
 
-	private LiveClient liveClient;
-	private TencentLiveProperties liveProperties;
+	private final LiveClient liveClient;
+	private final TencentLiveProperties liveProperties;
 
+	/**
+	 * Wraps the given SDK client and configuration.
+	 *
+	 * @param liveClient      the Tencent Live SDK client
+	 * @param liveProperties  the bound Live configuration
+	 */
 	public TencentLiveTemplate(LiveClient liveClient, TencentLiveProperties liveProperties) {
 		this.liveClient = liveClient;
 		this.liveProperties = liveProperties;
 	}
 
 	/**
-	 * 根据用户ID生成推流地址
-	 * @param userId 用户ID
-	 * @return 流地址信息
+	 * Builds a set of push/play URLs for the stream derived from the given user id.
+	 *
+	 * @param userId the user id used to derive the stream name
+	 * @return the generated stream URLs (RTMP / WebRTC / FLV / HLS)
 	 */
 	public StreamResult createStream(String userId) {
 		return createStreamByStreamName(this.getStreamNameByUserId(userId));
 	}
 
 	/**
-	 * 根据流名称生成推流地址
-	 * @param streamName 流名称
-	 * https://cloud.tencent.com/document/product/267/43392
-	 * @return 流地址信息
+	 * Builds a set of signed push/play URLs for the given stream name.
+	 *
+	 * @param streamName the stream name; see
+	 *                   <a href="https://cloud.tencent.com/document/product/267/43392">docs</a>
+	 * @return the generated stream URLs (RTMP / WebRTC / FLV / HLS)
 	 */
 	public StreamResult createStreamByStreamName(String streamName) {
 		String secretUrl = CommonHelper.getSafeUrl(liveProperties.getStreamUrlKey(), streamName, System.currentTimeMillis() / 1000 + ONE_WEEK_SECOND);
@@ -95,26 +112,28 @@ public class TencentLiveTemplate {
 				.hlsUrl(CommonHelper.getHlsUrl(liveProperties.getPlayDomain(), liveProperties.getAppName(), streamName, secretUrl))
 				.build();
 	}
-	
+
 	/**
-	 * 2、创建通用混流
-	 * API:https://cloud.tencent.com/document/product/267/43404
-	 * @param homeStreamName 主场流名称
-	 * @param awayStreamName 客场流名称
-	 * @param retryTimes	   重试次数
-	 * @return 混流结果
+	 * Creates a common mix-stream session with a default side-by-side canvas
+	 * layout (canvas + home stream + away stream).
+	 * @see <a href="https://cloud.tencent.com/document/product/267/43404">API reference</a>
+	 *
+	 * @param homeStreamName home (primary) stream name
+	 * @param awayStreamName away (secondary) stream name
+	 * @param retryTimes     initial retry counter used by the do/while loop
+	 * @return the mix-stream result containing the session id and output URLs
 	 */
 	public MixStreamResult createMixStream(String homeStreamName, String awayStreamName, int retryTimes) {
-		
-		// 输出设置
+
+		// Output stream configuration.
 		CommonMixOutputParams outputParams = new CommonMixOutputParams();
 		String outputStreamName = System.currentTimeMillis() + DELIMITER + srandom.nextInt(10000);
 		outputParams.setOutputStreamName(outputStreamName);
 		outputParams.setOutputStreamType(1L);
-		
+
 		CommonMixInputParam[] inputStreams = new CommonMixInputParam[3];
-		
-		// 画布设置
+
+		// Canvas (background) layer.
 		CommonMixInputParam inputStream = new CommonMixInputParam();
 		inputStream.setInputStreamName(CANV_NAME);
 		CommonMixLayoutParams LayoutParams = new CommonMixLayoutParams();
@@ -125,7 +144,7 @@ public class TencentLiveTemplate {
 		inputStream.setLayoutParams(LayoutParams);
 		inputStreams[0] = inputStream;
 
-		// 主场画面设置
+		// Home (primary) picture layer.
 		CommonMixInputParam inputStream1 = new CommonMixInputParam();
 		inputStream1.setInputStreamName(homeStreamName);
 		CommonMixLayoutParams layoutParams1 = new CommonMixLayoutParams();
@@ -142,7 +161,7 @@ public class TencentLiveTemplate {
 		inputStream1.setCropParams(cropParams1);
 		inputStreams[1] = inputStream1;
 
-		// 客场画面设置
+		// Away (secondary) picture layer.
 		CommonMixInputParam inputStream2 = new CommonMixInputParam();
 		inputStream2.setInputStreamName(awayStreamName);
 		CommonMixLayoutParams layoutParams2 = new CommonMixLayoutParams();
@@ -157,43 +176,42 @@ public class TencentLiveTemplate {
 		cropParams2.setCropHeight(HEIGHT);
 		inputStream2.setCropParams(cropParams2);
 		inputStreams[2] = inputStream2;
-		
+
 		return this.createMixStream(homeStreamName, awayStreamName, retryTimes, inputStreams, outputParams);
-		
+
 	}
-	
+
 	/**
-	 * 2、创建通用混流
-	 * API:https://cloud.tencent.com/document/product/267/43404
-	 * @param homeStreamName 主场流名称
-	 * @param awayStreamName 客场流名称
-	 * @param retryTimes	   重试次数
-	 * @param inputStreams	   混流输入流列表
-	 * @param outputParams	   混流输出流参数
-	 * @return 混流结果
+	 * Creates a common mix-stream session using the caller-supplied input streams
+	 * and output parameters.
+	 * @see <a href="https://cloud.tencent.com/document/product/267/43404">API reference</a>
+	 *
+	 * @param homeStreamName home (primary) stream name, used to derive the session id
+	 * @param awayStreamName away (secondary) stream name (reserved for logging)
+	 * @param retryTimes     initial retry counter used by the do/while loop
+	 * @param inputStreams   the mix-stream input stream list
+	 * @param outputParams   the mix-stream output parameters
+	 * @return the mix-stream result containing the session id and output URLs
 	 */
-	public MixStreamResult createMixStream(String homeStreamName, String awayStreamName, int retryTimes, 
+	public MixStreamResult createMixStream(String homeStreamName, String awayStreamName, int retryTimes,
 			CommonMixInputParam[] inputStreams,
 			CommonMixOutputParams outputParams) {
 		MixStreamResult result = null;
 		boolean isSuccess;
 		do {
 			try {
-				
+
 				CreateCommonMixStreamRequest req = new CreateCommonMixStreamRequest();
 
-				// 混流会话（申请混流开始到取消混流结束）标识 ID。 该值与CreateCommonMixStream中的MixStreamSessionId保持一致。
-				
+				// Mix-stream session id (valid from creation until cancel).
 				String mixStreamSessionId = CommonHelper.getMixStreamSessionId(homeStreamName);
-				
+
 				req.setInputStreamList(inputStreams);
 				req.setMixStreamSessionId(mixStreamSessionId);
 				req.setOutputParams(outputParams);
 
-				// 通过client对象调用想要访问的接口，需要传入请求对象
 				CreateCommonMixStreamResponse commonMixStreamResponse = liveClient.CreateCommonMixStream(req);
-				
-				// 输出json格式的字符串回包
+
 				log.info("混流成功  {} {}", mixStreamSessionId, DescribeZonesRequest.toJsonString(commonMixStreamResponse));
 
 				result = MixStreamResult.builder()
@@ -202,7 +220,7 @@ public class TencentLiveTemplate {
 			} catch (TencentCloudSDKException e) {
 				log.error("{}混流异常", homeStreamName, e);
 			}
-			
+
 			isSuccess = StringUtils.hasText(result.getSessionId()) && ++retryTimes < 2;
 		} while (isSuccess);
 
@@ -211,22 +229,23 @@ public class TencentLiveTemplate {
 		result.setWebrtcUrl(stream.getWebrtcUrl());
 		result.setHlsUrl(stream.getHlsUrl());
 		result.setFlvUrl(stream.getFlvUrl());
-		
+
 		return result;
 	}
-	
+
 	/**
-	 * 2、创建通用混流
-	 * API:https://cloud.tencent.com/document/product/267/43404
-	 * @param homeStreamName 主场流名称
-	 * @param awayStreamName 客场流名称
-	 * @param retryTimes	   重试次数
-	 * @param controlParams  混流的特殊控制参数
-	 * @param inputStreams	   混流输入流列表
-	 * @param outputParams	   混流输出流参数
-	 * @return 混流结果
+	 * Creates a common mix-stream session with explicit control parameters.
+	 * @see <a href="https://cloud.tencent.com/document/product/267/43404">API reference</a>
+	 *
+	 * @param homeStreamName home (primary) stream name, used to derive the session id
+	 * @param awayStreamName away (secondary) stream name (reserved for logging)
+	 * @param retryTimes     initial retry counter used by the do/while loop
+	 * @param controlParams  special control parameters for the mix stream
+	 * @param inputStreams   the mix-stream input stream list
+	 * @param outputParams   the mix-stream output parameters
+	 * @return the mix-stream result containing the session id and output URLs
 	 */
-	public MixStreamResult createMixStream(String homeStreamName, String awayStreamName, int retryTimes, 
+	public MixStreamResult createMixStream(String homeStreamName, String awayStreamName, int retryTimes,
 			CommonMixControlParams controlParams,
 			CommonMixInputParam[] inputStreams,
 			CommonMixOutputParams outputParams) {
@@ -234,22 +253,19 @@ public class TencentLiveTemplate {
 		boolean isSuccess;
 		do {
 			try {
-				
+
 				CreateCommonMixStreamRequest req = new CreateCommonMixStreamRequest();
 
-				// 混流会话（申请混流开始到取消混流结束）标识 ID。 该值与CreateCommonMixStream中的MixStreamSessionId保持一致。
-				
+				// Mix-stream session id (valid from creation until cancel).
 				String mixStreamSessionId = CommonHelper.getMixStreamSessionId(homeStreamName);
-				
+
 				req.setControlParams(controlParams);
 				req.setInputStreamList(inputStreams);
 				req.setMixStreamSessionId(mixStreamSessionId);
 				req.setOutputParams(outputParams);
 
-				// 通过client对象调用想要访问的接口，需要传入请求对象
 				CreateCommonMixStreamResponse commonMixStreamResponse = liveClient.CreateCommonMixStream(req);
-				
-				// 输出json格式的字符串回包
+
 				log.info("混流成功  {} {}", mixStreamSessionId, DescribeZonesRequest.toJsonString(commonMixStreamResponse));
 
 				result = MixStreamResult.builder()
@@ -258,7 +274,7 @@ public class TencentLiveTemplate {
 			} catch (TencentCloudSDKException e) {
 				log.error("{}混流异常", homeStreamName, e);
 			}
-			
+
 			isSuccess = StringUtils.hasText(result.getSessionId()) && ++retryTimes < 2;
 		} while (isSuccess);
 
@@ -267,16 +283,18 @@ public class TencentLiveTemplate {
 		result.setWebrtcUrl(stream.getWebrtcUrl());
 		result.setHlsUrl(stream.getHlsUrl());
 		result.setFlvUrl(stream.getFlvUrl());
-		
+
 		return result;
 	}
-	
+
 	/**
-	 * 3、取消通用混流
-	 * API:https://cloud.tencent.com/document/product/267/43405
-	 * @param mixStreamSessionId 混流session id
-	 * @param  retryTimes 重试次数
-	 * @return 是否取消混流成功
+	 * Cancels a common mix-stream session, retrying on failure up to the
+	 * configured retry limit.
+	 * @see <a href="https://cloud.tencent.com/document/product/267/43405">API reference</a>
+	 *
+	 * @param mixStreamSessionId the mix-stream session id to cancel
+	 * @param retryTimes         initial retry counter used by the do/while loop
+	 * @return {@code true} if the session was cancelled successfully
 	 */
 	public boolean stopMixStream(String mixStreamSessionId, int retryTimes) {
 		boolean isSuccess = Boolean.FALSE;
@@ -286,20 +304,19 @@ public class TencentLiveTemplate {
 		} while (isSuccess);
 		return isSuccess;
 	}
-	
+
 	/**
-	 * 取消混流
-	 * @param mixStreamSessionId 混流session id
-	 * @return 是否取消混流成功
+	 * Cancels a common mix-stream session without retrying.
+	 *
+	 * @param mixStreamSessionId the mix-stream session id to cancel
+	 * @return {@code true} if the session was cancelled successfully, {@code false} otherwise
 	 */
 	public boolean stopMixStream(String mixStreamSessionId) {
 		if (StringUtils.hasText(mixStreamSessionId)) {
 			try {
 				CancelCommonMixStreamRequest req = new CancelCommonMixStreamRequest();
 				req.setMixStreamSessionId(mixStreamSessionId);
-				// 通过client对象调用想要访问的接口，需要传入请求对象
 				CancelCommonMixStreamResponse commonMixStreamResponse = liveClient.CancelCommonMixStream(req);
-				// 输出json格式的字符串回包
 				log.info(DescribeZonesRequest.toJsonString(commonMixStreamResponse));
 				return Boolean.TRUE;
 			} catch (TencentCloudSDKException e) {
@@ -309,12 +326,14 @@ public class TencentLiveTemplate {
 		}
 		return Boolean.FALSE;
 	}
-	
+
 	/**
-     * 4、查询视频流状态
-     * @return     流状态，active：活跃，inactive：非活跃，forbid：禁播。
-     * @throws TencentCloudSDKException SDK异常
-     */
+	 * Queries the state of a live stream.
+	 *
+	 * @param streamName the stream name to query
+	 * @return the stream state: {@code active}, {@code inactive} or {@code forbid}
+	 * @throws TencentCloudSDKException if the SDK call fails
+	 */
     public String describeLiveStreamState(String streamName) throws TencentCloudSDKException {
         LiveClient liveClient = getLiveClient();
         DescribeLiveStreamStateRequest req = new DescribeLiveStreamStateRequest();
@@ -325,11 +344,14 @@ public class TencentLiveTemplate {
         log.info("查看视频流状态result:{}", DescribeLiveStreamStateResponse.toJsonString(resp));
         return resp.getStreamState();
     }
-    
+
 	/**
-	 * 反向解析流名称获取userId
-	 * @param streamName 流名称
-	 * @return userId 用户ID
+	 * Reverses {@link #getStreamNameByUserId(String)} to recover the user id
+	 * embedded in a stream name.
+	 *
+	 * @param streamName the stream name to parse
+	 * @return the embedded user id
+	 * @throws IllegalArgumentException if the stream name is not in {@code userId_timestamp} form
 	 */
 	public String getUserIdByStreamName(String streamName) {
 		String[] split = streamName.split(DELIMITER);
@@ -338,21 +360,25 @@ public class TencentLiveTemplate {
 		}
 		return split[0];
 	}
-	
+
 	/**
-	 * 根据userId生成流名称
-	 * @param userId 用户ID
-	 * @return 流名称
+	 * Composes a stream name from a user id and the current timestamp
+	 * ({@code userId_timestamp}).
+	 *
+	 * @param userId the user id
+	 * @return the generated stream name
 	 */
 	public String getStreamNameByUserId(String userId) {
 		StringBuilder streamName = new StringBuilder(userId).append(DELIMITER).append(System.currentTimeMillis());
 		return streamName.toString();
 	}
-	
+
+	/** @return the underlying Tencent Live SDK client. */
 	public LiveClient getLiveClient() {
 		return liveClient;
 	}
-	
+
+	/** @return the bound Live configuration. */
 	public TencentLiveProperties getLiveProperties() {
 		return liveProperties;
 	}
