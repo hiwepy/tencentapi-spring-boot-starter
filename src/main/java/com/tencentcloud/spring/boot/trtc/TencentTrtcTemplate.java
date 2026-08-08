@@ -48,14 +48,32 @@ import com.tencentcloudapi.trtc.v20190722.models.StopMCUMixTranscodeResponse;
 
 import lombok.extern.slf4j.Slf4j;
 
+/**
+ * Facade around the Tencent Real-Time Communication (TRTC) SDK
+ * {@link TrtcClient} that exposes room management (kick user / dismiss room)
+ * and cloud mix-transcoding operations for both numeric and string room ids.
+ * <p>
+ * Application user ids are translated to TRTC accounts (and back) through the
+ * configured {@link TrtcUserIdProvider}.</p>
+ *
+ * @author [@Loong Wan](https://github.com/loong10k)
+ * @since 1.0.0
+ */
 @Slf4j
 public class TencentTrtcTemplate {
 	private static final String DELIMITER = "_";
 
-	private TrtcUserIdProvider trtcUserIdProvider;
-	private TrtcClient trtcClient;
-	private TencentTrtcProperties trtcProperties;
+	private final TrtcUserIdProvider trtcUserIdProvider;
+	private final TrtcClient trtcClient;
+	private final TencentTrtcProperties trtcProperties;
 
+	/**
+	 * Wraps the given SDK client, configuration and user-id provider.
+	 *
+	 * @param trtcClient         the Tencent TRTC SDK client
+	 * @param trtcProperties     the bound TRTC configuration
+	 * @param trtcUserIdProvider the user-id/account translator
+	 */
 	public TencentTrtcTemplate(TrtcClient trtcClient, TencentTrtcProperties trtcProperties,
 			TrtcUserIdProvider trtcUserIdProvider) {
 		this.trtcClient = trtcClient;
@@ -64,13 +82,13 @@ public class TencentTrtcTemplate {
 	}
 
 	/**
-	 * 1、将用户从房间移出，适用于主播/房主/管理员踢人等场景
-	 * API：https://cloud.tencent.com/document/api/647/40496
-	 * 
-	 * @param roomId  房间ID
-	 * @param userIds 业务用户ID数组
-	 * @return 操作结果
-	 * @throws TencentCloudSDKException SDK操作异常
+	 * Removes users from a numeric room (e.g. host/owner/admin kicking a user).
+	 * @see <a href="https://cloud.tencent.com/document/api/647/40496">API reference</a>
+	 *
+	 * @param roomId  the numeric room id
+	 * @param userIds the application user ids to remove
+	 * @return the raw SDK response as JSON
+	 * @throws TencentCloudSDKException if the SDK call fails
 	 */
 	public String kickout(Long roomId, String... userIds) throws TencentCloudSDKException {
 
@@ -92,13 +110,13 @@ public class TencentTrtcTemplate {
 	}
 
 	/**
-	 * 2、将用户从房间移出，适用于主播/房主/管理员踢人等场景
-	 * API：https://cloud.tencent.com/document/api/647/50426
-	 * 
-	 * @param roomId  房间ID
-	 * @param userIds 业务用户ID数组
-	 * @return 操作结果
-	 * @throws TencentCloudSDKException SDK操作异常
+	 * Removes users from a string room (e.g. host/owner/admin kicking a user).
+	 * @see <a href="https://cloud.tencent.com/document/api/647/50426">API reference</a>
+	 *
+	 * @param roomId  the string room id
+	 * @param userIds the application user ids to remove
+	 * @return the raw SDK response as JSON
+	 * @throws TencentCloudSDKException if the SDK call fails
 	 */
 	public String kickout(String roomId, String... userIds) throws TencentCloudSDKException {
 
@@ -120,11 +138,12 @@ public class TencentTrtcTemplate {
 	}
 
 	/**
-	 * 3、解散房间，把房间所有用户从房间移出，解散房间 API：https://cloud.tencent.com/document/api/647/50089
-	 * 
-	 * @param roomId 房间ID
-	 * @return 操作结果
-	 * @throws TencentCloudSDKException SDK操作异常
+	 * Dismisses a numeric room, removing all users from it.
+	 * @see <a href="https://cloud.tencent.com/document/api/647/50089">API reference</a>
+	 *
+	 * @param roomId the numeric room id
+	 * @return the raw SDK response as JSON
+	 * @throws TencentCloudSDKException if the SDK call fails
 	 */
 	public String dismissRoom(Long roomId) throws TencentCloudSDKException {
 
@@ -144,12 +163,12 @@ public class TencentTrtcTemplate {
 	}
 
 	/**
-	 * 2、解散房间（字符串房间号），把房间所有用户从房间移出，解散房间
-	 * API：https://cloud.tencent.com/document/api/647/37088
-	 * 
-	 * @param roomId 房间ID
-	 * @return 操作结果
-	 * @throws TencentCloudSDKException SDK操作异常
+	 * Dismisses a string room, removing all users from it.
+	 * @see <a href="https://cloud.tencent.com/document/api/647/37088">API reference</a>
+	 *
+	 * @param roomId the string room id
+	 * @return the raw SDK response as JSON
+	 * @throws TencentCloudSDKException if the SDK call fails
 	 */
 	public String dismissRoom(String roomId) throws TencentCloudSDKException {
 
@@ -168,16 +187,18 @@ public class TencentTrtcTemplate {
 	}
 
 	/**
-	 * 
-	 * TODO
-	 * 
-	 * @author ： <a href="https://github.com/vindell">vindell</a>
-	 * @param streamId        直播流 ID，由用户自定义设置，该流 ID 不能与用户旁路的流 ID 相同
-	 * @param pureAudioStream 取值范围[0,1]， 填0：直播流为音视频(默认); 填1：直播流为纯音频
-	 * @param recordId        自定义录制文件名称前缀。请先在实时音视频控制台开通录制功能，https://cloud.tencent.com/document/product/647/50768
-	 * @param recordAudioOnly 取值范围[0,1]，填0无实际含义;
-	 *                        填1：指定录制文件格式为mp3。此参数不建议使用，建议在实时音视频控制台配置纯音频录制模板。
-	 * @return 输出参数
+	 * Builds the mix-transcode {@link OutputParams} for the given stream.
+	 *
+	 * @param streamId        user-defined live stream id; must differ from any
+	 *                       旁路 (relay-to-CDN) stream id
+	 * @param pureAudioStream {@code 0} for audio+video (default), {@code 1} for pure audio
+	 * @param recordId        custom recording file-name prefix (recording must be
+	 *                        enabled in the TRTC console; see
+	 *                        <a href="https://cloud.tencent.com/document/product/647/50768">docs</a>)
+	 * @param recordAudioOnly {@code 0} is meaningless; {@code 1} forces the
+	 *                        recording format to mp3. Prefer configuring a
+	 *                        pure-audio recording template in the console.
+	 * @return the populated output parameters
 	 */
 	public OutputParams outputParams(String streamId, Long pureAudioStream, String recordId, Long recordAudioOnly) {
 
@@ -195,16 +216,20 @@ public class TencentTrtcTemplate {
 	}
 
 	/**
-	 * 2、启动云端混流，并指定混流画面中各路画面的布局位置。
-	 * API:https://cloud.tencent.com/document/api/647/44270
-	 * 
-	 * @param roomId           房间ID
-	 * @param outputParams     混流输出控制参数：https://cloud.tencent.com/document/api/647/44055#OutputParams
-	 * @param encodeParams     混流输出编码参数：https://cloud.tencent.com/document/api/647/44055#EncodeParams
-	 * @param layoutParams     混流输出布局参数：https://cloud.tencent.com/document/api/647/44055#LayoutParams
-	 * @param publishCdnParams 第三方CDN转推参数：https://cloud.tencent.com/document/api/647/44055#PublishCdnParams
-	 * @return 混流地址
-	 * @throws TencentCloudSDKException SDK操作异常
+	 * Starts cloud mix-transcoding for a numeric room with the given layout.
+	 * @see <a href="https://cloud.tencent.com/document/api/647/44270">API reference</a>
+	 *
+	 * @param roomId           the numeric room id
+	 * @param outputParams     mix output control params
+	 *                       (<a href="https://cloud.tencent.com/document/api/647/44055#OutputParams">OutputParams</a>)
+	 * @param encodeParams     mix output encoding params
+	 *                       (<a href="https://cloud.tencent.com/document/api/647/44055#EncodeParams">EncodeParams</a>)
+	 * @param layoutParams     mix output layout params
+	 *                       (<a href="https://cloud.tencent.com/document/api/647/44055#LayoutParams">LayoutParams</a>)
+	 * @param publishCdnParams third-party CDN relay params
+	 *                       (<a href="https://cloud.tencent.com/document/api/647/44055#PublishCdnParams">PublishCdnParams</a>)
+	 * @return the mix-stream address / SDK response as JSON
+	 * @throws TencentCloudSDKException if the SDK call fails
 	 */
 	public String createMixStream(Long roomId, OutputParams outputParams, EncodeParams encodeParams,
 			LayoutParams layoutParams, PublishCdnParams publishCdnParams) throws TencentCloudSDKException {
@@ -232,16 +257,20 @@ public class TencentTrtcTemplate {
 	}
 
 	/**
-	 * 2、启动云端混流（字符串房间号），并指定混流画面中各路画面的布局位置。
-	 * API:https://cloud.tencent.com/document/api/647/50236
-	 * 
-	 * @param roomId           房间ID
-	 * @param outputParams     混流输出控制参数：https://cloud.tencent.com/document/api/647/44055#OutputParams
-	 * @param encodeParams     混流输出编码参数：https://cloud.tencent.com/document/api/647/44055#EncodeParams
-	 * @param layoutParams     混流输出布局参数：https://cloud.tencent.com/document/api/647/44055#LayoutParams
-	 * @param publishCdnParams 第三方CDN转推参数：https://cloud.tencent.com/document/api/647/44055#PublishCdnParams
-	 * @return 混流地址
-	 * @throws TencentCloudSDKException SDK操作异常
+	 * Starts cloud mix-transcoding for a string room with the given layout.
+	 * @see <a href="https://cloud.tencent.com/document/api/647/50236">API reference</a>
+	 *
+	 * @param roomId           the string room id
+	 * @param outputParams     mix output control params
+	 *                       (<a href="https://cloud.tencent.com/document/api/647/44055#OutputParams">OutputParams</a>)
+	 * @param encodeParams     mix output encoding params
+	 *                       (<a href="https://cloud.tencent.com/document/api/647/44055#EncodeParams">EncodeParams</a>)
+	 * @param layoutParams     mix output layout params
+	 *                       (<a href="https://cloud.tencent.com/document/api/647/44055#LayoutParams">LayoutParams</a>)
+	 * @param publishCdnParams third-party CDN relay params
+	 *                       (<a href="https://cloud.tencent.com/document/api/647/44055#PublishCdnParams">PublishCdnParams</a>)
+	 * @return the mix-stream address / SDK response as JSON
+	 * @throws TencentCloudSDKException if the SDK call fails
 	 */
 	public String createMixStream(String roomId, OutputParams outputParams, EncodeParams encodeParams,
 			LayoutParams layoutParams, PublishCdnParams publishCdnParams) throws TencentCloudSDKException {
@@ -269,12 +298,13 @@ public class TencentTrtcTemplate {
 	}
 
 	/**
-	 * 3、结束云端混流 
-	 * API:https://cloud.tencent.com/document/api/647/44269
-	 * 
-	 * @param roomId     roomId 房间ID
-	 * @param retryTimes 重试次数
-	 * @return 是否结束云端混流成功
+	 * Stops cloud mix-transcoding for a numeric room, retrying on failure up to
+	 * the configured retry limit.
+	 * @see <a href="https://cloud.tencent.com/document/api/647/44269">API reference</a>
+	 *
+	 * @param roomId     the numeric room id
+	 * @param retryTimes initial retry counter used by the do/while loop
+	 * @return {@code true} if mix-transcoding was stopped successfully
 	 */
 	public boolean stopMixStream(Long roomId, int retryTimes) {
 		boolean isSuccess = Boolean.FALSE;
@@ -286,11 +316,11 @@ public class TencentTrtcTemplate {
 	}
 
 	/**
-	 * 4、结束云端混流 
-	 * API:https://cloud.tencent.com/document/api/647/44269
-	 * 
-	 * @param roomId roomId 房间ID
-	 * @return 是否结束云端混流成功
+	 * Stops cloud mix-transcoding for a numeric room without retrying.
+	 * @see <a href="https://cloud.tencent.com/document/api/647/44269">API reference</a>
+	 *
+	 * @param roomId the numeric room id
+	 * @return {@code true} if mix-transcoding was stopped successfully
 	 */
 	public boolean stopMixStream(Long roomId) {
 		if (Objects.nonNull(roomId)) {
@@ -315,12 +345,13 @@ public class TencentTrtcTemplate {
 	}
 
 	/**
-	 * 3、结束云端混流（字符串房间号） 
-	 * API:https://cloud.tencent.com/document/api/647/50235
-	 * 
-	 * @param roomId     roomId 房间ID
-	 * @param retryTimes 重试次数
-	 * @return 是否结束云端混流成功
+	 * Stops cloud mix-transcoding for a string room, retrying on failure up to
+	 * the configured retry limit.
+	 * @see <a href="https://cloud.tencent.com/document/api/647/50235">API reference</a>
+	 *
+	 * @param roomId     the string room id
+	 * @param retryTimes initial retry counter used by the do/while loop
+	 * @return {@code true} if mix-transcoding was stopped successfully
 	 */
 	public boolean stopMixStream(String roomId, int retryTimes) {
 		boolean isSuccess = Boolean.FALSE;
@@ -332,11 +363,11 @@ public class TencentTrtcTemplate {
 	}
 
 	/**
-	 * 3、结束云端混流（字符串房间号）
-	 * API:https://cloud.tencent.com/document/api/647/50235
-	 * 
-	 * @param roomId roomId 房间ID
-	 * @return 是否结束云端混流成功
+	 * Stops cloud mix-transcoding for a string room without retrying.
+	 * @see <a href="https://cloud.tencent.com/document/api/647/50235">API reference</a>
+	 *
+	 * @param roomId the string room id
+	 * @return {@code true} if mix-transcoding was stopped successfully
 	 */
 	public boolean stopMixStream(String roomId) {
 		if (StringUtils.hasText(roomId)) {
@@ -362,10 +393,12 @@ public class TencentTrtcTemplate {
 	}
 
 	/**
-	 * 反向解析流名称获取userId
-	 * 
-	 * @param streamId 流ID
-	 * @return userId
+	 * Reverses {@link #getStreamNameByUserId(String)} to recover the user id
+	 * embedded in a stream name.
+	 *
+	 * @param streamId the stream id to parse
+	 * @return the embedded user id
+	 * @throws IllegalArgumentException if the stream name is not in {@code userId_timestamp} form
 	 */
 	public String getUserIdByStreamName(String streamId) {
 		String[] split = streamId.split(DELIMITER);
@@ -376,34 +409,52 @@ public class TencentTrtcTemplate {
 	}
 
 	/**
-	 * 根据userId生成流名称
-	 * 
-	 * @param userId 用户ID
-	 * @return 流名称
+	 * Composes a stream name from a user id and the current timestamp
+	 * ({@code userId_timestamp}).
+	 *
+	 * @param userId the user id
+	 * @return the generated stream name
 	 */
 	public String getStreamNameByUserId(String userId) {
 		StringBuilder streamName = new StringBuilder(userId).append(DELIMITER).append(System.currentTimeMillis());
 		return streamName.toString();
 	}
 
+	/**
+	 * Resolves the application user id for a given TRTC account, delegating to
+	 * the {@link TrtcUserIdProvider}.
+	 *
+	 * @param account the TRTC account identifier
+	 * @return the application user id
+	 */
 	public String getUserIdByTrtcUser(String account) {
 		return trtcUserIdProvider.getUserIdByTrtcUser(trtcProperties.getSdkappid(), account);
 	}
 
+	/**
+	 * Resolves the TRTC account for a given application user id, delegating to
+	 * the {@link TrtcUserIdProvider}.
+	 *
+	 * @param userId the application user id
+	 * @return the TRTC account identifier
+	 */
 	public String getTrtcUserByUserId(String userId) {
 		return trtcUserIdProvider.getTrtcUserByUserId(trtcProperties.getSdkappid(), userId);
 	}
-	
+
+	/** @return the underlying Tencent TRTC SDK client. */
 	public TrtcClient getTrtcClient() {
 		return trtcClient;
 	}
-	
+
+	/** @return the bound TRTC configuration. */
 	public TencentTrtcProperties getTrtcProperties() {
 		return trtcProperties;
 	}
 
+	/** @return the configured user-id/account translator. */
 	public TrtcUserIdProvider getTrtcUserIdProvider() {
 		return trtcUserIdProvider;
 	}
-	
+
 }

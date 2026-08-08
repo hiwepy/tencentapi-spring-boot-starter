@@ -24,18 +24,21 @@ import java.util.Objects;
 import com.google.common.base.Joiner;
 import com.tencentcloud.spring.boot.tim.TimApiAddress;
 
-/*
- * This class gathers all the utilities methods.
+/**
+ * Internal helper utilities for the Tencent Cloud starters: live-stream URL
+ * building and signing, mix-stream session id generation, MD5 hex encoding and
+ * TIM REST API URL composition.
+ *
+ * @author [@Loong Wan](https://github.com/loong10k)
+ * @since 1.0.0
  */
 public final class CommonHelper {
 
-	/*
-	 * 一周秒数
-	 */
+	/** Number of seconds in one week; used as the validity window for generated stream URLs. */
 	public static final Integer ONE_WEEK_SECOND = 7 * 24 * 60 * 60;
 
 	private static final char[] DIGITS_LOWER = {'0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'a', 'b', 'c', 'd', 'e', 'f'};
-	
+
 	private static final String RTMP_PREFIX = "rtmp://";
 	private static final String WEBRTC_PREFIX = "webrtc://";
 	private static final String HTTP_PREFIX = "http://";
@@ -44,47 +47,79 @@ public final class CommonHelper {
 	private static final String URL_DELIMITER = "/";
 	private static final String PARAMETER_CONNECTOR = "?";
 
+	/** Separator used when joining query-string key/value pairs. */
 	public static final String DELIMITER = "&";
+	/** Separator between a query-string key and its value. */
 	public static final String SEPARATOR = "=";
+	/** Guava joiner for rendering a map as a query string. */
 	public static final Joiner.MapJoiner joiner = Joiner.on(DELIMITER).withKeyValueSeparator(SEPARATOR);
-	
+
+	/**
+	 * Builds a mix-stream session id by appending the current timestamp to the
+	 * given stream name ({@code streamName_timestamp}).
+	 *
+	 * @param streamName the base stream name
+	 * @return the generated mix-stream session id
+	 */
 	public static String getMixStreamSessionId(final String streamName) {
 		StringBuilder mixStreamSessionId = new StringBuilder(streamName);
 		mixStreamSessionId.append("_").append(System.currentTimeMillis());
 		return mixStreamSessionId.toString();
 	}
-	
-	/*
-	 * 地址组成：推流域名+AppName+StreamName+鉴权信息
-	 * 地址格式：rtmp://domain/AppName/StreamName?txSecret=Md5(key+StreamName+hex(time))&txTime=hex(time)
+
+	/**
+	 * Builds the RTMP push URL: {@code rtmp://domain/AppName/StreamName?txSecret=...&txTime=...}.
+	 *
+	 * @param pushDomain push (ingest) domain
+	 * @param appName    app name path segment
+	 * @param streamName stream name
+	 * @param safeUrl    pre-computed authentication query string
+	 * @return the RTMP push URL
 	 */
 	public static StringBuilder getRtmpUrl(final String pushDomain, String appName, String streamName, final String safeUrl) {
 		StringBuilder rtmpUrl = new StringBuilder();
 		rtmpUrl.append(RTMP_PREFIX).append(pushDomain).append(URL_DELIMITER).append(appName).append(URL_DELIMITER).append(streamName).append(PARAMETER_CONNECTOR).append(safeUrl);
 		return rtmpUrl;
 	}
-	
-	/*
-	 * 地址组成：推流域名+AppName+StreamName+鉴权信息
-	 * 地址格式：webrtc://domain/AppName/StreamName?txSecret=Md5(key+StreamName+hex(time))&txTime=hex(time)
+
+	/**
+	 * Builds the WebRTC push URL: {@code webrtc://domain/AppName/StreamName?txSecret=...&txTime=...}.
+	 *
+	 * @param pushDomain push (ingest) domain
+	 * @param appName    app name path segment
+	 * @param streamName stream name
+	 * @param safeUrl    pre-computed authentication query string
+	 * @return the WebRTC push URL
 	 */
 	public static StringBuilder getWebrtcUrl(final String pushDomain, String appName, String streamName, final String safeUrl) {
 		StringBuilder rtmpUrl = new StringBuilder();
 		rtmpUrl.append(WEBRTC_PREFIX).append(pushDomain).append(URL_DELIMITER).append(appName).append(URL_DELIMITER).append(streamName).append(PARAMETER_CONNECTOR).append(safeUrl);
 		return rtmpUrl;
 	}
-	
-	/*
-	 * 格式http://domain/AppName/StreamName.flv?txSecret=
+
+	/**
+	 * Builds the HTTP-FLV play URL: {@code http://domain/AppName/StreamName.flv?txSecret=...}.
+	 *
+	 * @param playDomain playback domain
+	 * @param appName    app name path segment
+	 * @param streamName stream name
+	 * @param safeUrl    pre-computed authentication query string
+	 * @return the HTTP-FLV play URL
 	 */
 	public static StringBuilder getFlvUrl(final String playDomain, String appName, String streamName, final String safeUrl) {
 		StringBuilder flvUrl = new StringBuilder();
 		flvUrl.append(HTTP_PREFIX).append(playDomain).append(URL_DELIMITER).append(appName).append(URL_DELIMITER).append(streamName).append(FLV_SUFFIX).append(PARAMETER_CONNECTOR).append(safeUrl);
 		return flvUrl;
 	}
-	
-	/*
-	 * 格式http://domain/AppName/StreamName.m3u8
+
+	/**
+	 * Builds the HLS play URL: {@code http://domain/AppName/StreamName.m3u8?txSecret=...}.
+	 *
+	 * @param playDomain playback domain
+	 * @param appName    app name path segment
+	 * @param streamName stream name
+	 * @param safeUrl    pre-computed authentication query string
+	 * @return the HLS play URL
 	 */
 	public static StringBuilder getHlsUrl(final String playDomain, String appName, String streamName, final String safeUrl) {
 		StringBuilder hlsUrl = new StringBuilder();
@@ -92,12 +127,18 @@ public final class CommonHelper {
 		return hlsUrl;
 	}
 
-	 /*
-     * KEY+ streamName + txTime
-     * txSecret=Md5(key+StreamName+hex(time))&txTime=hex(time)
-     */
+	/**
+	 * Computes the Tencent Live authentication query string
+	 * {@code txSecret=Md5(key+StreamName+hex(time))&txTime=hex(time)} for the
+	 * given stream key, stream name and expiry timestamp.
+	 *
+	 * @param key        the stream authentication key
+	 * @param streamName the stream name being signed
+	 * @param txTime     expiry time in seconds since the epoch
+	 * @return the {@code txSecret=...&txTime=...} query string, or empty on error
+	 */
 	public static String getSafeUrl(String key, String streamName, long txTime) {
-		
+
            String input = new StringBuilder().
                              append(key).
                              append(streamName).
@@ -124,6 +165,12 @@ public final class CommonHelper {
                              toString();
      }
 
+	/**
+	 * Encodes a byte array as a lowercase hexadecimal string.
+	 *
+	 * @param data the bytes to encode
+	 * @return the hex representation
+	 */
      private static String byteArrayToHexString(byte[] data) {
            char[] out = new char[data.length << 1];
 
@@ -133,8 +180,17 @@ public final class CommonHelper {
            }
            return new String(out);
      }
-	
-	
+
+
+	/**
+	 * Composes a fully-qualified TIM REST API URL by appending the given
+	 * query parameters to the {@link TimApiAddress} base URL, using {@code ?}
+	 * or {@code &} as appropriate.
+	 *
+	 * @param address the TIM API address enum constant
+	 * @param data    the query parameters to append (may be empty/null)
+	 * @return the fully-qualified request URL
+	 */
 	public static String getRequestUrl(final TimApiAddress address, final Map<String, String> data) {
 		if (Objects.nonNull(data) && !data.isEmpty()) {
 			final StringBuilder sb = new StringBuilder();
