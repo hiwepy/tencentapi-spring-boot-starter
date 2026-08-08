@@ -27,58 +27,99 @@ import com.tencentcloud.spring.boot.utils.CommonHelper;
 import lombok.extern.slf4j.Slf4j;
 
 /**
- * Tim 接口集成
- * https://cloud.tencent.com/document/product/269/42440
+ * Base class for the Tencent Cloud IM (TIM) operation groupings (account,
+ * group, profile, sns, etc.). Subclasses delegate request execution to the
+ * shared {@link TencentTimTemplate} and inherit common helpers for signature
+ * generation, user-id translation and synchronous/asynchronous invocation.
+ * @see <a href="https://cloud.tencent.com/document/product/269/42440">TIM REST API overview</a>
+ *
+ * @author [@Loong Wan](https://github.com/loong10k)
+ * @since 1.0.0
  */
 @Slf4j
 public abstract class TencentTimOperations {
 
+	/** Base URL prefix for all TIM REST API endpoints. */
 	public static final String PREFIX = "https://console.tim.qq.com";
+	/** HTTP {@code Content-Type} for plain JSON. */
 	public static final String APPLICATION_JSON_VALUE = "application/json";
+	/** HTTP {@code Content-Type} for UTF-8 JSON. */
 	public static final String APPLICATION_JSON_UTF8_VALUE = "application/json;charset=UTF-8";
 
+	/** The backing template used to execute requests. */
 	protected TencentTimTemplate timTemplate;
 
+	/**
+	 * Binds this operation helper to the given template.
+	 *
+	 * @param timTemplate the backing TIM template
+	 */
 	public TencentTimOperations(TencentTimTemplate timTemplate) {
 		this.timTemplate = timTemplate;
 	}
-	
+
+	/**
+	 * Generates a user signature for the given identifier using the configured
+	 * default expiry.
+	 *
+	 * @param identifier the TIM account identifier
+	 * @return the generated UserSig
+	 */
 	protected String genUserSig(String identifier) {
 		return timTemplate.genUserSig(identifier);
 	}
 
+	/**
+	 * Generates a user signature for the given identifier with a custom expiry.
+	 *
+	 * @param identifier the TIM account identifier
+	 * @param expire     signature validity in seconds
+	 * @return the generated UserSig
+	 */
 	protected String genUserSig(String identifier, long expire) {
 		return timTemplate.genUserSig(identifier, expire);
 	}
 
 	/**
-	 * 根据im用户id获取用户id
-	 * 
-	 * @param imUser IM 用户ID
-	 * @return IM 用户ID对应的用户ID
+	 * Resolves the application user id for the given TIM account.
+	 *
+	 * @param imUser the TIM account identifier
+	 * @return the application user id
 	 */
 	protected String getUserIdByImUser(String imUser) {
 		return timTemplate.getUserIdByImUser(imUser);
 	}
 
 	/**
-	 * 根据用户id获取im用户id
-	 * 
-	 * @param userId 用户ID
-	 * @return 用户ID对应的用户ID
+	 * Resolves the TIM account for the given application user id.
+	 *
+	 * @param userId the application user id
+	 * @return the TIM account identifier
 	 */
 	protected String getImUserByUserId(String userId) {
 		return timTemplate.getImUserByUserId(userId);
 	}
-	
+
 	/**
-	 * 返回默认的参数
-	 * @return 默认参数
+	 * Returns the default TIM REST API query parameters (UserSig, identifier,
+	 * SdkAppid, random, contenttype).
+	 *
+	 * @return the default query parameters
 	 */
 	protected Map<String, String> getDefaultParams() {
 		return getTimTemplate().getDefaultParams();
 	}
-	
+
+	/**
+	 * Synchronously invokes a TIM REST API endpoint and returns the parsed
+	 * response, logging success or failure.
+	 *
+	 * @param address the TIM API address enum constant
+	 * @param params  the request body object (serialized to JSON)
+	 * @param cls     the response type
+	 * @param <T>     the response type, extending {@link TimActionResponse}
+	 * @return the parsed response
+	 */
 	protected <T extends TimActionResponse> T request(TimApiAddress address, Object params, Class<T> cls) {
 		String url = CommonHelper.getRequestUrl(address, getDefaultParams());
 		T res =  getTimTemplate().requestInvoke(url, params, cls);
@@ -90,6 +131,16 @@ public abstract class TencentTimOperations {
 		return res;
 	}
 	
+	/**
+	 * Asynchronously invokes a TIM REST API endpoint and delivers the parsed
+	 * response to the supplied callback.
+	 *
+	 * @param address the TIM API address enum constant
+	 * @param params  the request body object (serialized to JSON)
+	 * @param cls     the response type
+	 * @param consumer callback invoked with the parsed response
+	 * @param <T>     the response type, extending {@link TimActionResponse}
+	 */
 	protected <T extends TimActionResponse> void asyncRequest(TimApiAddress address, Object params, Class<T> cls, Consumer<T> consumer) {
 		String url = CommonHelper.getRequestUrl(address, getDefaultParams());
 		getTimTemplate().requestAsyncInvoke(url, params, (response) -> {
@@ -115,8 +166,9 @@ public abstract class TencentTimOperations {
 		});
 	}
 	
+	/** @return the backing TIM template. */
 	public TencentTimTemplate getTimTemplate() {
 		return timTemplate;
 	}
-	
+
 }
