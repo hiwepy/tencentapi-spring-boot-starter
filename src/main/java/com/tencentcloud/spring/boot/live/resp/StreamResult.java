@@ -18,26 +18,25 @@ package com.tencentcloud.spring.boot.live.resp;
 import lombok.Builder;
 import lombok.Data;
 
+/**
+ * Result object holding the push/play URLs for a single Tencent Live stream.
+ *
+ * @author [@Loong Wan](https://github.com/loong10k)
+ * @since 1.0.0
+ */
 @Data
 @Builder
 public class StreamResult {
 
+	/** The stream name these URLs were built for. */
 	private String streamName;
-	/**
-	 * 格式rtmp://domain/AppName/StreamName?txSecret=
-	 */
+	/** Push URL, format {@code rtmp://domain/AppName/StreamName?txSecret=...}. */
 	private StringBuilder rtmpUrl;
-	/**
-	 * 格式webrtc://domain/AppName/StreamName?txSecret=
-	 */
+	/** Push URL, format {@code webrtc://domain/AppName/StreamName?txSecret=...}. */
 	private StringBuilder webrtcUrl;
-	/**
-	 * 格式http://domain/AppName/StreamName.flv?txSecret=
-	 */
+	/** Play URL, format {@code http://domain/AppName/StreamName.flv?txSecret=...}. */
 	private StringBuilder flvUrl;
-	/**
-	 * 格式http://domain/AppName/StreamName.m3u8
-	 */
+	/** Play URL, format {@code http://domain/AppName/StreamName.m3u8}. */
 	private StringBuilder hlsUrl;
 
 }

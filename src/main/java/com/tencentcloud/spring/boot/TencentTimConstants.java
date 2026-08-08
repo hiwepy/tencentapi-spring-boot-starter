@@ -1,130 +1,158 @@
 package com.tencentcloud.spring.boot;
 
 
+/**
+ * String constants used by the Tencent Cloud IM (TIM) integration: client
+ * connection actions, user online states, callback event types and disconnect
+ * reasons.
+ *
+ * @author [@Loong Wan](https://github.com/loong10k)
+ * @since 1.0.0
+ */
 public class TencentTimConstants {
 
+	/** Client connection lifecycle actions reported by TIM. */
 	public static class Action {
 
-		public static final String LOGIN = "Login"; // 表示上线（TCP 建立）
-		public static final String LOGOUT = "Logout"; // 表示下线（TCP 断开）
-		public static final String DISCONNECT = "Disconnect"; // 表示网络断开（TCP 断开）
-		
+		/** Client came online (TCP connection established). */
+		public static final String LOGIN = "Login";
+		/** Client went offline (TCP connection closed). */
+		public static final String LOGOUT = "Logout";
+		/** Network disconnected (TCP connection lost). */
+		public static final String DISCONNECT = "Disconnect";
+
 	}
-	
+
 	/**
-	   * 返回的用户状态，目前支持的状态有：
-	   *前台运行状态（Online）：客户端登录后和即时通信 IM 后台有长连接
-	   * 后台运行状态（PushOnline）：iOS 和 Android 进程被 kill 或因网络问题掉线，进入 PushOnline 状态，此时仍然可以接收消息的离线推送。客户端切到后台，但是进程未被手机操作系统 kill 掉时，此时状态仍是 Online
-	   *未登录状态（Offline）：客户端主动退出登录或者客户端自上一次登录起7天之内未登录过
-	   *如果用户是多终端登录，则只要有一个终端的状态是 Online ，该字段值就是 Online
-	   */
+	 * User online states returned by TIM.
+	 * <p>Supported values:</p>
+	 * <ul>
+	 *   <li><b>Online</b> &mdash; the client is logged in and has a long-lived
+	 *       connection to the IM backend.</li>
+	 *   <li><b>PushOnline</b> &mdash; the iOS/Android process was killed or the
+	 *       network dropped, so the account can still receive offline push
+	 *       notifications. While the app is backgrounded but the process is still
+	 *       alive the state remains {@code Online}.</li>
+	 *   <li><b>Offline</b> &mdash; the client logged out or has not logged in
+	 *       within the last 7 days.</li>
+	 * </ul>
+	 * <p>For multi-terminal users the value is {@code Online} as long as any one
+	 * terminal is online.</p>
+	 */
 	public static class State {
 
-		public static final String ONLINE = "Online"; // 前台运行状态（Online）：客户端登录后和即时通信 IM 后台有长连接
-		public static final String PUSHONLINE = "PushOnline"; // 后台运行状态（PushOnline）：iOS 和 Android 进程被 kill 或因网络问题掉线，进入 PushOnline 状态，此时仍然可以接收消息的离线推送。客户端切到后台，但是进程未被手机操作系统 kill 掉时，此时状态仍是 Online
-		public static final String OFFLINE = "Offline"; // 未登录状态（Offline）：客户端主动退出登录或者客户端自上一次登录起7天之内未登录过
-		
+		/** Foreground running state: the client is logged in and connected. */
+		public static final String ONLINE = "Online";
+		/** Background running state: process killed or network dropped; offline push is still available. */
+		public static final String PUSHONLINE = "PushOnline";
+		/** Logged out: the client logged out or has not logged in within the last 7 days. */
+		public static final String OFFLINE = "Offline";
+
 	}
-	
+
+	/** Callback event types delivered by the TIM backend. */
 	public static class CallBack {
-		
+
 		/**
-		 * 1、状态变更回调
-		 * https://cloud.tencent.com/document/product/269/2570
+		 * State change callback.
+		 * @see <a href="https://cloud.tencent.com/document/product/269/2570">docs</a>
 		 */
 		public static final String STATE_CHANGE = "State.StateChange";
 		/**
-		 * 2、添加好友之后回调
-		 * https://cloud.tencent.com/document/product/269/1657
+		 * After a friend is added callback.
+		 * @see <a href="https://cloud.tencent.com/document/product/269/1657">docs</a>
 		 */
 		public static final String SNS_FRIEND_ADD = "Sns.CallbackFriendAdd";
 		/**
-		 * 3、删除好友之后回调
-		 * https://cloud.tencent.com/document/product/269/1659
+		 * After a friend is deleted callback.
+		 * @see <a href="https://cloud.tencent.com/document/product/269/1659">docs</a>
 		 */
 		public static final String SNS_FRIEND_DELETE = "Sns.CallbackFriendDelete";
 		/**
-		 * 4、添加黑名单之后回调
-		 * https://cloud.tencent.com/document/product/269/1660
+		 * After an account is added to the blacklist callback.
+		 * @see <a href="https://cloud.tencent.com/document/product/269/1660">docs</a>
 		 */
 		public static final String SNS_BLACKLIST_ADD = "Sns.CallbackBlackListAdd";
 		/**
-		 * 5、删除黑名单之后回调
-		 * https://cloud.tencent.com/document/product/269/1661
+		 * After an account is removed from the blacklist callback.
+		 * @see <a href="https://cloud.tencent.com/document/product/269/1661">docs</a>
 		 */
 		public static final String SNS_BLACKLIST_DELETE = "Sns.CallbackBlackListDelete";
 		/**
-		 * 6、发单聊消息之前回调
-		 * https://cloud.tencent.com/document/product/269/1632
+		 * Before a C2C (single-chat) message is sent callback.
+		 * @see <a href="https://cloud.tencent.com/document/product/269/1632">docs</a>
 		 */
 		public static final String C2C_BEFORE_SEND_MSG = "C2C.CallbackBeforeSendMsg";
 		/**
-		 * 7、发单聊消息之后回调
-		 * https://cloud.tencent.com/document/product/269/2716
+		 * After a C2C (single-chat) message is sent callback.
+		 * @see <a href="https://cloud.tencent.com/document/product/269/2716">docs</a>
 		 */
 		public static final String C2C_AFTER_SEND_MSG = "C2C.CallbackAfterSendMsg";
 		/**
-		 * 8、创建群组之前回调
-		 * https://cloud.tencent.com/document/product/269/1662
+		 * Before a group is created callback.
+		 * @see <a href="https://cloud.tencent.com/document/product/269/1662">docs</a>
 		 */
 		public static final String GROUP_BEFORE_CREATE = "Group.CallbackBeforeCreateGroup";
 		/**
-		 * 9、创建群组之后回调
-		 * https://cloud.tencent.com/document/product/269/1663
+		 * After a group is created callback.
+		 * @see <a href="https://cloud.tencent.com/document/product/269/1663">docs</a>
 		 */
 		public static final String GROUP_AFTER_CREATE = "Group.CallbackAfterCreateGroup";
 		/**
-		 * 10、申请入群之前回调
-		 * https://cloud.tencent.com/document/product/269/1665
+		 * Before a join-group application is submitted callback.
+		 * @see <a href="https://cloud.tencent.com/document/product/269/1665">docs</a>
 		 */
 		public static final String GROUP_BEFORE_APPLY_JOIN = "Group.CallbackBeforeApplyJoinGroup";
 		/**
-		 * 11、拉人入群之前回调
-		 * https://cloud.tencent.com/document/product/269/1666
+		 * Before members are invited into a group callback.
+		 * @see <a href="https://cloud.tencent.com/document/product/269/1666">docs</a>
 		 */
 		public static final String GROUP_BEFORE_INVITE_JOIN = "Group.CallbackBeforeInviteJoinGroup";
 		/**
-		 * 12、新成员入群之后回调
-		 * https://cloud.tencent.com/document/product/269/1667
+		 * After a new member joins a group callback.
+		 * @see <a href="https://cloud.tencent.com/document/product/269/1667">docs</a>
 		 */
 		public static final String GROUP_AFTER_MEMBER_JOIN = "Group.CallbackAfterNewMemberJoin";
 		/**
-		 * 13、群成员离开之后回调
-		 * https://cloud.tencent.com/document/product/269/1668
+		 * After a group member leaves callback.
+		 * @see <a href="https://cloud.tencent.com/document/product/269/1668">docs</a>
 		 */
 		public static final String GROUP_AFTER_MEMBER_EXIT = "Group.CallbackAfterMemberExit";
 		/**
-		 * 14、群内发言之前回调
-		 * https://cloud.tencent.com/document/product/269/1619
+		 * Before a message is sent in a group callback.
+		 * @see <a href="https://cloud.tencent.com/document/product/269/1619">docs</a>
 		 */
 		public static final String GROUP_BEFORE_SEND_MSG = "Group.CallbackBeforeSendMsg";
 		/**
-		 * 15、群内发言之后回调
-		 * https://cloud.tencent.com/document/product/269/2661
+		 * After a message is sent in a group callback.
+		 * @see <a href="https://cloud.tencent.com/document/product/269/2661">docs</a>
 		 */
 		public static final String GROUP_AFTER_SEND_MSG = "Group.CallbackAfterSendMsg";
 		/**
-		 * 16、群组满员之后回调
-		 * https://cloud.tencent.com/document/product/269/1669
+		 * After a group becomes full callback.
+		 * @see <a href="https://cloud.tencent.com/document/product/269/1669">docs</a>
 		 */
 		public static final String GROUP_AFTER_GROUP_FULL = "Group.CallbackAfterGroupFull";
 		/**
-		 * 17、群组解散之后回调
-		 * https://cloud.tencent.com/document/product/269/1670
+		 * After a group is dissolved callback.
+		 * @see <a href="https://cloud.tencent.com/document/product/269/1670">docs</a>
 		 */
-		public static final String GROUP_AFTER_GROUP_DESTROYED = "Group.CallbackAfterGroupDestroyed";
+		public static final String GROUP_AFTER_GROUP_DESTROYED = "Group.CallbackGroupDestroyed";
 		/**
-		 * 18、群组资料修改之后回调
-		 * https://cloud.tencent.com/document/product/269/2930
+		 * After group profile information is changed callback.
+		 * @see <a href="https://cloud.tencent.com/document/product/269/2930">docs</a>
 		 */
 		public static final String GROUP_AFTER_GROUP_INFO_CHANGED = "Group.CallbackAfterGroupInfoChanged";
 	}
-	
+
+	/** Reasons reported when a client connection ends. */
 	public static class Reason {
 
+		/** The long connection was actively closed. */
 		public static final String LINK_CLOSE = "LinkClose";
+		/** The connection timed out. */
 		public static final String TIME_OUT = "TimeOut";
-		
+
 	}
-	
+
 }
