@@ -1,8 +1,15 @@
 package com.tencentcloud.spring.boot.tim;
 
 /**
- * https://cloud.tencent.com/document/product/269/1520
- * @author 		： <a href="https://github.com/hiwepy">hiwepy</a>
+ * Catalogue of Tencent Cloud IM (TIM) REST API endpoints, each entry pairing a
+ * human-readable operation name (Chinese) with its fully-qualified URL.
+ * <p>Used by {@link com.tencentcloud.spring.boot.utils.CommonHelper#getRequestUrl}
+ * to build request URLs and by the operation helpers in
+ * {@link com.tencentcloud.spring.boot.tim.TencentTimOperations} for logging.
+ * @see <a href="https://cloud.tencent.com/document/product/269/1520">TIM REST API list</a>
+ *
+ * @author [@Loong Wan](https://github.com/loong10k)
+ * @since 1.0.0
  */
 public enum TimApiAddress {
 	
