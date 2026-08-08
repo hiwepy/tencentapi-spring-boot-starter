@@ -19,21 +19,47 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 
 import lombok.Data;
 
+/**
+ * Root configuration properties shared by all Tencent Cloud service integrations
+ * (Live, SMS, TIM, TRTC, etc.).
+ * <p>
+ * Bound to the {@code tencent.cloud.*} namespace. The credentials defined here
+ * act as a global fallback; each service-specific properties class
+ * ({@link TencentLiveProperties}, {@link TencentSmsProperties},
+ * {@link TencentTimProperties}, {@link TencentTrtcProperties}) can override the
+ * {@code secretId} / {@code secretKey} per service when non-blank values are
+ * supplied there.</p>
+ *
+ * <h3>Configuration</h3>
+ * <ul>
+ *   <li>{@code tencent.cloud.secret-id} — Tencent Cloud API key (AK)</li>
+ *   <li>{@code tencent.cloud.secret-key} — Tencent Cloud API secret (SK)</li>
+ *   <li>{@code tencent.cloud.debug} — enable SDK debug logging (default {@code false})</li>
+ * </ul>
+ *
+ * @author [@Loong Wan](https://github.com/loong10k)
+ * @since 1.0.0
+ */
 @ConfigurationProperties(TencentCloudProperties.PREFIX)
 @Data
 public class TencentCloudProperties {
 
+	/** Configuration prefix shared by all Tencent Cloud service starters. */
 	public static final String PREFIX = "tencent.cloud";
-	
+
 	/**
-	 * 官网获取的 API ID（腾讯云应用的AK）
+	 * Tencent Cloud API key (AK / secret id) obtained from the
+	 * <a href="https://console.cloud.tencent.com/cam/capi">CAM console</a>.
 	 */
 	private String secretId;
+
 	/**
-	 * 官网获取的 Secret Key（腾讯应用的SK）
+	 * Tencent Cloud API secret (SK / secret key) obtained from the
+	 * <a href="https://console.cloud.tencent.com/cam/capi">CAM console</a>.
 	 */
   	private String secretKey;
-    
+
+	/** Whether to enable SDK debug output on the underlying Tencent clients (default {@code false}). */
     private boolean debug;
-	
+
 }
