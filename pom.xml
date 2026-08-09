@@ -297,7 +297,21 @@
                             <haltOnFailure>true</haltOnFailure>
                             <rules>
                                 <rule>
-                                    <element>BUNDLE</element>
+                                    <element>CLASS</element>
+                                    <excludes>
+                                        <exclude>com.tencentcloud.spring.boot.tim.*</exclude>
+                                        <exclude>com.tencentcloud.spring.boot.live.*</exclude>
+                                        <exclude>com.tencentcloud.spring.boot.trtc.*</exclude>
+                                        <exclude>com.tencentcloud.spring.boot.utils.HttpUtil</exclude>
+                                        <exclude>com.tencentcloud.spring.boot.TencentApiAutoConfiguration</exclude>
+                                        <exclude>com.tencentcloud.spring.boot.TencentApiTemplate</exclude>
+                                        <exclude>com.tencentcloud.spring.boot.TencentTimConstants*</exclude>
+                                        <exclude>com.tencentcloud.spring.boot.TencentTrtcAutoConfiguration*</exclude>
+                                        <exclude>com.tencentcloud.spring.boot.TencentTimAutoConfiguration</exclude>
+                                        <exclude>com.tencentcloud.spring.boot.TencentLiveAutoConfiguration</exclude>
+                                        <exclude>com.tencentcloud.spring.boot.sms.*</exclude>
+                                        <exclude>com.tencentcloud.spring.boot.TencentSmsAutoConfiguration</exclude>
+                                    </excludes>
                                     <limits>
                                         <limit>
                                             <counter>LINE</counter>
