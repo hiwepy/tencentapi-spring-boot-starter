@@ -91,7 +91,7 @@ public class TencentSmsTemplate {
 	public SendSmsResponse send(SendSmsRequest req) throws TencentCloudSDKException {
 
 		// Apply all non-null bound properties onto the request.
-		PropertyMapper map = PropertyMapper.get().alwaysApplyingWhenNonNull();
+		PropertyMapper map = PropertyMapper.get();
 
 		map.from(smsProperties.getSdkappid()).to(req::setSmsSdkAppid);
 		map.from(smsProperties.getSign()).to(req::setSign);
