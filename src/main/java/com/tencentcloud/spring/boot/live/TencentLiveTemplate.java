@@ -50,7 +50,7 @@ import lombok.extern.slf4j.Slf4j;
  * <a href="https://cloud.tencent.com/document/product/267/41299">Live docs</a>
  * and the <a href="https://cloud.tencent.com/document/product/267/32744">mix-stream docs</a>.
  *
- * @author [@Loong Wan](https://github.com/loong10k)
+ * @author <a href="https://github.com/loong10k">Loong Wan</a>
  * @since 1.0.0
  */
 @Slf4j

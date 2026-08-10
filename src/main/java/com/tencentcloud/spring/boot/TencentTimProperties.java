@@ -36,7 +36,7 @@ import lombok.Data;
  *   <li>{@code tencent.cloud.tim.domain} — TIM REST API base domain</li>
  * </ul>
  *
- * @author [@Loong Wan](https://github.com/loong10k)
+ * @author <a href="https://github.com/loong10k">Loong Wan</a>
  * @since 1.0.0
  */
 @EqualsAndHashCode(callSuper = true)
