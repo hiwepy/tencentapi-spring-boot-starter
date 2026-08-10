@@ -23,7 +23,7 @@ import static org.mockito.Mockito.*;
  * Tests for Operations, Template and related classes using mocked
  * TencentTimTemplate.
  *
- * @author [@Loong Wan](https://github.com/loong10k)
+ * @author <a href="https://github.com/loong10k">Loong Wan</a>
  * @since 1.0.0
  */
 class OperationsTest {
