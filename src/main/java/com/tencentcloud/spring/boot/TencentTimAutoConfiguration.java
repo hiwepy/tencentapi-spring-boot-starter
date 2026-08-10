@@ -21,7 +21,7 @@ import org.springframework.context.annotation.Configuration;
  * a {@link TimInfoProvider} when available, falling back to plain defaults
  * otherwise.</p>
  *
- * @author [@Loong Wan](https://github.com/loong10k)
+ * @author <a href="https://github.com/loong10k">Loong Wan</a>
  * @since 1.0.0
  */
 @Configuration
