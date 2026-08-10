@@ -25,7 +25,7 @@ import com.tencentcloudapi.trtc.v20190722.TrtcClient;
  * {@link TencentCloudProperties}) and exposes a
  * {@link TencentTrtcTemplate} facade bean for application code.</p>
  *
- * @author [@Loong Wan](https://github.com/loong10k)
+ * @author <a href="https://github.com/loong10k">Loong Wan</a>
  * @since 1.0.0
  */
 @Configuration
