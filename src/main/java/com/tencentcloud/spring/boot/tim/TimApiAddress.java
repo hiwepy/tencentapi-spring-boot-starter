@@ -8,7 +8,7 @@ package com.tencentcloud.spring.boot.tim;
  * {@link com.tencentcloud.spring.boot.tim.TencentTimOperations} for logging.
  * @see <a href="https://cloud.tencent.com/document/product/269/1520">TIM REST API list</a>
  *
- * @author [@Loong Wan](https://github.com/loong10k)
+ * @author <a href="https://github.com/loong10k">Loong Wan</a>
  * @since 1.0.0
  */
 public enum TimApiAddress {

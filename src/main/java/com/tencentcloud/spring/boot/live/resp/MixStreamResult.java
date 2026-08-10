@@ -7,7 +7,7 @@ import lombok.Data;
  * Result object holding the session id and push/play URLs for a Tencent Live
  * mix-stream session.
  *
- * @author [@Loong Wan](https://github.com/loong10k)
+ * @author <a href="https://github.com/loong10k">Loong Wan</a>
  * @since 1.0.0
  */
 @Data
