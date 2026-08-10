@@ -5,7 +5,7 @@ import java.util.List;
 
 /**
  * https://cloud.tencent.com/document/product/269/1500#.E6.A0.87.E9.85.8D.E8.B5.84.E6.96.99.E5.AD.97.E6.AE.B5
- * @author 		： <a href="https://github.com/vindell">vindell</a>
+ * @author <a href="https://github.com/loong10k">Loong Wan</a>
  */
 public enum TagProfile {
 
