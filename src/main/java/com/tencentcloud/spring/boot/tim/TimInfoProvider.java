@@ -25,7 +25,7 @@ package com.tencentcloud.spring.boot.tim;
  * implementations are identity functions, so applications that use the same
  * value for both can leave the methods unimplemented.</p>
  *
- * @author [@Loong Wan](https://github.com/loong10k)
+ * @author <a href="https://github.com/loong10k">Loong Wan</a>
  * @since 1.0.0
  */
 public interface TimInfoProvider {
