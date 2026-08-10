@@ -37,7 +37,7 @@ import lombok.Data;
  *   <li>{@code tencent.cloud.debug} — enable SDK debug logging (default {@code false})</li>
  * </ul>
  *
- * @author [@Loong Wan](https://github.com/loong10k)
+ * @author <a href="https://github.com/loong10k">Loong Wan</a>
  * @since 1.0.0
  */
 @ConfigurationProperties(TencentCloudProperties.PREFIX)

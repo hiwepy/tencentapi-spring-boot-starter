@@ -29,7 +29,7 @@ import com.tencentcloud.spring.boot.tim.TimApiAddress;
  * building and signing, mix-stream session id generation, MD5 hex encoding and
  * TIM REST API URL composition.
  *
- * @author [@Loong Wan](https://github.com/loong10k)
+ * @author <a href="https://github.com/loong10k">Loong Wan</a>
  * @since 1.0.0
  */
 public final class CommonHelper {
