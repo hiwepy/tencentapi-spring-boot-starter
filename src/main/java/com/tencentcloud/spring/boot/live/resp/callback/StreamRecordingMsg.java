@@ -9,6 +9,8 @@ import lombok.EqualsAndHashCode;
 /**
  * 2、录制事件通知
  * https://cloud.tencent.com/document/product/267/47026
+ * @author <a href="https://github.com/loong10k">Loong Wan</a>
+ * @since 1.0.0
  */
 @Data
 @EqualsAndHashCode(callSuper=false)

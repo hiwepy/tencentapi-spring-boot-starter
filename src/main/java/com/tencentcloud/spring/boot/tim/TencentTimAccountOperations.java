@@ -31,6 +31,8 @@ import com.tencentcloud.spring.boot.tim.resp.account.AccountsImportResponse;
 /**
  * 1、帐号管理
  * https://cloud.tencent.com/document/product/269/1608
+ * @author <a href="https://github.com/loong10k">Loong Wan</a>
+ * @since 1.0.0
  */
 public class TencentTimAccountOperations extends TencentTimOperations {
 

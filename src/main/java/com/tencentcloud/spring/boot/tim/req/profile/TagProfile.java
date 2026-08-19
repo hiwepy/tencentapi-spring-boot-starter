@@ -6,6 +6,7 @@ import java.util.List;
 /**
  * https://cloud.tencent.com/document/product/269/1500#.E6.A0.87.E9.85.8D.E8.B5.84.E6.96.99.E5.AD.97.E6.AE.B5
  * @author <a href="https://github.com/loong10k">Loong Wan</a>
+ * @since 1.0.0
  */
 public enum TagProfile {
 
@@ -41,18 +42,38 @@ public enum TagProfile {
         this.ramark = ramark;
     }
 
+    /**
+     * Returns the value.
+     *
+     * @return the value
+     */
     public String getValue(){
         return this.value;
     }
     
+	/**
+	 * Returns the desc.
+	 *
+	 * @return the desc
+	 */
 	public String getDesc() {
 		return desc;
 	}
 	
+	/**
+	 * Returns the ramark.
+	 *
+	 * @return the ramark
+	 */
 	public String getRamark() {
 		return ramark;
 	}
 	
+	/**
+	 * as Tag List.
+	 *
+	 * @return the result
+	 */
 	public static List<String> asTagList() {
 		List<String> tagList = new ArrayList<String>();
 		for (TagProfile tag : TagProfile.values()) {

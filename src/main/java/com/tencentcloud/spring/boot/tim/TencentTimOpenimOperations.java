@@ -32,6 +32,8 @@ import com.tencentcloud.spring.boot.tim.resp.message.MessageSendResponse;
 /**
  * 2、单聊信息
  * https://cloud.tencent.com/document/product/269/2282
+ * @author <a href="https://github.com/loong10k">Loong Wan</a>
+ * @since 1.0.0
  */
 public class TencentTimOpenimOperations extends TencentTimOperations {
 

@@ -22,6 +22,12 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Data;
 
 
+/**
+ * <p>Group ID.</p>
+ *
+ * @author <a href="https://github.com/loong10k">Loong Wan</a>
+ * @since 1.0.0
+ */
 @Data
 @JsonInclude( JsonInclude.Include.NON_NULL)
 @JsonIgnoreProperties(ignoreUnknown = false)

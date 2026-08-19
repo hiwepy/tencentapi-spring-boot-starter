@@ -11,6 +11,8 @@ import lombok.Data;
 /**
  * 删除好友之后回调
  * https://cloud.tencent.com/document/product/269/1659
+ * @author <a href="https://github.com/loong10k">Loong Wan</a>
+ * @since 1.0.0
  */
 @Data
 @JsonInclude(JsonInclude.Include.NON_NULL)

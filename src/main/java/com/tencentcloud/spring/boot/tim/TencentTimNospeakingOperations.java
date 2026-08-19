@@ -9,6 +9,8 @@ import com.tencentcloud.spring.boot.tim.resp.nospeaking.NoSpeakingResponse;
 /**
  * 全局禁言管理
  * https://cloud.tencent.com/document/product/269/1519
+ * @author <a href="https://github.com/loong10k">Loong Wan</a>
+ * @since 1.0.0
  */
 public class TencentTimNospeakingOperations extends TencentTimOperations {
 

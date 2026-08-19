@@ -31,6 +31,7 @@ import lombok.Data;
     *     标签的与条件 TagsAnd
  * 	AttrsOr 和 AttrsAnd 可以并存，TagsOr 和 TagsAnd 也可以并存。但是标签和属性条件不能并存。如果没有 Condition，则推送给全部用户
  * @author <a href="https://github.com/loong10k">Loong Wan</a>
+ * @since 1.0.0
  */
 @Data
 @JsonInclude(JsonInclude.Include.NON_NULL)

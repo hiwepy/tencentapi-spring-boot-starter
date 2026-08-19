@@ -11,6 +11,8 @@ import lombok.EqualsAndHashCode;
 
 /**
  * 回调应答对象
+ * @author <a href="https://github.com/loong10k">Loong Wan</a>
+ * @since 1.0.0
  */
 @Data
 @EqualsAndHashCode(callSuper=false)

@@ -21,6 +21,12 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 
 import lombok.Data;
 
+/**
+ * <p>Account Item.</p>
+ *
+ * @author <a href="https://github.com/loong10k">Loong Wan</a>
+ * @since 1.0.0
+ */
 @Data
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonIgnoreProperties(ignoreUnknown = false)
@@ -50,6 +56,11 @@ public class AccountItem {
 	@JsonProperty("accountStatus")
 	private String accountStatus;
 	
+	/**
+	 * Returns the imported.
+	 *
+	 * @return the imported
+	 */
 	public boolean isImported() {
 		return "0".equals(resultCode) && "Imported".equals(accountStatus);
 	}

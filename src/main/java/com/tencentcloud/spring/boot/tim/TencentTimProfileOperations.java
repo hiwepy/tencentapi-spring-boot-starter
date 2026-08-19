@@ -33,6 +33,8 @@ import com.tencentcloud.spring.boot.tim.resp.profile.UserProfilePortraitSetRespo
 /**
  * Tim 资料管理接口集成
  * https://cloud.tencent.com/document/product/269/42440
+ * @author <a href="https://github.com/loong10k">Loong Wan</a>
+ * @since 1.0.0
  */
 public class TencentTimProfileOperations extends TencentTimOperations {
 
@@ -52,10 +54,33 @@ public class TencentTimProfileOperations extends TencentTimOperations {
 		return this.portraitSet(userId, nickname, null, avatar, null, null, null);
 	}
 	
+	/**
+	 * portrait Set.
+	 *
+	 * @param userId the user id
+	 * @param nickname the nickname
+	 * @param gender the gender
+	 * @param avatar the avatar
+	 * @param birthDay the birth day
+	 * @param signature the signature
+	 * @return the result
+	 */
 	public UserProfilePortraitSetResponse portraitSet(String userId, String nickname, GenderType gender, String avatar, Integer birthDay, String signature) {
 		return this.portraitSet(userId, nickname, gender, avatar, birthDay, signature, null);
 	}
 	
+	/**
+	 * portrait Set.
+	 *
+	 * @param userId the user id
+	 * @param nickname the nickname
+	 * @param gender the gender
+	 * @param avatar the avatar
+	 * @param birthDay the birth day
+	 * @param signature the signature
+	 * @param level the level
+	 * @return the result
+	 */
 	public UserProfilePortraitSetResponse portraitSet(String userId, String nickname, GenderType gender, String avatar, Integer birthDay, String signature, Integer level) {
 		Map<String, Object> profile = new HashMap<>();
 		if(Objects.nonNull(nickname)) {
@@ -79,50 +104,134 @@ public class TencentTimProfileOperations extends TencentTimOperations {
 		return this.portraitSet(userId, profile);
 	}
 	
+	/**
+	 * set Nickname.
+	 *
+	 * @param userId the user id
+	 * @param nickname the nickname
+	 * @return the result
+	 */
 	public UserProfilePortraitSetResponse setNickname(String userId, String nickname) {
 		return this.portraitSet(userId, ImmutableMap.of(TagProfile.Tag_Profile_IM_Nick.getValue(), nickname));
 	}
 	
+	/**
+	 * set Gender.
+	 *
+	 * @param userId the user id
+	 * @param gender the gender
+	 * @return the result
+	 */
 	public UserProfilePortraitSetResponse setGender(String userId, GenderType gender) {
 		return this.portraitSet(userId, ImmutableMap.of(TagProfile.Tag_Profile_IM_Gender.getValue(), gender.getValue()));
 	}
 
+	/**
+	 * set Avatar.
+	 *
+	 * @param userId the user id
+	 * @param avatar the avatar
+	 * @return the result
+	 */
 	public UserProfilePortraitSetResponse setAvatar(String userId, String avatar) {
 		return this.portraitSet(userId, ImmutableMap.of(TagProfile.Tag_Profile_IM_Image.getValue(), avatar));
 	}
 
+	/**
+	 * set Im Allow Type.
+	 *
+	 * @param userId the user id
+	 * @param allowType the allow type
+	 * @return the result
+	 */
 	public UserProfilePortraitSetResponse setImAllowType(String userId, AllowType allowType) {
 		return this.portraitSet(userId, ImmutableMap.of(TagProfile.Tag_Profile_IM_AllowType.getValue(), allowType.getValue()));
 	}
 	
+	/**
+	 * set Birth Day.
+	 *
+	 * @param userId the user id
+	 * @param birthDay the birth day
+	 * @return the result
+	 */
 	public UserProfilePortraitSetResponse setBirthDay(String userId, Integer birthDay) {
 		return this.portraitSet(userId, ImmutableMap.of(TagProfile.Tag_Profile_IM_BirthDay.getValue(), birthDay));
 	}
 	
+	/**
+	 * set Location.
+	 *
+	 * @param userId the user id
+	 * @param location the location
+	 * @return the result
+	 */
 	public UserProfilePortraitSetResponse setLocation(String userId, String location) {
 		return this.portraitSet(userId, ImmutableMap.of(TagProfile.Tag_Profile_IM_Location.getValue(), location));
 	}
 	
+	/**
+	 * set Self Signature.
+	 *
+	 * @param userId the user id
+	 * @param selfSignature the self signature
+	 * @return the result
+	 */
 	public UserProfilePortraitSetResponse setSelfSignature(String userId, String selfSignature) {
 		return this.portraitSet(userId, ImmutableMap.of(TagProfile.Tag_Profile_IM_SelfSignature.getValue(), selfSignature));
 	}
 	
+	/**
+	 * set Language.
+	 *
+	 * @param userId the user id
+	 * @param language the language
+	 * @return the result
+	 */
 	public UserProfilePortraitSetResponse setLanguage(String userId, Integer language) {
 		return this.portraitSet(userId, ImmutableMap.of(TagProfile.Tag_Profile_IM_Language.getValue(), language));
 	}
 	
+	/**
+	 * set Msg Settings.
+	 *
+	 * @param userId the user id
+	 * @param msgSettings the msg settings
+	 * @return the result
+	 */
 	public UserProfilePortraitSetResponse setMsgSettings(String userId, Integer msgSettings) {
 		return this.portraitSet(userId, ImmutableMap.of(TagProfile.Tag_Profile_IM_MsgSettings.getValue(), msgSettings));
 	}
 	
+	/**
+	 * set Admin Forbid Type.
+	 *
+	 * @param userId the user id
+	 * @param adminForbidType the admin forbid type
+	 * @return the result
+	 */
 	public UserProfilePortraitSetResponse setAdminForbidType(String userId, AdminForbidType adminForbidType) {
 		return this.portraitSet(userId, ImmutableMap.of(TagProfile.Tag_Profile_IM_AdminForbidType.getValue(), adminForbidType.getValue()));
 	}
 	
+	/**
+	 * set Level.
+	 *
+	 * @param userId the user id
+	 * @param level the level
+	 * @return the result
+	 */
 	public UserProfilePortraitSetResponse setLevel(String userId, Integer level) {
 		return this.portraitSet(userId, ImmutableMap.of(TagProfile.Tag_Profile_IM_Level.getValue(), level));
 	}
 	
+	/**
+	 * set Role.
+	 *
+	 * @param userId the user id
+	 * @param role the role
+	 * @return the result
+	 */
 	public UserProfilePortraitSetResponse setRole(String userId, Integer role) {
 		return this.portraitSet(userId, ImmutableMap.of(TagProfile.Tag_Profile_IM_Role.getValue(), role));
 	}

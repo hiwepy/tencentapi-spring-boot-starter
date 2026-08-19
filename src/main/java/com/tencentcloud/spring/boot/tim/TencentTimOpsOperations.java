@@ -13,6 +13,8 @@ import com.tencentcloud.spring.boot.tim.resp.ops.AppIpResponse;
 /**
  *  运营管理
  * https://cloud.tencent.com/document/product/269/1519
+ * @author <a href="https://github.com/loong10k">Loong Wan</a>
+ * @since 1.0.0
  */
 public class TencentTimOpsOperations extends TencentTimOperations {
 

@@ -21,6 +21,8 @@ import com.tencentcloud.spring.boot.tim.resp.push.UserTagsResponse;
 /**
  * 3、全员推送
  * https://cloud.tencent.com/document/product/269/45933
+ * @author <a href="https://github.com/loong10k">Loong Wan</a>
+ * @since 1.0.0
  */
 public class TencentTimAllMemberPushOperations extends TencentTimOperations {
 

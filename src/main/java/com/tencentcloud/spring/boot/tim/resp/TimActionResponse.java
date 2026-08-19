@@ -8,6 +8,8 @@ import lombok.Data;
 
 /**
  * IM响应结果
+ * @author <a href="https://github.com/loong10k">Loong Wan</a>
+ * @since 1.0.0
  */
 @Data
 @JsonInclude(JsonInclude.Include.NON_NULL)
@@ -38,6 +40,11 @@ public class TimActionResponse {
 	@JsonProperty("ErrorDisplay")
 	private String errorDisplay;
 
+	/**
+	 * Returns the success.
+	 *
+	 * @return the success
+	 */
 	public boolean isSuccess() {
 		return "OK".equals(actionStatus);
 	}

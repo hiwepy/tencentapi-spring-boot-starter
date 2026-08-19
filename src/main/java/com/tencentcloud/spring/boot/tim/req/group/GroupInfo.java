@@ -13,6 +13,8 @@ import lombok.NoArgsConstructor;
 
 /**
  * 群组信息
+ * @author <a href="https://github.com/loong10k">Loong Wan</a>
+ * @since 1.0.0
  */
 @JsonInclude( JsonInclude.Include.NON_NULL)
 @Data

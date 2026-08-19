@@ -141,6 +141,13 @@ public class TencentTimTemplate implements InitializingBean {
 						.build(new CacheLoader<String, String>() {
 
 							@Override
+							/**
+							 * load.
+							 *
+							 * @param key the key
+							 * @return the result
+							 * @throws Exception if an error occurs
+							 */
 							public String load(String key) throws Exception {
 								return tlsSigAPIv2.genUserSig(timProperties.getIdentifier(), timProperties.getExpire());
 							}
@@ -273,11 +280,23 @@ public class TencentTimTemplate implements InitializingBean {
 			okhttp3Client.newCall(request).enqueue(new Callback() {
 
 	            @Override
+	            /**
+	             * on Failure.
+	             *
+	             * @param call the call
+	             * @param e the e
+	             */
 	            public void onFailure(Call call, IOException e) {
 	            	log.error("Tim Async Request Failure : url : {}, params : {}, message : {}, use time : {} ", url, params, e.getMessage(), System.currentTimeMillis() - start);
 	            }
 
 	            @Override
+	            /**
+	             * on Response.
+	             *
+	             * @param call the call
+	             * @param response the response
+	             */
 	            public void onResponse(Call call, Response response) {
                 	if (response.isSuccessful()) {
     					log.info("Tim Async Request Success : url : {}, params : {}, code : {}, message : {} , use time : {} ", url, params, response.code(), response.message(), System.currentTimeMillis() - start);

@@ -23,6 +23,12 @@ import com.tencentcloud.spring.boot.tim.resp.TimActionResponse;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
+/**
+ * <p>Group Member Online Num Get Response.</p>
+ *
+ * @author <a href="https://github.com/loong10k">Loong Wan</a>
+ * @since 1.0.0
+ */
 @Data
 @EqualsAndHashCode(callSuper=false)
 @JsonInclude( JsonInclude.Include.NON_NULL)

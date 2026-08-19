@@ -1,5 +1,11 @@
 package com.tencentcloud.spring.boot.tim.req.group;
 
+/**
+ * <p>Enumeration of Group Type types.</p>
+ *
+ * @author <a href="https://github.com/loong10k">Loong Wan</a>
+ * @since 1.0.0
+ */
 public enum GroupType {
 	/**
 	 * 私有群
@@ -30,6 +36,11 @@ public enum GroupType {
 		this.value = value;
 	}
 
+	/**
+	 * Returns the value.
+	 *
+	 * @return the value
+	 */
 	public String getValue() {
 		return this.value;
 	}

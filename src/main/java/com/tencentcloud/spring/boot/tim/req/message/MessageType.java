@@ -1,5 +1,11 @@
 package com.tencentcloud.spring.boot.tim.req.message;
 
+/**
+ * <p>Enumeration of Message Type types.</p>
+ *
+ * @author <a href="https://github.com/loong10k">Loong Wan</a>
+ * @since 1.0.0
+ */
 public enum MessageType {
 	
     TIM_TEXT_ELEM("TIMTextElem","文本消息"),
@@ -16,10 +22,20 @@ public enum MessageType {
         this.desc = desc;
     }
 
+    /**
+     * Returns the value.
+     *
+     * @return the value
+     */
     public String getValue(){
         return this.value;
     }
     
+	/**
+	 * Returns the desc.
+	 *
+	 * @return the desc
+	 */
 	public String getDesc() {
 		return desc;
 	}

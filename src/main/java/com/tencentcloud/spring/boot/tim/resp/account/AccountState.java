@@ -8,6 +8,8 @@ import java.util.NoSuchElementException;
  * 后台运行状态（PushOnline）：iOS 和 Android 进程被 kill 或因网络问题掉线，进入 PushOnline 状态，此时仍然可以接收消息的离线推送。客户端切到后台，但是进程未被手机操作系统 kill 掉时，此时状态仍是 Online
  *未登录状态（Offline）：客户端主动退出登录或者客户端自上一次登录起7天之内未登录过
  *如果用户是多终端登录，则只要有一个终端的状态是 Online ，该字段值就是 Online
+ * @author <a href="https://github.com/loong10k">Loong Wan</a>
+ * @since 1.0.0
  */
 public enum AccountState {
 	
@@ -30,18 +32,41 @@ public enum AccountState {
 		this.state = state;
 	}
 
+	/**
+	 * Returns the state.
+	 *
+	 * @return the state
+	 */
 	public String getState() {
 		return state;
 	}
 
+	/**
+	 * equals.
+	 *
+	 * @param state the state
+	 * @return the result
+	 */
 	public boolean equals(AccountState state) {
 		return this.compareTo(state) == 0;
 	}
 
+	/**
+	 * equals.
+	 *
+	 * @param state the state
+	 * @return the result
+	 */
 	public boolean equals(String state) {
 		return this.compareTo(AccountState.valueOfIgnoreCase(state)) == 0;
 	}
 
+	/**
+	 * value Of Ignore Case.
+	 *
+	 * @param state the state
+	 * @return the result
+	 */
 	public static AccountState valueOfIgnoreCase(String state) {
 		for (AccountState stateEnum : AccountState.values()) {
 			if (stateEnum.name().equalsIgnoreCase(state)) {

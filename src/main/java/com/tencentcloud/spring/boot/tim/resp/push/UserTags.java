@@ -10,6 +10,8 @@ import lombok.Data;
 
 /**
  * 用户标签
+ * @author <a href="https://github.com/loong10k">Loong Wan</a>
+ * @since 1.0.0
  */
 @Data
 @JsonInclude(JsonInclude.Include.NON_NULL)

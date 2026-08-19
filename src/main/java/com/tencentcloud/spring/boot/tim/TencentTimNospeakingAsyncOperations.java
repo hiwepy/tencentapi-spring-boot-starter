@@ -22,6 +22,12 @@ import com.google.common.collect.ImmutableMap;
 import com.tencentcloud.spring.boot.tim.resp.TimActionResponse;
 import com.tencentcloud.spring.boot.tim.resp.nospeaking.NoSpeakingResponse;
 
+/**
+ * <p>Operations for Tencent TIM Nospeaking Async.</p>
+ *
+ * @author <a href="https://github.com/loong10k">Loong Wan</a>
+ * @since 1.0.0
+ */
 public class TencentTimNospeakingAsyncOperations extends TencentTimNospeakingOperations {
 
 	public TencentTimNospeakingAsyncOperations(TencentTimTemplate timTemplate) {

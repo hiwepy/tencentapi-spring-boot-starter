@@ -27,6 +27,12 @@ import com.google.common.collect.ImmutableMap;
 import com.tencentcloud.spring.boot.tim.resp.profile.UserProfilePortraitGetResponse;
 import com.tencentcloud.spring.boot.tim.resp.profile.UserProfilePortraitSetResponse;
 
+/**
+ * <p>Operations for Tencent TIM Profile Async.</p>
+ *
+ * @author <a href="https://github.com/loong10k">Loong Wan</a>
+ * @since 1.0.0
+ */
 public class TencentTimProfileAsyncOperations extends TencentTimProfileOperations {
 
 	public TencentTimProfileAsyncOperations(TencentTimTemplate timTemplate) {

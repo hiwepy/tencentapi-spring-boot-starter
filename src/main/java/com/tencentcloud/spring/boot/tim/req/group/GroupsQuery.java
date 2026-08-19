@@ -7,6 +7,8 @@ import lombok.Data;
 
 /**
  * 群组信息
+ * @author <a href="https://github.com/loong10k">Loong Wan</a>
+ * @since 1.0.0
  */
 @JsonInclude( JsonInclude.Include.NON_NULL)
 @Data
@@ -35,26 +37,56 @@ public class GroupsQuery {
     @JsonProperty("EGroupType")
     private String groupType;
 
+    /**
+     * Returns the limit.
+     *
+     * @return the limit
+     */
     public Integer getLimit() {
         return limit;
     }
 
+    /**
+     * Sets the limit.
+     *
+     * @param limit the limit
+     */
     public void setLimit(Integer limit) {
         this.limit = limit;
     }
 
+    /**
+     * Returns the next.
+     *
+     * @return the next
+     */
     public Integer getNext() {
         return next;
     }
 
+    /**
+     * Sets the next.
+     *
+     * @param next the next
+     */
     public void setNext(Integer next) {
         this.next = next;
     }
 
+    /**
+     * Returns the group type.
+     *
+     * @return the group type
+     */
     public String getGroupType() {
         return groupType;
     }
 
+    /**
+     * Sets the group type.
+     *
+     * @param groupType the group type
+     */
     public void setGroupType(String groupType) {
         this.groupType = groupType;
     }

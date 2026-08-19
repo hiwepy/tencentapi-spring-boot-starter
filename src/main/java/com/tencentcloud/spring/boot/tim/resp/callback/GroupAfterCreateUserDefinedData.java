@@ -24,6 +24,7 @@ import lombok.Data;
 /**
  * 用户建群时的自定义字段
  * @author <a href="https://github.com/loong10k">Loong Wan</a>
+ * @since 1.0.0
  */
 @Data
 @JsonInclude(JsonInclude.Include.NON_NULL)

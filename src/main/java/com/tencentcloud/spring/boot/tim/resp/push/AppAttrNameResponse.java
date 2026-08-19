@@ -12,6 +12,8 @@ import lombok.EqualsAndHashCode;
 
 /**
  * 应用属性名称
+ * @author <a href="https://github.com/loong10k">Loong Wan</a>
+ * @since 1.0.0
  */
 @Data
 @EqualsAndHashCode(callSuper=false)

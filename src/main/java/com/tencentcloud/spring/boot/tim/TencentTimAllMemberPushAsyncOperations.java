@@ -34,6 +34,12 @@ import com.tencentcloud.spring.boot.tim.resp.push.UserAttrsResponse;
 import com.tencentcloud.spring.boot.tim.resp.push.UserTags;
 import com.tencentcloud.spring.boot.tim.resp.push.UserTagsResponse;
 
+/**
+ * <p>Operations for Tencent TIM All Member Push Async.</p>
+ *
+ * @author <a href="https://github.com/loong10k">Loong Wan</a>
+ * @since 1.0.0
+ */
 public class TencentTimAllMemberPushAsyncOperations extends TencentTimAllMemberPushOperations {
 
 	public TencentTimAllMemberPushAsyncOperations(TencentTimTemplate timTemplate) {

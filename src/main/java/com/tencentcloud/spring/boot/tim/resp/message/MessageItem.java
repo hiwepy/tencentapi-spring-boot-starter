@@ -26,6 +26,8 @@ import lombok.Data;
 
 /**
  * 响应消息记录
+ * @author <a href="https://github.com/loong10k">Loong Wan</a>
+ * @since 1.0.0
  */
 @Data
 @JsonInclude(JsonInclude.Include.NON_NULL)

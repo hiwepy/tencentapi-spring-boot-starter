@@ -18,6 +18,12 @@ package com.tencentcloud.spring.boot.trtc.resp;
 import lombok.Builder;
 import lombok.Data;
 
+/**
+ * <p>Stream Result.</p>
+ *
+ * @author <a href="https://github.com/loong10k">Loong Wan</a>
+ * @since 1.0.0
+ */
 @Data
 @Builder
 public class StreamResult {

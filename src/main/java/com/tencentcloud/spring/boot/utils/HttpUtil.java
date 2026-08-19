@@ -10,16 +10,35 @@ import java.util.Map;
 
 /**
  * http 工具类
+ * @author <a href="https://github.com/loong10k">Loong Wan</a>
+ * @since 1.0.0
  */
 public class HttpUtil {
 
 	public static final String CONTENT_TYPE = "application/x-www-form-urlencoded";
 	
+    /**
+     * post.
+     *
+     * @param requestUrl the request url
+     * @param accessToken the access token
+     * @param params the params
+     * @return the result
+     */
     public static String post(String requestUrl, String accessToken, String params)
             throws Exception {
         return HttpUtil.post(requestUrl, accessToken, CONTENT_TYPE, params);
     }
 
+    /**
+     * post.
+     *
+     * @param requestUrl the request url
+     * @param accessToken the access token
+     * @param contentType the content type
+     * @param params the params
+     * @return the result
+     */
     public static String post(String requestUrl, String accessToken, String contentType, String params)
             throws Exception {
         String encoding = "UTF-8";
@@ -29,12 +48,31 @@ public class HttpUtil {
         return HttpUtil.post(requestUrl, accessToken, contentType, params, encoding);
     }
 
+    /**
+     * post.
+     *
+     * @param requestUrl the request url
+     * @param accessToken the access token
+     * @param contentType the content type
+     * @param params the params
+     * @param encoding the encoding
+     * @return the result
+     */
     public static String post(String requestUrl, String accessToken, String contentType, String params, String encoding)
             throws Exception {
         String url = requestUrl + "?access_token=" + accessToken;
         return HttpUtil.postGeneralUrl(url, contentType, params, encoding);
     }
 
+    /**
+     * post General URL.
+     *
+     * @param generalUrl the general url
+     * @param contentType the content type
+     * @param params the params
+     * @param encoding the encoding
+     * @return the result
+     */
     public static String postGeneralUrl(String generalUrl, String contentType, String params, String encoding)
             throws Exception {
         URL url = new URL(generalUrl);

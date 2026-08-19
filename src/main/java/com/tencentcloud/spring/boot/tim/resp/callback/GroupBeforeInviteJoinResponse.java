@@ -12,6 +12,8 @@ import lombok.EqualsAndHashCode;
 /**
  * 拉人入群之前回调响应
  * https://cloud.tencent.com/document/product/269/1666
+ * @author <a href="https://github.com/loong10k">Loong Wan</a>
+ * @since 1.0.0
  */
 @Data
 @JsonInclude(JsonInclude.Include.NON_NULL)

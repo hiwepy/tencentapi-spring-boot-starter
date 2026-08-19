@@ -42,6 +42,12 @@ import com.tencentcloud.spring.boot.tim.resp.sns.GroupAddResponse;
 import com.tencentcloud.spring.boot.tim.resp.sns.GroupDeleteResponse;
 import com.tencentcloud.spring.boot.tim.resp.sns.GroupGetResponse;
 
+/**
+ * <p>Operations for Tencent TIM Sns Async.</p>
+ *
+ * @author <a href="https://github.com/loong10k">Loong Wan</a>
+ * @since 1.0.0
+ */
 public class TencentTimSnsAsyncOperations extends TencentTimSnsOperations {
 
 	public TencentTimSnsAsyncOperations(TencentTimTemplate timTemplate) {

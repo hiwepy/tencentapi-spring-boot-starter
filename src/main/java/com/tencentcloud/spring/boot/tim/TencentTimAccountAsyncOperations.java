@@ -29,6 +29,12 @@ import com.tencentcloud.spring.boot.tim.resp.account.AccountImportResponse;
 import com.tencentcloud.spring.boot.tim.resp.account.AccountStateResponse;
 import com.tencentcloud.spring.boot.tim.resp.account.AccountsImportResponse;
 
+/**
+ * <p>Operations for Tencent TIM Account Async.</p>
+ *
+ * @author <a href="https://github.com/loong10k">Loong Wan</a>
+ * @since 1.0.0
+ */
 public class TencentTimAccountAsyncOperations extends TencentTimAccountOperations {
 
 	public TencentTimAccountAsyncOperations(TencentTimTemplate timTemplate) {

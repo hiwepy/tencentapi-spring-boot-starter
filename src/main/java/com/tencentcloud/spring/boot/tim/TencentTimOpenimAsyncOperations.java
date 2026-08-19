@@ -30,6 +30,12 @@ import com.tencentcloud.spring.boot.tim.resp.TimActionResponse;
 import com.tencentcloud.spring.boot.tim.resp.message.MessageGetResponse;
 import com.tencentcloud.spring.boot.tim.resp.message.MessageSendResponse;
 
+/**
+ * <p>Operations for Tencent TIM Openim Async.</p>
+ *
+ * @author <a href="https://github.com/loong10k">Loong Wan</a>
+ * @since 1.0.0
+ */
 public class TencentTimOpenimAsyncOperations extends TencentTimOpenimOperations {
 
 	public TencentTimOpenimAsyncOperations(TencentTimTemplate timTemplate) {

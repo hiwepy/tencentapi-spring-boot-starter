@@ -51,6 +51,8 @@ import com.tencentcloud.spring.boot.tim.resp.group.GroupSystemNotificationSendRe
 /**
  * 6、群组管理
  * https://cloud.tencent.com/document/product/269/1614
+ * @author <a href="https://github.com/loong10k">Loong Wan</a>
+ * @since 1.0.0
  */
 public class TencentTimGroupOperations extends TencentTimOperations {
 

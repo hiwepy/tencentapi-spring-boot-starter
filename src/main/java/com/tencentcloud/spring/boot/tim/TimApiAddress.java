@@ -320,10 +320,20 @@ public enum TimApiAddress {
 		this.url = url;
 	}
 
+	/**
+	 * Returns the opt.
+	 *
+	 * @return the opt
+	 */
 	public String getOpt() {
 		return opt;
 	}
 	
+	/**
+	 * Returns the url.
+	 *
+	 * @return the url
+	 */
 	public String getUrl() {
 		return url;
 	}

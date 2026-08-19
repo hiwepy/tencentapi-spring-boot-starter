@@ -4,6 +4,8 @@ import java.io.*;
 
 /**
  * 文件读取工具类
+ * @author <a href="https://github.com/loong10k">Loong Wan</a>
+ * @since 1.0.0
  */
 public class FileUtil {
 
